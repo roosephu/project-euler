@@ -63,45 +63,52 @@ template<class edge> struct Graph {
     vector<edge>& operator [](int t) {return adj[t];}
 };
 
-const int64 MOD = 1e9;
-const int64 N = 1e10;
-const int LMT = 3000000;
+const int N = 5, M = 18, MOD = 1e9;
 
-int H[LMT];
-int S[LMT];
-map<int64, int> f;
+typedef int64 mat[M][M];
 
-void add(int &a, int64 b) {if ((a += b) >= MOD) a -= MOD; }
+mat f, U;
 
-int64 calc(int64 n) {
-    if (n < LMT) return H[n];
-    if (f.count(n)) return f[n];
-    cerr << n << " " << SZ(f) << endl;
-    int &t = f[n];
-    for (int64 i = 2, j; i <= n; i = j) {
-        j = n / (n / i) + 1;
-        add(t, (j - i) * calc(n / i) % MOD);
+void matmul(mat a, mat b, mat c) {
+    mat t;
+    memset(t, 0, sizeof(t));
+    FOR (i, 0, M) FOR (j, 0, M) FOR (k, 0, M)
+        (t[i][j] += a[i][k] * b[k][j]) %= MOD;
+    memcpy(c, t, sizeof(t));
+}
+
+int calc(int64 e) {
+    memset(f, 0, sizeof(f)), f[17][17] = 1;
+    memset(U, 0, sizeof(U));
+    FOR (i, 0, 8) {
+        U[i +  1][i +  0] = 1;
+        U[i + 10][i +  9] = 1;
     }
-    t = ((n + 1) % MOD * (n + 1) % MOD * (n + 1) % MOD - 1 + MOD - t) % MOD;
-    return t;
+    FOR (i, 9, 18) U[i][17] = 1;
+    FOR (i, 9, 18) U[i][ 8] = 18 - i;
+    FOR (i, 0,  9) U[i][ 8] = 10;
+
+    for (; e; e >>= 1, matmul(U, U, U))
+        e & 1 ? matmul(f, U, f), 0 : 0;
+    return f[17][8];
 }
 
 int main(int argc, char **argv) {
     ios_base::sync_with_stdio(false);
-
-    // int sum = 0;
-    // FOR (i, 1, LMT) {
-    //     // add(H[i], (int64)(i + 1) * (i + 1) % MOD * (i + 1) % MOD - 1);
-    //     add(sum, S[i]);
-    //     H[i] = ((int64)(i + 1) * (i + 1) % MOD * (i + 1) % MOD - 1 + MOD - sum) % MOD;
-    //     for (int j = i; (j += i) < LMT; ) {
-    //         add(S[j], (MOD + H[i] - H[i - 1]) % MOD);
+    // f[0] = 0, g[0] = 1;
+    // FOR (i, 1, n + 1) {
+    //     FOR (j, 1, 9) {
+    //         if (i >= j) {
+    //             f[i] += f[i - j] * 10 + g[i - j] * j;
+    //             g[i] += g[i - j];
+    //         }
     //     }
     // }
+    int64 e = 1, ans = 0;
+    FOR (i, 0, 17) {
+        ans += calc(e *= 13);
+    }
+    cout << ans % MOD << endl;
 
-    // cerr << calc(N) << endl;
-    long double x = pow(N + 1, 3), zeta = (long double)1.202056903159594285399738161511449990764;
-    // FOR (i, 1, 1e9) zeta += (long double)1.0 / i / i / i;
-    cerr << setprecision(20) << x / zeta << endl;
-    return 0;
+    return 0; 
 }

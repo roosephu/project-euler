@@ -32,15 +32,23 @@ using namespace std;
 #endif
 
 #define oo 0x3F3F3F3F
+#ifdef DEBUG
+#define cvar(x) cerr << "<" << #x << ": " << x << ">"
+#define evar(x) cvar (x) << endl
+template<class T> void DISP(const char *s, T x, int n) {cerr << "[" << s << ": "; for (int i = 0; i < n; ++i) cerr << x[i] << " "; cerr << "]" << endl;}
+#define disp(x,n) DISP(#x " to " #n, x, n)
+#else
+#define cvar(...) ({})
+#define evar(...) ({})
+#define disp(...) ({})
+#endif
 #define car first
 #define cdr second
 #define PB push_back
 #define SZ(x) (int)((x).size())
 #define ALL(x) (x).begin(), (x).end()
-#define For(i, a, b) for (int _end_ = (b), i = (a); i <= _end_; ++i)
-#define Rof(i, a, b) for (int _end_ = (b), i = (a); i >= _end_; --i)
-#define FOR(i, a, b) for (int _end_ = (b), i = (a); i != _end_; ++i)
-#define ROF(i, a, b) for (int _end_ = (b), i = (a); i != _end_; --i)
+#define FOR(i, a, b) for (int _end_ = (b), i = (a); i <= _end_; ++i)
+#define ROF(i, a, b) for (int _end_ = (b), i = (a); i >= _end_; --i)
 
 typedef unsigned int uint;
 typedef long long int64;
@@ -63,45 +71,19 @@ template<class edge> struct Graph {
     vector<edge>& operator [](int t) {return adj[t];}
 };
 
-const int64 MOD = 1e9;
-const int64 N = 1e10;
-const int LMT = 3000000;
+const int64 MOD = fpm(17, 7, 1e18), PHI = MOD - MOD / 17;
 
-int H[LMT];
-int S[LMT];
-map<int64, int> f;
-
-void add(int &a, int64 b) {if ((a += b) >= MOD) a -= MOD; }
-
-int64 calc(int64 n) {
-    if (n < LMT) return H[n];
-    if (f.count(n)) return f[n];
-    cerr << n << " " << SZ(f) << endl;
-    int &t = f[n];
-    for (int64 i = 2, j; i <= n; i = j) {
-        j = n / (n / i) + 1;
-        add(t, (j - i) * calc(n / i) % MOD);
-    }
-    t = ((n + 1) % MOD * (n + 1) % MOD * (n + 1) % MOD - 1 + MOD - t) % MOD;
-    return t;
+int64 inv(int64 x) {
+    return fpm(x, PHI - 1, MOD);
 }
 
 int main(int argc, char **argv) {
+#ifndef ONLINE_JUDGE
+#endif
     ios_base::sync_with_stdio(false);
 
-    // int sum = 0;
-    // FOR (i, 1, LMT) {
-    //     // add(H[i], (int64)(i + 1) * (i + 1) % MOD * (i + 1) % MOD - 1);
-    //     add(sum, S[i]);
-    //     H[i] = ((int64)(i + 1) * (i + 1) % MOD * (i + 1) % MOD - 1 + MOD - sum) % MOD;
-    //     for (int j = i; (j += i) < LMT; ) {
-    //         add(S[j], (MOD + H[i] - H[i - 1]) % MOD);
-    //     }
-    // }
+    int64 e = fpm(10, 1e18, PHI);
+    cout << (fpm(MOD - 1, e, MOD) * inv(MOD - 15) % MOD + fpm(2, e, MOD) * 4 % MOD * inv(MOD - 3) % MOD + 2 * inv(5) % MOD * fpm(4, e, MOD) % MOD + 1) % MOD << endl;
 
-    // cerr << calc(N) << endl;
-    long double x = pow(N + 1, 3), zeta = (long double)1.202056903159594285399738161511449990764;
-    // FOR (i, 1, 1e9) zeta += (long double)1.0 / i / i / i;
-    cerr << setprecision(20) << x / zeta << endl;
-    return 0;
+    return 0; 
 }

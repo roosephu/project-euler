@@ -63,45 +63,11 @@ template<class edge> struct Graph {
     vector<edge>& operator [](int t) {return adj[t];}
 };
 
-const int64 MOD = 1e9;
-const int64 N = 1e10;
-const int LMT = 3000000;
 
-int H[LMT];
-int S[LMT];
-map<int64, int> f;
-
-void add(int &a, int64 b) {if ((a += b) >= MOD) a -= MOD; }
-
-int64 calc(int64 n) {
-    if (n < LMT) return H[n];
-    if (f.count(n)) return f[n];
-    cerr << n << " " << SZ(f) << endl;
-    int &t = f[n];
-    for (int64 i = 2, j; i <= n; i = j) {
-        j = n / (n / i) + 1;
-        add(t, (j - i) * calc(n / i) % MOD);
-    }
-    t = ((n + 1) % MOD * (n + 1) % MOD * (n + 1) % MOD - 1 + MOD - t) % MOD;
-    return t;
-}
 
 int main(int argc, char **argv) {
     ios_base::sync_with_stdio(false);
+    
 
-    // int sum = 0;
-    // FOR (i, 1, LMT) {
-    //     // add(H[i], (int64)(i + 1) * (i + 1) % MOD * (i + 1) % MOD - 1);
-    //     add(sum, S[i]);
-    //     H[i] = ((int64)(i + 1) * (i + 1) % MOD * (i + 1) % MOD - 1 + MOD - sum) % MOD;
-    //     for (int j = i; (j += i) < LMT; ) {
-    //         add(S[j], (MOD + H[i] - H[i - 1]) % MOD);
-    //     }
-    // }
-
-    // cerr << calc(N) << endl;
-    long double x = pow(N + 1, 3), zeta = (long double)1.202056903159594285399738161511449990764;
-    // FOR (i, 1, 1e9) zeta += (long double)1.0 / i / i / i;
-    cerr << setprecision(20) << x / zeta << endl;
-    return 0;
+    return 0; 
 }

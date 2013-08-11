@@ -63,45 +63,32 @@ template<class edge> struct Graph {
     vector<edge>& operator [](int t) {return adj[t];}
 };
 
-const int64 MOD = 1e9;
-const int64 N = 1e10;
-const int LMT = 3000000;
+const int N = 1e8, M = 1e9, U = N;
 
-int H[LMT];
-int S[LMT];
-map<int64, int> f;
-
-void add(int &a, int64 b) {if ((a += b) >= MOD) a -= MOD; }
-
-int64 calc(int64 n) {
-    if (n < LMT) return H[n];
-    if (f.count(n)) return f[n];
-    cerr << n << " " << SZ(f) << endl;
-    int &t = f[n];
-    for (int64 i = 2, j; i <= n; i = j) {
-        j = n / (n / i) + 1;
-        add(t, (j - i) * calc(n / i) % MOD);
-    }
-    t = ((n + 1) % MOD * (n + 1) % MOD * (n + 1) % MOD - 1 + MOD - t) % MOD;
-    return t;
-}
+int prime[U + 1], dvs[U + 1];
 
 int main(int argc, char **argv) {
     ios_base::sync_with_stdio(false);
+    // int LMT = sqrt(U) + 1;
+    FOR (i, 2, U + 1) {
+        if (!prime[i])  prime[++prime[0]] = i, dvs[i] = 2;
+        for (int j = 1, t, k = U / i; prime[j] <= k; ++j) {
+            prime[t = i * prime[j]] = i;
+            if (i % prime[j]) dvs[t] = dvs[i] * 2;
+            else {dvs[t] = dvs[i]; break; }
+        }
+    }
 
-    // int sum = 0;
-    // FOR (i, 1, LMT) {
-    //     // add(H[i], (int64)(i + 1) * (i + 1) % MOD * (i + 1) % MOD - 1);
-    //     add(sum, S[i]);
-    //     H[i] = ((int64)(i + 1) * (i + 1) % MOD * (i + 1) % MOD - 1 + MOD - sum) % MOD;
-    //     for (int j = i; (j += i) < LMT; ) {
-    //         add(S[j], (MOD + H[i] - H[i - 1]) % MOD);
-    //     }
-    // }
+    dvs[1] = 1;
+    int64 ans = 0;
+    FOR (i, 1, U + 1) {
+        if (i & 1)
+            ans += 2ll * dvs[i] * (N / i) * (M / i);
+        else {
+            ans += 2ll * dvs[i] * ((N / i / 2ll) * (M / i / 2) + ((M / i + 1ll) / 2) * ((N / i + 1ll) / 2));
+        }
+    }
+    cout << ans << endl;
 
-    // cerr << calc(N) << endl;
-    long double x = pow(N + 1, 3), zeta = (long double)1.202056903159594285399738161511449990764;
-    // FOR (i, 1, 1e9) zeta += (long double)1.0 / i / i / i;
-    cerr << setprecision(20) << x / zeta << endl;
-    return 0;
+    return 0; 
 }

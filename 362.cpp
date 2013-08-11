@@ -63,45 +63,42 @@ template<class edge> struct Graph {
     vector<edge>& operator [](int t) {return adj[t];}
 };
 
-const int64 MOD = 1e9;
-const int64 N = 1e10;
-const int LMT = 3000000;
+const int64 N = 1e10, LMT = 1e5;
 
-int H[LMT];
-int S[LMT];
-map<int64, int> f;
+int prime[LMT * 2 + 1], mu[LMT * 2 + 1], S[LMT * 2];
+map<int64, int64> g;
+map<pair<int, int64>, int64> f;
 
-void add(int &a, int64 b) {if ((a += b) >= MOD) a -= MOD; }
-
-int64 calc(int64 n) {
-    if (n < LMT) return H[n];
-    if (f.count(n)) return f[n];
-    cerr << n << " " << SZ(f) << endl;
-    int &t = f[n];
-    for (int64 i = 2, j; i <= n; i = j) {
-        j = n / (n / i) + 1;
-        add(t, (j - i) * calc(n / i) % MOD);
-    }
-    t = ((n + 1) % MOD * (n + 1) % MOD * (n + 1) % MOD - 1 + MOD - t) % MOD;
+int64 calc(int64 x) {
+    if (g.count(x)) return g[x];
+    int64 &t = g[x];
+    for (int64 i = 1; i * i <= x; ++i)
+        t += x / i / i * mu[i];
     return t;
+}
+
+int64 dfs(int i, int64 j) {
+    auto x = make_pair(i, j);
+    if (f.count(x)) return f[x];
+    if ((int64)S[i] * S[i] > j) return calc(j) - i;
+    return f[x] = 1 + dfs(i, j / S[i]) + dfs(i + 1, j);
 }
 
 int main(int argc, char **argv) {
     ios_base::sync_with_stdio(false);
+    
+    mu[1] = 1;
+    FOR (i, 2, LMT * 2 + 1) {
+        if (!prime[i]) prime[++prime[0]] = i, mu[i] = -1;
+        for (int j = 1, t, k = LMT / i; prime[j] <= k; ++j) {
+            prime[t = i * prime[j]] = 1;
+            if (i % prime[j]) mu[t] = -mu[i];
+            else {mu[t] = 0; break; }
+        }
+        if (mu[i]) S[++S[0]] = i;
+    }
+    cerr << dfs(1, N) << endl;
 
-    // int sum = 0;
-    // FOR (i, 1, LMT) {
-    //     // add(H[i], (int64)(i + 1) * (i + 1) % MOD * (i + 1) % MOD - 1);
-    //     add(sum, S[i]);
-    //     H[i] = ((int64)(i + 1) * (i + 1) % MOD * (i + 1) % MOD - 1 + MOD - sum) % MOD;
-    //     for (int j = i; (j += i) < LMT; ) {
-    //         add(S[j], (MOD + H[i] - H[i - 1]) % MOD);
-    //     }
-    // }
-
-    // cerr << calc(N) << endl;
-    long double x = pow(N + 1, 3), zeta = (long double)1.202056903159594285399738161511449990764;
-    // FOR (i, 1, 1e9) zeta += (long double)1.0 / i / i / i;
-    cerr << setprecision(20) << x / zeta << endl;
-    return 0;
+    return 0; 
 }
+

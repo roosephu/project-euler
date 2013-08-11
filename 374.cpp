@@ -63,45 +63,36 @@ template<class edge> struct Graph {
     vector<edge>& operator [](int t) {return adj[t];}
 };
 
-const int64 MOD = 1e9;
-const int64 N = 1e10;
-const int LMT = 3000000;
+const int MOD = 982451653, LMT = 2e7;
+const int64 N = 1e14;
 
-int H[LMT];
-int S[LMT];
-map<int64, int> f;
-
-void add(int &a, int64 b) {if ((a += b) >= MOD) a -= MOD; }
-
-int64 calc(int64 n) {
-    if (n < LMT) return H[n];
-    if (f.count(n)) return f[n];
-    cerr << n << " " << SZ(f) << endl;
-    int &t = f[n];
-    for (int64 i = 2, j; i <= n; i = j) {
-        j = n / (n / i) + 1;
-        add(t, (j - i) * calc(n / i) % MOD);
-    }
-    t = ((n + 1) % MOD * (n + 1) % MOD * (n + 1) % MOD - 1 + MOD - t) % MOD;
-    return t;
-}
+int inv[LMT];
 
 int main(int argc, char **argv) {
     ios_base::sync_with_stdio(false);
+    inv[1] = 1;
+    FOR (i, 2, LMT) inv[i] = (int64)inv[MOD % i] * (MOD - MOD / i) % MOD;
 
-    // int sum = 0;
-    // FOR (i, 1, LMT) {
-    //     // add(H[i], (int64)(i + 1) * (i + 1) % MOD * (i + 1) % MOD - 1);
-    //     add(sum, S[i]);
-    //     H[i] = ((int64)(i + 1) * (i + 1) % MOD * (i + 1) % MOD - 1 + MOD - sum) % MOD;
-    //     for (int j = i; (j += i) < LMT; ) {
-    //         add(S[j], (MOD + H[i] - H[i - 1]) % MOD);
-    //     }
-    // }
+    int64 fac = 1, ans = 0, sinv = 0;
+    FOR (i, 2, LMT) {
+        int64 L = i * (i - 1ll) / 2, R = i * (i + 1ll) / 2 - 1; // [L, R]
+        fac = fac * i % MOD;
+        if (R <= N) ans += fac * (i - 1) % MOD; // R
+        if (R == 2) ans += 1;
+        else if (R - 1 <= N) ans += fac * inv[2] % MOD * inv[i] % MOD * (i + 1) % MOD * (i - 2) % MOD;         // R - 1
+        if (R - 2 <= N) {
+            ans += sinv * fac % MOD * (i - 2) % MOD;
+        } else {
+            int x = i - 1;
+            for (; L <= N; ++L) {
+                ans += fac * inv[x] % MOD * (i - 2) % MOD;
+                --x;
+            }
+        }
+        sinv = (sinv + inv[i]) % MOD;
+        if (R > N) break;
+    }
+    cerr << ans % MOD << endl;
 
-    // cerr << calc(N) << endl;
-    long double x = pow(N + 1, 3), zeta = (long double)1.202056903159594285399738161511449990764;
-    // FOR (i, 1, 1e9) zeta += (long double)1.0 / i / i / i;
-    cerr << setprecision(20) << x / zeta << endl;
-    return 0;
+    return 0; 
 }

@@ -63,45 +63,72 @@ template<class edge> struct Graph {
     vector<edge>& operator [](int t) {return adj[t];}
 };
 
-const int64 MOD = 1e9;
-const int64 N = 1e10;
-const int LMT = 3000000;
+const int N = 2e7, MOD = 1e8;
+int bit[N + 1], phi[N + 1], prime[N + 1], f[N + 1];
 
-int H[LMT];
-int S[LMT];
-map<int64, int> f;
+struct zp {
+    int x;
 
-void add(int &a, int64 b) {if ((a += b) >= MOD) a -= MOD; }
-
-int64 calc(int64 n) {
-    if (n < LMT) return H[n];
-    if (f.count(n)) return f[n];
-    cerr << n << " " << SZ(f) << endl;
-    int &t = f[n];
-    for (int64 i = 2, j; i <= n; i = j) {
-        j = n / (n / i) + 1;
-        add(t, (j - i) * calc(n / i) % MOD);
+    operator int() { return x; }
+    operator int64() { return x; }
+    zp() : x(0) {}
+    zp(int _) : x(_ % MOD) {}
+    
+    int operator + (int a) {
+        x += a;
+        if (x >= MOD) x -= MOD;
+        return x;
     }
-    t = ((n + 1) % MOD * (n + 1) % MOD * (n + 1) % MOD - 1 + MOD - t) % MOD;
+
+    int operator - (int a) {
+        x -= a;
+        if (x < 0) x += MOD;
+        return x;
+    }
+
+    int operator * (int a) {
+        x = (int64)x * a % MOD;
+        return a;
+    }
+
+    int operator / (int a) {
+        x = x * fpm(a, MOD - 2, MOD) % MOD;
+        return x;
+    }
+};
+
+void bit_modify(int x, int v) {
+    for (; x <= N; x += x & -x) (bit[x] += v) %= MOD;
+}
+
+int bit_query(int x) {
+    int t = bit[x];
+    for (; x &= x - 1; (t += bit[x]) %= MOD);
     return t;
 }
 
 int main(int argc, char **argv) {
     ios_base::sync_with_stdio(false);
 
-    // int sum = 0;
-    // FOR (i, 1, LMT) {
-    //     // add(H[i], (int64)(i + 1) * (i + 1) % MOD * (i + 1) % MOD - 1);
-    //     add(sum, S[i]);
-    //     H[i] = ((int64)(i + 1) * (i + 1) % MOD * (i + 1) % MOD - 1 + MOD - sum) % MOD;
-    //     for (int j = i; (j += i) < LMT; ) {
-    //         add(S[j], (MOD + H[i] - H[i - 1]) % MOD);
-    //     }
-    // }
+    phi[1] = 1;
+    FOR (i, 2, N + 1) {
+        if (!prime[i]) prime[++prime[0]] = i, phi[i] = i - 1;
+        for (int j = 1, k = N / i, t; prime[j] <= k; ++j) {
+            prime[t = i * prime[j]] = 1;
+            if (i % prime[j]) phi[t] = phi[i] * phi[prime[j]];
+            else {phi[t] = phi[i] * prime[j]; break; }
+        }
+    }
 
-    // cerr << calc(N) << endl;
-    long double x = pow(N + 1, 3), zeta = (long double)1.202056903159594285399738161511449990764;
-    // FOR (i, 1, 1e9) zeta += (long double)1.0 / i / i / i;
-    cerr << setprecision(20) << x / zeta << endl;
-    return 0;
+    int64 ans = 0;
+    f[6] = 1;
+    FOR (i, 6, N + 1) {
+        (f[i] += bit_query(phi[i])) %= MOD;
+        ans += f[i];
+        bit_modify(phi[i] + 1, f[i]);
+        bit_modify(    i     , MOD - f[i]);
+    }
+    cerr << ans % MOD << endl;
+
+    return 0; 
 }
