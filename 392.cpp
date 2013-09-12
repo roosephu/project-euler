@@ -61,9 +61,66 @@ template<class edge> struct Graph {
     vector<edge>& operator [](int t) {return adj[t];}
 };
 
+const real EPS = 1e-12;
+const real pi = acos(-1);
+const int N = 200;
+
+real ans[N + 2];
+int lnk[N + 2];
+
+#define f(x) (cos(2 * x) + sin(x) * sy - cos(x) * cx)
+#define Df(x) (cos(x) * sy + sin(x) * cx - 2 * sin(2 * x))
+
+real opt(real x, real y) {
+    // real L = x, R = y, cx = cos(x), sy = sin(y), m;
+    // for (; m = (L + R) / 2, R - L > EPS; )
+    //     func(m) > 0 ? (L = m) : (R = m);
+    real cx = cos(x), sy = sin(y), u = (x + y) / 2;
+    for ( ; ; ) {
+        real v = u - f(u) / Df(u);
+        if (abs(u - v) < EPS) break;
+        u = v;
+    }
+    return u;
+}
+
+bool retreat(int x) {
+    real t = ans[x];
+    ans[x] = opt(ans[x - 1], ans[x + 1]);
+    return abs(ans[x] - t) > EPS;
+}
+
 int main(int argc, char **argv) {
     ios_base::sync_with_stdio(false);
-    (>>>POINT<<<)
+    cerr << setprecision(20);
+
+    ans[0] = 0, ans[N + 1] = pi / 2;
+    FOR (i, 1, N) ans[i] = pi * i / 2 / (N + 1);
+
+    int head = 1, tail = 1;
+    FOR (i, 1, N) {
+        if (i != N)
+            lnk[i] = i + 1;
+        tail = i;
+    }
+
+    for (int v; head; head = lnk[v], lnk[v] = 0) {
+        if (retreat(v = head)) {
+            if (v > 1 && !lnk[v - 1] && v - 1 != tail) {
+                lnk[tail] = v - 1, tail = v - 1;
+            }
+            if (v < N && !lnk[v + 1] && v + 1 != tail) {
+                lnk[tail] = v + 1, tail = v + 1;
+            }
+        }
+    }
+    real x = 1, area = 0;
+    FOR (i, 1, N) {
+        area += (x - cos(ans[i])) * (1 - sin(ans[i]));
+        x = cos(ans[i]);
+        // cerr << ans[i] << endl;
+    }
+    cerr << 4 - area * 4 << endl;
 
     return 0; 
 }

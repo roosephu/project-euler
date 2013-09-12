@@ -61,9 +61,62 @@ template<class edge> struct Graph {
     vector<edge>& operator [](int t) {return adj[t];}
 };
 
+const int64 N = 1e14, LMT = 1e4;
+
+int cnt = 0;
+int prime[LMT + 1];
+
+bool isP(int64 x) {
+    if (x == 1) return false;
+    int i = 1;
+    for (; i <= prime[0] && prime[i] * prime[i] <= x; ++i) {
+        if (x % prime[i] == 0) return false;
+    }
+    if (i <= prime[0]) return true;
+    
+    char s[100];
+    sprintf(s, "factor %lld > tmp", x);
+    system(s);
+    FILE *fin = fopen("tmp", "r");
+    
+    int n = 0; int64 a[50];
+    fscanf(fin, "%*lld%*c");
+    for (; fscanf(fin, "%lld", &a[n]) == 1; ++n);
+    fclose(fin);
+    return n == 1;
+}
+
+int64 ans = 0;
+void search(int64 n, int s) {
+    if (n >= N) return ;
+    if (n % s != 0) return ;
+    ++cnt;
+    if (n * 10 < N && n >= 10 && isP(n / s)) {
+        FOR (i, 0, 9) {
+            if (isP(n * 10 + i))
+                ans += n * 10 + i;
+        }
+    }
+    // cerr << n << endl;
+    FOR (i, 0, 9) {
+        search(n * 10 + i, s + i);
+    }
+}
+
 int main(int argc, char **argv) {
     ios_base::sync_with_stdio(false);
-    (>>>POINT<<<)
 
+    FOR (i, 2, LMT) {
+        if (!prime[i]) prime[++prime[0]] = i;
+        for (int j = 1, k = LMT / i; prime[j] <= k; ++j) {
+            prime[i * prime[j]] = 1;
+            if (i % prime[j] == 0) break;
+        }
+    }
+    
+    FOR (i, 1, 9) search(i, i);
+
+    cerr << cnt << " " << ans << endl;
+    // cerr << isP(1000000000131ll) << endl;
     return 0; 
 }

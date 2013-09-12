@@ -37,8 +37,10 @@ using namespace std;
 #define PB push_back
 #define SZ(x) (int)((x).size())
 #define ALL(x) (x).begin(), (x).end()
-#define FOR(i, a, b) for (int _end_ = (b), i = (a); i <= _end_; ++i)
-#define ROF(i, a, b) for (int _end_ = (b), i = (a); i >= _end_; --i)
+#define For(i, a, b) for (int _end_ = (b), i = (a); i <= _end_; ++i)
+#define Rof(i, a, b) for (int _end_ = (b), i = (a); i >= _end_; --i)
+#define FOR(i, a, b) for (int _end_ = (b), i = (a); i != _end_; ++i)
+#define ROF(i, a, b) for (int _end_ = (b), i = (a); i != _end_; --i)
 
 typedef unsigned int uint;
 typedef long long int64;
@@ -61,9 +63,47 @@ template<class edge> struct Graph {
     vector<edge>& operator [](int t) {return adj[t];}
 };
 
+const int N = 10000000, MOD = 1000000007, T = 10000;
+
+int fac[N * 2 + 1], ifac[N + 1];
+int X[T], Y[T], f[T], top;
+
+int cb(int a, int b) {
+    if (a < 0 || b < 0) return 0;
+    return (int64)fac[a + b] * ifac[a] % MOD * ifac[b] % MOD;
+}
+
+int calc(int x, int y) {
+    int64 t = cb(x, y);
+    FOR (i, 0, top) {
+        t += MOD - (int64)cb(x - X[i], y - Y[i]) * f[i] % MOD;
+    }
+    return t % MOD;
+}
+
 int main(int argc, char **argv) {
     ios_base::sync_with_stdio(false);
-    (>>>POINT<<<)
+
+    fac[0] = 1;
+    FOR (i, 1, N * 2 + 1) fac[i] = (int64)fac[i - 1] * i % MOD;
+    ifac[N] = fpm(fac[N], MOD - 2, MOD);
+    ROF (i, N, -1) ifac[i - 1] = (int64)ifac[i] * i % MOD;
+    
+    FOR (x, 1, N) {
+        if (x * x > N) break;
+        FOR (y, 1, N) {
+            int s = x * x + y * y;
+            if (y * y > N) break;
+            if (sqr(int(sqrt(s))) == s) {
+                X[top] = x * x;
+                Y[top] = y * y;
+                f[top] = calc(x * x, y * y);
+                top++;
+                // cerr << x * x << " " << y * y << endl;
+            }
+        }
+    }
+    cerr << calc(N, N) << endl;
 
     return 0; 
 }

@@ -37,8 +37,10 @@ using namespace std;
 #define PB push_back
 #define SZ(x) (int)((x).size())
 #define ALL(x) (x).begin(), (x).end()
-#define FOR(i, a, b) for (int _end_ = (b), i = (a); i <= _end_; ++i)
-#define ROF(i, a, b) for (int _end_ = (b), i = (a); i >= _end_; --i)
+#define For(i, a, b) for (int _end_ = (b), i = (a); i <= _end_; ++i)
+#define Rof(i, a, b) for (int _end_ = (b), i = (a); i >= _end_; --i)
+#define FOR(i, a, b) for (int _end_ = (b), i = (a); i != _end_; ++i)
+#define ROF(i, a, b) for (int _end_ = (b), i = (a); i != _end_; --i)
 
 typedef unsigned int uint;
 typedef long long int64;
@@ -61,9 +63,50 @@ template<class edge> struct Graph {
     vector<edge>& operator [](int t) {return adj[t];}
 };
 
+const int L2 = 20, L3 = 13, N = 1000000 + 1;
+
+int f[N][L2][L3], g[N];
+int P2[L2], P3[L3];
+
+bool isP(int x) {
+    for (int i = 2; i * i <= x; ++i)
+        if (x % i == 0) return false;
+    return true;
+}
+
 int main(int argc, char **argv) {
     ios_base::sync_with_stdio(false);
-    (>>>POINT<<<)
+    FOR (i, 0, L2) P2[i] = 1 << i;
+    FOR (i, 0, L3) P3[i] = i ? P3[i - 1] * 3 : 1;
+
+    FOR (j, 0, L2) {
+        FOR (k, 0, L3) {
+            int p = P2[j] * P3[k];
+            if (p >= N) break;
+            f[p][j][k] = 1;
+        }
+    }
+    FOR (i, 1, N) {
+        FOR (j, 0, L2) {
+            FOR (k, 0, L3) {
+                if (!f[i][j][k]) continue;
+                g[i] += f[i][j][k];
+                FOR (u, 0, j) {
+                    FOR (v, k + 1, L3) {
+                        int q = i + P2[u] * P3[v];
+                        if (q >= N) break;
+                        f[q][u][v] += f[i][j][k];
+                    }
+                }
+            }
+        }
+    }
+    int64 ans = 0;
+    FOR (i, 2, N) {
+        if (g[i] == 1 && isP(i))
+            ans += i;
+    }
+    cerr << ans << endl;
 
     return 0; 
 }

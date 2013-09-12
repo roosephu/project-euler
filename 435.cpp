@@ -63,7 +63,7 @@ template<class edge> struct Graph {
 
 int main(int argc, char **argv) {
     ios_base::sync_with_stdio(false);
-    (>>>POINT<<<)
+    
 
     return 0; 
 }

@@ -32,16 +32,6 @@ using namespace std;
 #endif
 
 #define oo 0x3F3F3F3F
-#ifdef DEBUG
-#define cvar(x) cerr << "<" << #x << ": " << x << ">"
-#define evar(x) cvar (x) << endl
-template<class T> void DISP(const char *s, T x, int n) {cerr << "[" << s << ": "; for (int i = 0; i < n; ++i) cerr << x[i] << " "; cerr << "]" << endl;}
-#define disp(x,n) DISP(#x " to " #n, x, n)
-#else
-#define cvar(...) ({})
-#define evar(...) ({})
-#define disp(...) ({})
-#endif
 #define car first
 #define cdr second
 #define PB push_back
@@ -63,43 +53,43 @@ template <typename T> T gcd(T x, T y) {for (T t; x; t = x, x = y % x, y = t); re
 
 template<class edge> struct Graph {
     vector<vector<edge> > adj;
-    Graph(int n) {adj.clear (); adj.resize (n + 5);}
-    Graph() {adj.clear (); }
-    void resize(int n) {adj.resize (n + 5); }
-    void add(int s, edge e){adj[s].push_back (e);}
-    void del(int s, edge e) {adj[s].erase (find (iter (adj[s]), e)); }
+    Graph(int n) {adj.clear(); adj.resize(n + 5);}
+    Graph() {adj.clear(); }
+    void resize(int n) {adj.resize(n + 5); }
+    void add(int s, edge e){adj[s].push_back(e);}
+    void del(int s, edge e) {adj[s].erase(find(iter(adj[s]), e)); }
     vector<edge>& operator [](int t) {return adj[t];}
 };
 
-const int64 N = 1e12;
-const int LMT = 4000, MOD = 1e9;
+const int64 N = 100, MOD = 1e8;
 
-map<int64, int> f, H;
+int f[N + 1];
 
-int calc(int64 n) {
-    if (n >= LMT) return H[n];
-    if (f.count(n)) return f[n];
-    int &t = f[n];
-    FOR (i, 1, sqrt(n)) {
-        if (n % i != 0) continue;
-        t += calc(i); if (t >= MOD) t -= MOD;
-        if (n / i != i) {
-            t += calc(n / i);
-            if (t >= MOD) t -= MOD;
-        }
-    }
-    t = fpm(N / n, 3, MOD) - t;
-    if (t < 0) t += MOD;
-    return t;
+int64 calc(int64 n) {
+    int64 a = n, b = n - 1;
+    return a * b / 2;
 }
 
 int main(int argc, char **argv) {
     ios_base::sync_with_stdio(false);
-    FOR (i, 1, sqrt(n)) {
-        if (n % i == 0) {
-            
-        }
+    int64 a = 1, b = 1, ans = 0;
+    memset(f, -1, sizeof(f));
+    for (; b <= N; ) {
+        int64 c = a + b;
+        f[b] = 0;
+        a = b, b = c;
     }
+    int lx = 1;
+    FOR (i, 1, N) {
+        if (f[i] != -1) {
+            lx = i;
+            continue;
+        }
+        f[i] = i - lx;
+        if (f[i] * 2 >= lx) f[i] = f[i - lx];
+        ans += f[i];
+    }
+    cerr << ans % MOD << endl;
 
     return 0; 
 }

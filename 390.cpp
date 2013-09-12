@@ -37,8 +37,10 @@ using namespace std;
 #define PB push_back
 #define SZ(x) (int)((x).size())
 #define ALL(x) (x).begin(), (x).end()
-#define FOR(i, a, b) for (int _end_ = (b), i = (a); i <= _end_; ++i)
-#define ROF(i, a, b) for (int _end_ = (b), i = (a); i >= _end_; --i)
+#define For(i, a, b) for (int _end_ = (b), i = (a); i <= _end_; ++i)
+#define Rof(i, a, b) for (int _end_ = (b), i = (a); i >= _end_; --i)
+#define FOR(i, a, b) for (int _end_ = (b), i = (a); i != _end_; ++i)
+#define ROF(i, a, b) for (int _end_ = (b), i = (a); i != _end_; --i)
 
 typedef unsigned int uint;
 typedef long long int64;
@@ -61,9 +63,17 @@ template<class edge> struct Graph {
     vector<edge>& operator [](int t) {return adj[t];}
 };
 
+const int64 N = 1e6;
+
 int main(int argc, char **argv) {
     ios_base::sync_with_stdio(false);
-    (>>>POINT<<<)
+    int64 ans = 0;
+    FOR (b, 1, sqrt(N) / 2 + 10) {
+        int64 r = sqrt((1.0 * N * N - 1.0 * b * b) / (4.0 * b * b + 1));
+        if (r >= b) ans += r - 1;
+        else ans += r;
+    }
+    cerr << ans << endl;
 
     return 0; 
 }
