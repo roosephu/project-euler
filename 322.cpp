@@ -71,7 +71,7 @@ template<class edge> struct Graph {
      vector<edge>& operator [](int t) {return adj[t];}
 };
 
-const int64 N = (int64)1e7 - 10, M = (int64)1e18;
+const int64 N = (int64)1e7 - 10, M = (int64)1e9;
 
 int main(int argc, char **argv) {
      ios_base::sync_with_stdio(false);

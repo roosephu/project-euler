@@ -1,0 +1,1519 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 9.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       157,          7]
+NotebookDataLength[     56103,       1509]
+NotebookOptionsPosition[     54242,       1441]
+NotebookOutlinePosition[     54580,       1456]
+CellTagsIndexPosition[     54537,       1453]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"c1", " ", "=", " ", 
+   RowBox[{
+    RowBox[{"(", 
+     RowBox[{"2", "+", 
+      RowBox[{"Sqrt", "[", "2", "]"}]}], ")"}], "/", 
+    RowBox[{"(", 
+     RowBox[{"4", 
+      RowBox[{"Exp", "[", 
+       RowBox[{"Sqrt", "[", "2", "]"}], "]"}]}], ")"}]}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"c2", " ", "=", " ", 
+   RowBox[{
+    RowBox[{"(", 
+     RowBox[{"2", "-", 
+      RowBox[{"Sqrt", "[", "2", "]"}]}], ")"}], "/", 
+    RowBox[{"(", 
+     RowBox[{"4", 
+      RowBox[{"Exp", "[", 
+       RowBox[{"-", 
+        RowBox[{"Sqrt", "[", "2", "]"}]}], "]"}]}], ")"}]}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"f", "[", "x_", "]"}], ":=", " ", 
+   RowBox[{
+    RowBox[{"(", 
+     RowBox[{
+      RowBox[{"c1", " ", 
+       RowBox[{"Exp", "[", 
+        RowBox[{
+         RowBox[{"Sqrt", "[", "2", "]"}], "x"}], "]"}]}], "+", 
+      RowBox[{"c2", " ", 
+       RowBox[{"Exp", "[", 
+        RowBox[{
+         RowBox[{"-", 
+          RowBox[{"Sqrt", "[", "2", "]"}]}], "x"}], "]"}]}]}], ")"}], "/", 
+    "x"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"g", "[", "x_", "]"}], ":=", 
+   RowBox[{
+    RowBox[{"f", "[", "x", "]"}], "*", "x"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{"Simplify", "[", 
+  RowBox[{
+   RowBox[{"Integrate", "[", 
+    RowBox[{
+     RowBox[{"2", 
+      RowBox[{"(", 
+       RowBox[{"y", "-", "x"}], ")"}], 
+      RowBox[{"g", "[", "y", "]"}]}], ",", 
+     RowBox[{"{", 
+      RowBox[{"y", ",", "x", ",", "1"}], "}"}]}], "]"}], "+", "x", "-", 
+   RowBox[{"g", "[", "x", "]"}]}], "]"}]}], "Input",
+ CellChangeTimes->{{3.601119918116766*^9, 3.601120003877461*^9}, {
+  3.601120035985537*^9, 3.601120158842244*^9}, {3.601120199218891*^9, 
+  3.6011202508669643`*^9}}],
+
+Cell[BoxData["0"], "Output",
+ CellChangeTimes->{{3.601119981832636*^9, 3.601120004552606*^9}, {
+  3.60112003990562*^9, 3.601120068680043*^9}, {3.6011201225279913`*^9, 
+  3.601120137263624*^9}, {3.6011201873129253`*^9, 3.601120251359108*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Simplify", "[", 
+  RowBox[{"1", "+", 
+   RowBox[{"Integrate", "[", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"f", "[", 
+       RowBox[{"x", "/", "t"}], "]"}], "*", "2", 
+      RowBox[{"(", 
+       RowBox[{"1", "-", "t"}], ")"}]}], ",", 
+     RowBox[{"{", 
+      RowBox[{"t", ",", "x", ",", "1"}], "}"}]}], "]"}], "-", 
+   RowBox[{"f", "[", "x", "]"}]}], "]"}]], "Input",
+ CellChangeTimes->{
+  3.601120186274499*^9, {3.601120296161916*^9, 3.601120335644952*^9}, {
+   3.6011203920683613`*^9, 3.6011204045153503`*^9}}],
+
+Cell[BoxData[
+ RowBox[{"ConditionalExpression", "[", 
+  RowBox[{
+   RowBox[{
+    FractionBox["1", 
+     RowBox[{"6", " ", "x"}]], 
+    RowBox[{
+     SuperscriptBox["\[ExponentialE]", 
+      RowBox[{
+       RowBox[{"-", 
+        SqrtBox["2"]}], " ", 
+       RowBox[{"(", 
+        RowBox[{"3", "+", 
+         RowBox[{"2", " ", "x"}]}], ")"}]}]], " ", 
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"-", "2"}], " ", 
+        SuperscriptBox["\[ExponentialE]", 
+         RowBox[{
+          SqrtBox["2"], " ", 
+          RowBox[{"(", 
+           RowBox[{"4", "+", "x"}], ")"}]}]]}], "+", 
+       RowBox[{
+        SqrtBox["2"], " ", 
+        SuperscriptBox["\[ExponentialE]", 
+         RowBox[{
+          SqrtBox["2"], " ", 
+          RowBox[{"(", 
+           RowBox[{"4", "+", "x"}], ")"}]}]]}], "-", 
+       RowBox[{"2", " ", 
+        SuperscriptBox["\[ExponentialE]", 
+         RowBox[{
+          SqrtBox["2"], " ", 
+          RowBox[{"(", 
+           RowBox[{"2", "+", 
+            RowBox[{"3", " ", "x"}]}], ")"}]}]]}], "-", 
+       RowBox[{
+        SqrtBox["2"], " ", 
+        SuperscriptBox["\[ExponentialE]", 
+         RowBox[{
+          SqrtBox["2"], " ", 
+          RowBox[{"(", 
+           RowBox[{"2", "+", 
+            RowBox[{"3", " ", "x"}]}], ")"}]}]]}], "+", 
+       RowBox[{"2", " ", 
+        SuperscriptBox["\[ExponentialE]", 
+         RowBox[{
+          SqrtBox["2"], " ", 
+          RowBox[{"(", 
+           RowBox[{"4", "+", "x"}], ")"}]}]], " ", "x"}], "-", 
+       RowBox[{"2", " ", 
+        SqrtBox["2"], " ", 
+        SuperscriptBox["\[ExponentialE]", 
+         RowBox[{
+          SqrtBox["2"], " ", 
+          RowBox[{"(", 
+           RowBox[{"4", "+", "x"}], ")"}]}]], " ", "x"}], "+", 
+       RowBox[{"6", " ", 
+        SuperscriptBox["\[ExponentialE]", 
+         RowBox[{
+          SqrtBox["2"], " ", 
+          RowBox[{"(", 
+           RowBox[{"3", "+", 
+            RowBox[{"2", " ", "x"}]}], ")"}]}]], " ", "x"}], "+", 
+       RowBox[{"2", " ", 
+        SuperscriptBox["\[ExponentialE]", 
+         RowBox[{
+          SqrtBox["2"], " ", 
+          RowBox[{"(", 
+           RowBox[{"2", "+", 
+            RowBox[{"3", " ", "x"}]}], ")"}]}]], " ", "x"}], "+", 
+       RowBox[{"2", " ", 
+        SqrtBox["2"], " ", 
+        SuperscriptBox["\[ExponentialE]", 
+         RowBox[{
+          SqrtBox["2"], " ", 
+          RowBox[{"(", 
+           RowBox[{"2", "+", 
+            RowBox[{"3", " ", "x"}]}], ")"}]}]], " ", "x"}], "-", 
+       RowBox[{"2", " ", 
+        SuperscriptBox["\[ExponentialE]", 
+         RowBox[{
+          SqrtBox["2"], " ", 
+          RowBox[{"(", 
+           RowBox[{"4", "+", "x"}], ")"}]}]], " ", 
+        SuperscriptBox["x", "2"]}], "+", 
+       RowBox[{
+        SqrtBox["2"], " ", 
+        SuperscriptBox["\[ExponentialE]", 
+         RowBox[{
+          SqrtBox["2"], " ", 
+          RowBox[{"(", 
+           RowBox[{"4", "+", "x"}], ")"}]}]], " ", 
+        SuperscriptBox["x", "2"]}], "-", 
+       RowBox[{"12", " ", 
+        SuperscriptBox["\[ExponentialE]", 
+         RowBox[{
+          SqrtBox["2"], " ", 
+          RowBox[{"(", 
+           RowBox[{"3", "+", 
+            RowBox[{"2", " ", "x"}]}], ")"}]}]], " ", 
+        SuperscriptBox["x", "2"]}], "-", 
+       RowBox[{"2", " ", 
+        SuperscriptBox["\[ExponentialE]", 
+         RowBox[{
+          SqrtBox["2"], " ", 
+          RowBox[{"(", 
+           RowBox[{"2", "+", 
+            RowBox[{"3", " ", "x"}]}], ")"}]}]], " ", 
+        SuperscriptBox["x", "2"]}], "-", 
+       RowBox[{
+        SqrtBox["2"], " ", 
+        SuperscriptBox["\[ExponentialE]", 
+         RowBox[{
+          SqrtBox["2"], " ", 
+          RowBox[{"(", 
+           RowBox[{"2", "+", 
+            RowBox[{"3", " ", "x"}]}], ")"}]}]], " ", 
+        SuperscriptBox["x", "2"]}], "+", 
+       RowBox[{"10", " ", 
+        SuperscriptBox["\[ExponentialE]", 
+         RowBox[{
+          SqrtBox["2"], " ", 
+          RowBox[{"(", 
+           RowBox[{"3", "+", 
+            RowBox[{"2", " ", "x"}]}], ")"}]}]], " ", 
+        SuperscriptBox["x", "3"]}], "+", 
+       RowBox[{"6", " ", 
+        SuperscriptBox["\[ExponentialE]", 
+         RowBox[{"2", " ", 
+          SqrtBox["2"], " ", 
+          RowBox[{"(", 
+           RowBox[{"2", "+", "x"}], ")"}]}]], " ", 
+        SuperscriptBox["x", "2"], " ", 
+        RowBox[{"ExpIntegralEi", "[", 
+         RowBox[{"-", 
+          SqrtBox["2"]}], "]"}]}], "-", 
+       RowBox[{"3", " ", 
+        SqrtBox["2"], " ", 
+        SuperscriptBox["\[ExponentialE]", 
+         RowBox[{"2", " ", 
+          SqrtBox["2"], " ", 
+          RowBox[{"(", 
+           RowBox[{"2", "+", "x"}], ")"}]}]], " ", 
+        SuperscriptBox["x", "2"], " ", 
+        RowBox[{"ExpIntegralEi", "[", 
+         RowBox[{"-", 
+          SqrtBox["2"]}], "]"}]}], "-", 
+       RowBox[{"2", " ", 
+        SuperscriptBox["\[ExponentialE]", 
+         RowBox[{"2", " ", 
+          SqrtBox["2"], " ", 
+          RowBox[{"(", 
+           RowBox[{"2", "+", "x"}], ")"}]}]], " ", 
+        SuperscriptBox["x", "3"], " ", 
+        RowBox[{"ExpIntegralEi", "[", 
+         RowBox[{"-", 
+          SqrtBox["2"]}], "]"}]}], "+", 
+       RowBox[{"2", " ", 
+        SqrtBox["2"], " ", 
+        SuperscriptBox["\[ExponentialE]", 
+         RowBox[{"2", " ", 
+          SqrtBox["2"], " ", 
+          RowBox[{"(", 
+           RowBox[{"2", "+", "x"}], ")"}]}]], " ", 
+        SuperscriptBox["x", "3"], " ", 
+        RowBox[{"ExpIntegralEi", "[", 
+         RowBox[{"-", 
+          SqrtBox["2"]}], "]"}]}], "+", 
+       RowBox[{"6", " ", 
+        SuperscriptBox["\[ExponentialE]", 
+         RowBox[{"2", " ", 
+          SqrtBox["2"], " ", 
+          RowBox[{"(", 
+           RowBox[{"1", "+", "x"}], ")"}]}]], " ", 
+        SuperscriptBox["x", "2"], " ", 
+        RowBox[{"ExpIntegralEi", "[", 
+         SqrtBox["2"], "]"}]}], "+", 
+       RowBox[{"3", " ", 
+        SqrtBox["2"], " ", 
+        SuperscriptBox["\[ExponentialE]", 
+         RowBox[{"2", " ", 
+          SqrtBox["2"], " ", 
+          RowBox[{"(", 
+           RowBox[{"1", "+", "x"}], ")"}]}]], " ", 
+        SuperscriptBox["x", "2"], " ", 
+        RowBox[{"ExpIntegralEi", "[", 
+         SqrtBox["2"], "]"}]}], "-", 
+       RowBox[{"2", " ", 
+        SuperscriptBox["\[ExponentialE]", 
+         RowBox[{"2", " ", 
+          SqrtBox["2"], " ", 
+          RowBox[{"(", 
+           RowBox[{"1", "+", "x"}], ")"}]}]], " ", 
+        SuperscriptBox["x", "3"], " ", 
+        RowBox[{"ExpIntegralEi", "[", 
+         SqrtBox["2"], "]"}]}], "-", 
+       RowBox[{"2", " ", 
+        SqrtBox["2"], " ", 
+        SuperscriptBox["\[ExponentialE]", 
+         RowBox[{"2", " ", 
+          SqrtBox["2"], " ", 
+          RowBox[{"(", 
+           RowBox[{"1", "+", "x"}], ")"}]}]], " ", 
+        SuperscriptBox["x", "3"], " ", 
+        RowBox[{"ExpIntegralEi", "[", 
+         SqrtBox["2"], "]"}]}], "-", 
+       RowBox[{
+        SuperscriptBox["\[ExponentialE]", 
+         RowBox[{"2", " ", 
+          SqrtBox["2"], " ", 
+          RowBox[{"(", 
+           RowBox[{"2", "+", "x"}], ")"}]}]], " ", 
+        SuperscriptBox["x", "2"], " ", 
+        RowBox[{"(", 
+         RowBox[{"6", "-", 
+          RowBox[{"3", " ", 
+           SqrtBox["2"]}], "+", 
+          RowBox[{"2", " ", 
+           RowBox[{"(", 
+            RowBox[{
+             RowBox[{"-", "1"}], "+", 
+             SqrtBox["2"]}], ")"}], " ", "x"}]}], ")"}], " ", 
+        RowBox[{"ExpIntegralEi", "[", 
+         RowBox[{
+          RowBox[{"-", 
+           SqrtBox["2"]}], " ", "x"}], "]"}]}], "+", 
+       RowBox[{
+        SuperscriptBox["\[ExponentialE]", 
+         RowBox[{"2", " ", 
+          SqrtBox["2"], " ", 
+          RowBox[{"(", 
+           RowBox[{"1", "+", "x"}], ")"}]}]], " ", 
+        SuperscriptBox["x", "2"], " ", 
+        RowBox[{"(", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"-", "3"}], " ", 
+           RowBox[{"(", 
+            RowBox[{"2", "+", 
+             SqrtBox["2"]}], ")"}]}], "+", 
+          RowBox[{"2", " ", 
+           RowBox[{"(", 
+            RowBox[{"1", "+", 
+             SqrtBox["2"]}], ")"}], " ", "x"}]}], ")"}], " ", 
+        RowBox[{"ExpIntegralEi", "[", 
+         RowBox[{
+          SqrtBox["2"], " ", "x"}], "]"}]}]}], ")"}]}]}], ",", 
+   RowBox[{
+    RowBox[{"0", "<", 
+     RowBox[{"Re", "[", "x", "]"}], "<", "1"}], "&&", 
+    RowBox[{
+     RowBox[{"Im", "[", "x", "]"}], "\[Equal]", "0"}]}]}], "]"}]], "Output",
+ CellChangeTimes->{{3.601120321856278*^9, 3.601120336079543*^9}, 
+   3.60112043084383*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"DSolve", "[", 
+  RowBox[{
+   RowBox[{
+    RowBox[{
+     RowBox[{
+      RowBox[{"y", "''"}], "[", "x", "]"}], "-", 
+     RowBox[{"2", 
+      RowBox[{
+       RowBox[{"y", "[", "x", "]"}], "/", 
+       RowBox[{"x", "^", "2"}]}]}]}], "\[Equal]", " ", 
+    RowBox[{"2", "/", 
+     RowBox[{"x", "^", "3"}]}]}], ",", 
+   RowBox[{"y", "[", "x", "]"}], ",", "x"}], "]"}]], "Input",
+ CellChangeTimes->{{3.6011217994594507`*^9, 3.601121837631713*^9}, 
+   3.601121926790986*^9}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{"{", 
+   RowBox[{
+    RowBox[{"y", "[", "x", "]"}], "\[Rule]", 
+    RowBox[{
+     FractionBox[
+      RowBox[{"C", "[", "1", "]"}], "x"], "+", 
+     RowBox[{
+      FractionBox["1", "3"], " ", 
+      SuperscriptBox["x", "2"], " ", 
+      RowBox[{"C", "[", "2", "]"}]}], "-", 
+     FractionBox[
+      RowBox[{"2", " ", 
+       RowBox[{"(", 
+        RowBox[{"1", "+", 
+         RowBox[{"3", " ", 
+          RowBox[{"Log", "[", "x", "]"}]}]}], ")"}]}], 
+      RowBox[{"9", " ", "x"}]]}]}], "}"}], "}"}]], "Output",
+ CellChangeTimes->{{3.601121818164257*^9, 3.601121838158546*^9}, 
+   3.601121928059588*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Simplify", "[", 
+  RowBox[{"Out", "[", "87", "]"}], "]"}]], "Input",
+ CellChangeTimes->{{3.6011218453540173`*^9, 3.601121867093884*^9}, 
+   3.6011219323497047`*^9}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{"{", 
+   RowBox[{
+    RowBox[{"y", "[", "x", "]"}], "\[Rule]", 
+    FractionBox[
+     RowBox[{
+      RowBox[{"-", "2"}], "+", 
+      RowBox[{"9", " ", 
+       RowBox[{"C", "[", "1", "]"}]}], "+", 
+      RowBox[{"3", " ", 
+       SuperscriptBox["x", "3"], " ", 
+       RowBox[{"C", "[", "2", "]"}]}], "-", 
+      RowBox[{"6", " ", 
+       RowBox[{"Log", "[", "x", "]"}]}]}], 
+     RowBox[{"9", " ", "x"}]]}], "}"}], "}"}]], "Output",
+ CellChangeTimes->{{3.601121852327857*^9, 3.6011218676916237`*^9}, 
+   3.601121932731165*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Simplify", "[", 
+  RowBox[{
+   RowBox[{"Out", "[", "87", "]"}], "*", "x"}], "]"}]], "Input",
+ CellChangeTimes->{{3.601122015515539*^9, 3.601122053428554*^9}}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{"{", 
+   RowBox[{"x", " ", 
+    RowBox[{"(", 
+     RowBox[{
+      RowBox[{"y", "[", "x", "]"}], "\[Rule]", 
+      FractionBox[
+       RowBox[{
+        RowBox[{"-", "2"}], "+", 
+        RowBox[{"9", " ", 
+         RowBox[{"C", "[", "1", "]"}]}], "+", 
+        RowBox[{"3", " ", 
+         SuperscriptBox["x", "3"], " ", 
+         RowBox[{"C", "[", "2", "]"}]}], "-", 
+        RowBox[{"6", " ", 
+         RowBox[{"Log", "[", "x", "]"}]}]}], 
+       RowBox[{"9", " ", "x"}]]}], ")"}]}], "}"}], "}"}]], "Output",
+ CellChangeTimes->{{3.6011220217490597`*^9, 3.6011220536841803`*^9}}]
+}, Open  ]],
+
+Cell[BoxData[
+ RowBox[{
+  FractionBox[
+   RowBox[{
+    RowBox[{"-", "2"}], "+", 
+    RowBox[{"9", " ", 
+     RowBox[{"C", "[", "1", "]"}]}], "+", 
+    RowBox[{"3", " ", 
+     SuperscriptBox["x", "3"], " ", 
+     RowBox[{"C", "[", "2", "]"}]}], "-", 
+    RowBox[{"6", " ", 
+     RowBox[{"Log", "[", "x", "]"}]}]}], 
+   RowBox[{"9", " ", "x"}]], "*", "x"}]], "Input",
+ CellChangeTimes->{{3.601122067133016*^9, 3.601122067308281*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  FractionBox["1", "9"], " ", 
+  RowBox[{"(", 
+   RowBox[{
+    RowBox[{"9", " ", 
+     RowBox[{"C", "[", "1", "]"}]}], "+", 
+    RowBox[{"3", " ", 
+     SuperscriptBox["x", "3"], " ", 
+     RowBox[{"C", "[", "2", "]"}]}], "-", 
+    RowBox[{"6", " ", 
+     RowBox[{"Log", "[", "x", "]"}]}]}], ")"}]}]], "Input",
+ CellChangeTimes->{{3.601122072051136*^9, 3.601122072365196*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  FractionBox["1", "9"], " ", 
+  RowBox[{"(", 
+   RowBox[{
+    RowBox[{"9", " ", 
+     RowBox[{"C", "[", "1", "]"}]}], "+", 
+    RowBox[{"3", " ", 
+     SuperscriptBox["x", "3"], " ", 
+     RowBox[{"C", "[", "2", "]"}]}], "-", 
+    RowBox[{"6", " ", 
+     RowBox[{"Log", "[", "x", "]"}]}]}], ")"}]}]], "Output",
+ CellChangeTimes->{3.601122073426284*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+   RowBox[{"f", "[", "x_", "]"}], ":=", " ", 
+   RowBox[{"C1", "+", 
+    RowBox[{"C2", " ", 
+     RowBox[{"x", "^", "3"}]}], "-", 
+    RowBox[{"2", 
+     RowBox[{
+      RowBox[{"Log", "[", "x", "]"}], "/", "3"}]}]}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{"1", "+", 
+  RowBox[{"Integrate", "[", 
+   RowBox[{
+    RowBox[{"2", "t", "*", 
+     RowBox[{"f", "[", 
+      RowBox[{"x", "/", 
+       RowBox[{"(", 
+        RowBox[{"1", "-", "t"}], ")"}]}], "]"}]}], ",", 
+    RowBox[{"{", 
+     RowBox[{"t", ",", "0", ",", 
+      RowBox[{"1", "-", "x"}]}], "}"}]}], "]"}]}]}], "Input",
+ CellChangeTimes->{{3.601122149258841*^9, 3.601122218244763*^9}, 
+   3.601123206062849*^9}],
+
+Cell[BoxData[
+ RowBox[{"ConditionalExpression", "[", 
+  RowBox[{
+   RowBox[{"1", "+", 
+    RowBox[{
+     FractionBox["1", "3"], " ", 
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"(", 
+         RowBox[{
+          RowBox[{"-", "1"}], "+", "x"}], ")"}], " ", 
+        RowBox[{"(", 
+         RowBox[{"3", "-", "x", "+", 
+          RowBox[{"3", " ", 
+           RowBox[{"(", 
+            RowBox[{
+             RowBox[{"-", "1"}], "+", "x"}], ")"}], " ", 
+           RowBox[{"(", 
+            RowBox[{"C1", "+", 
+             RowBox[{"C2", " ", "x"}]}], ")"}]}]}], ")"}]}], "-", 
+       RowBox[{"2", " ", 
+        RowBox[{"Log", "[", "x", "]"}]}]}], ")"}]}]}], ",", 
+   RowBox[{
+    RowBox[{"(", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"Re", "[", "x", "]"}], "<", "1"}], "&&", 
+      RowBox[{
+       RowBox[{"Re", "[", "x", "]"}], ">", "0"}], "&&", 
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"Re", "[", 
+          FractionBox["1", 
+           RowBox[{"1", "-", "x"}]], "]"}], ">", "1"}], "||", 
+        RowBox[{
+         FractionBox["1", 
+          RowBox[{"1", "-", "x"}]], "\[NotElement]", "Reals"}]}], ")"}]}], 
+     ")"}], "||", 
+    RowBox[{"(", 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"Re", "[", "x", "]"}], ">", "1"}], "||", 
+        RowBox[{"x", "\[NotElement]", "Reals"}]}], ")"}], "&&", 
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"Re", "[", 
+          FractionBox["1", 
+           RowBox[{"1", "-", "x"}]], "]"}], "\[GreaterEqual]", "1"}], "||", 
+        RowBox[{
+         RowBox[{"Re", "[", 
+          FractionBox["1", 
+           RowBox[{"1", "-", "x"}]], "]"}], "\[LessEqual]", "0"}], "||", 
+        RowBox[{
+         FractionBox["1", 
+          RowBox[{"1", "-", "x"}]], "\[NotElement]", "Reals"}]}], ")"}]}], 
+     ")"}]}]}], "]"}]], "Output",
+ CellChangeTimes->{3.6011222288500357`*^9, 3.6011232161785173`*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Simplify", "[", 
+  RowBox[{"Assuming", "[", 
+   RowBox[{
+    RowBox[{"0", "<", "x", "<", "1"}], ",", 
+    RowBox[{
+     RowBox[{"Out", "[", "97", "]"}], "-", 
+     RowBox[{"f", "[", "x", "]"}]}]}], "]"}], "]"}]], "Input",
+ CellChangeTimes->{{3.601122270978302*^9, 3.601122310451548*^9}}],
+
+Cell[BoxData[
+ RowBox[{"ConditionalExpression", "[", 
+  RowBox[{
+   FractionBox[
+    RowBox[{
+     RowBox[{"-", "5"}], "+", 
+     RowBox[{"9", " ", "x"}], "+", 
+     RowBox[{"9", " ", 
+      RowBox[{"(", 
+       RowBox[{"1", "-", 
+        RowBox[{"2", " ", "C1"}], "+", "C2"}], ")"}], " ", 
+      SuperscriptBox["x", "2"]}], "+", 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{"-", "4"}], "+", 
+        RowBox[{"9", " ", "C1"}], "-", 
+        RowBox[{"18", " ", "C2"}]}], ")"}], " ", 
+      SuperscriptBox["x", "3"]}], "+", 
+     RowBox[{"12", " ", 
+      RowBox[{"Log", "[", "x", "]"}]}]}], 
+    RowBox[{"9", " ", "x"}]], ",", 
+   RowBox[{
+    RowBox[{"(", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"Re", "[", "x", "]"}], "<", "1"}], "&&", 
+      RowBox[{
+       RowBox[{"Re", "[", "x", "]"}], ">", "0"}], "&&", 
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"Re", "[", 
+          FractionBox["1", 
+           RowBox[{"1", "-", "x"}]], "]"}], ">", "1"}], "||", 
+        RowBox[{
+         FractionBox["1", 
+          RowBox[{"1", "-", "x"}]], "\[NotElement]", "Reals"}]}], ")"}]}], 
+     ")"}], "||", 
+    RowBox[{"(", 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"Re", "[", "x", "]"}], ">", "1"}], "||", 
+        RowBox[{"x", "\[NotElement]", "Reals"}]}], ")"}], "&&", 
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"Re", "[", 
+          FractionBox["1", 
+           RowBox[{"1", "-", "x"}]], "]"}], "\[GreaterEqual]", "1"}], "||", 
+        RowBox[{
+         RowBox[{"Re", "[", 
+          FractionBox["1", 
+           RowBox[{"1", "-", "x"}]], "]"}], "\[LessEqual]", "0"}], "||", 
+        RowBox[{
+         FractionBox["1", 
+          RowBox[{"1", "-", "x"}]], "\[NotElement]", "Reals"}]}], ")"}]}], 
+     ")"}]}]}], "]"}]], "Output",
+ CellChangeTimes->{{3.601122274510025*^9, 3.601122310936592*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"Expand", "[", 
+   RowBox[{"1", "+", 
+    RowBox[{
+     FractionBox["1", "3"], " ", 
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"(", 
+         RowBox[{
+          RowBox[{"-", "1"}], "+", "x"}], ")"}], " ", 
+        RowBox[{"(", 
+         RowBox[{"3", "-", "x", "+", 
+          RowBox[{"3", " ", 
+           RowBox[{"(", 
+            RowBox[{
+             RowBox[{"-", "1"}], "+", "x"}], ")"}], " ", 
+           RowBox[{"(", 
+            RowBox[{"C1", "+", 
+             RowBox[{"C2", " ", "x"}]}], ")"}]}]}], ")"}]}], "-", 
+       RowBox[{"2", " ", 
+        RowBox[{"Log", "[", "x", "]"}]}]}], ")"}]}]}], "]"}], "-", 
+  RowBox[{"f", "[", "x", "]"}]}]], "Input",
+ CellChangeTimes->{{3.601122422195187*^9, 3.601122440042796*^9}, 
+   3.6011232328400097`*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  FractionBox[
+   RowBox[{"4", " ", "x"}], "3"], "-", 
+  RowBox[{"2", " ", "C1", " ", "x"}], "+", 
+  RowBox[{"C2", " ", "x"}], "-", 
+  FractionBox[
+   SuperscriptBox["x", "2"], "3"], "+", 
+  RowBox[{"C1", " ", 
+   SuperscriptBox["x", "2"]}], "-", 
+  RowBox[{"2", " ", "C2", " ", 
+   SuperscriptBox["x", "2"]}]}]], "Output",
+ CellChangeTimes->{{3.601122424343883*^9, 3.601122440599614*^9}, 
+   3.601123235194481*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["\<\
+1 - 5/(9*x) + x - 2*C1*x + C2*x - (4*x^2)/9 + C1*x^2 - 2*C2*x^2 + \
+(4*Log[x])/(3*x)\
+\>", "WolframAlphaLong"],
+
+Cell[BoxData[
+ NamespaceBox["WolframAlphaQueryResults",
+  DynamicModuleBox[{Typeset`q$$ = 
+   "1 - 5/(9*x) + x - 2*C1*x + C2*x - (4*x^2)/9 + C1*x^2 - 2*C2*x^2 + \
+(4*Log[x])/(3*x)", Typeset`opts$$ = {
+   AppearanceElements -> {
+     "Warnings", "Assumptions", "Brand", "Pods", "PodMenus", "Unsuccessful", 
+      "Sources"}, Asynchronous -> All, 
+    TimeConstraint -> {30, Automatic, Automatic, Automatic}, 
+    Method -> {
+     "Formats" -> {"cell", "minput", "msound", "dataformats"}, "Server" -> 
+      "http://api.wolframalpha.com/v1/"}}, Typeset`elements$$ = {
+   "Warnings", "Assumptions", "Brand", "Pods", "PodMenus", "Unsuccessful", 
+    "Sources"}, Typeset`pod1$$ = XMLElement[
+   "pod", {"title" -> "Input", "scanner" -> "Identity", "id" -> "Input", 
+     "position" -> "100", "error" -> "false", "numsubpods" -> "1"}, {
+     XMLElement["subpod", {"title" -> ""}, {
+       XMLElement[
+       "minput", {}, {
+        "1 - 5/(9 x) + x - 2 C1 x + C2 x - (4 x^2)/9 + C1 x^2 - 2 C2 x^2 + (4 \
+Log[x])/(3 x)"}], 
+       XMLElement["cell", {"compressed" -> False, "string" -> True}, {
+         Cell[
+          BoxData[
+           FormBox[
+            TagBox[
+             RowBox[{"1", "-", 
+               TagBox[
+                FractionBox["5", 
+                 RowBox[{"9", " ", "x"}]], 
+                PolynomialForm[#, TraditionalOrder -> False]& ], "+", "x", 
+               "-", 
+               RowBox[{"2", " ", "C1", " ", "x"}], "+", 
+               RowBox[{"C2", " ", "x"}], "-", 
+               TagBox[
+                RowBox[{
+                  FractionBox["1", "9"], " ", 
+                  RowBox[{"(", 
+                    TagBox[
+                    RowBox[{"4", " ", 
+                    SuperscriptBox["x", "2"]}], 
+                    PolynomialForm[#, TraditionalOrder -> False]& ], ")"}]}], 
+                PolynomialForm[#, TraditionalOrder -> False]& ], "+", 
+               RowBox[{"C1", " ", 
+                 SuperscriptBox["x", "2"]}], "-", 
+               RowBox[{"2", " ", "C2", " ", 
+                 SuperscriptBox["x", "2"]}], "+", 
+               FractionBox[
+                TagBox[
+                 RowBox[{"4", " ", 
+                   RowBox[{"log", "(", "x", ")"}]}], 
+                 PolynomialForm[#, TraditionalOrder -> False]& ], 
+                RowBox[{"3", " ", "x"}]]}], 
+             PolynomialForm[#, TraditionalOrder -> False]& ], 
+            TraditionalForm]], "Output"]}], 
+       XMLElement[
+       "dataformats", {}, {
+        "plaintext,minput,computabledata,formatteddata,formuladata"}]}], 
+     XMLElement["infos", {"count" -> "1"}, {
+       XMLElement["info", {"text" -> "log(x) is the natural logarithm"}, {
+         XMLElement[
+         "link", {
+          "url" -> "http://reference.wolfram.com/mathematica/ref/Log.html", 
+           "text" -> "Documentation", "title" -> "Mathematica"}, {}], 
+         XMLElement[
+         "link", {
+          "url" -> "http://functions.wolfram.com/ElementaryFunctions/Log", 
+           "text" -> "Properties", "title" -> "Wolfram Functions Site"}, {}], 
+         
+         XMLElement[
+         "link", {
+          "url" -> "http://mathworld.wolfram.com/NaturalLogarithm.html", 
+           "text" -> "Definition", "title" -> "MathWorld"}, {}], 
+         XMLElement["cell", {"compressed" -> False, "string" -> True}, {
+           Cell[
+            BoxData[
+             StyleBox[
+              FormBox[
+               StyleBox[
+                TemplateBox[{"  ", "\"  \"", 
+                  StyleBox[
+                   RowBox[{"log", "(", "x", ")"}], FontFamily -> 
+                   "Bitstream Charter", Bold, 14, StripOnInput -> False], 
+                  "\"is the natural logarithm\""}, "RowWithSeparators"], 
+                GrayLevel[0.3], StripOnInput -> False], TraditionalForm], 
+              FontFamily -> "Verdana", FontSize -> 12]], "Output", 
+            LinebreakAdjustments -> {1, 10, 0, 0, 10}]}]}]}]}], 
+   Typeset`pod2$$ = XMLElement[
+   "pod", {"title" -> "Result", "scanner" -> "Identity", "id" -> "Result", 
+     "position" -> "200", "error" -> "false", "numsubpods" -> "1", "primary" -> 
+     "true"}, {
+     XMLElement["subpod", {"title" -> "", "primary" -> "true"}, {
+       XMLElement["cell", {"compressed" -> False, "string" -> True}, {
+         Cell[
+          BoxData[
+           FormBox[
+            TagBox[
+             RowBox[{
+               RowBox[{"C1", " ", 
+                 SuperscriptBox["x", "2"]}], "-", 
+               RowBox[{"2", " ", "C1", " ", "x"}], "-", 
+               RowBox[{"2", " ", "C2", " ", 
+                 SuperscriptBox["x", "2"]}], "+", 
+               RowBox[{"C2", " ", "x"}], "-", 
+               FractionBox[
+                RowBox[{"4", " ", 
+                  SuperscriptBox["x", "2"]}], "9"], "+", "x", "-", 
+               FractionBox["5", 
+                RowBox[{"9", " ", "x"}]], "+", 
+               FractionBox[
+                RowBox[{"4", " ", 
+                  RowBox[{"log", "(", "x", ")"}]}], 
+                RowBox[{"3", " ", "x"}]], "+", "1"}], Identity], 
+            TraditionalForm]], "Output"]}], 
+       XMLElement[
+       "dataformats", {}, {
+        "plaintext,moutput,computabledata,formatteddata,formuladata"}]}]}], 
+   Typeset`pod3$$ = XMLElement[
+   "pod", {"title" -> "Alternate forms", "scanner" -> "Simplification", "id" -> 
+     "AlternateForm", "position" -> "300", "error" -> "false", "numsubpods" -> 
+     "3"}, {
+     XMLElement["subpod", {"title" -> ""}, {
+       XMLElement[
+       "minput", {}, {
+        "FullSimplify[1 - 5/(9 x) + x - 2 C1 x + C2 x - (4 x^2)/9 + C1 x^2 - \
+2 C2 x^2 + (4 Log[x])/(3 x)]"}], 
+       XMLElement["cell", {"compressed" -> False, "string" -> True}, {
+         Cell[
+          BoxData[
+           FormBox[
+            TagBox[
+             FractionBox[
+              RowBox[{
+                RowBox[{"x", " ", 
+                  RowBox[{"(", 
+                    RowBox[{
+                    RowBox[{"x", " ", 
+                    RowBox[{"(", 
+                    RowBox[{
+                    RowBox[{"9", " ", "C1", " ", 
+                    RowBox[{"(", 
+                    RowBox[{"x", "-", "2"}], ")"}]}], "-", 
+                    RowBox[{
+                    RowBox[{"18"}], " ", "C2", " ", "x"}], "+", 
+                    RowBox[{"9", " ", "C2"}], "-", 
+                    RowBox[{"4", " ", "x"}], "+", "9"}], ")"}]}], "+", "9"}], 
+                    ")"}]}], "+", 
+                RowBox[{"12", " ", 
+                  RowBox[{"log", "(", "x", ")"}]}], "-", "5"}], 
+              RowBox[{"9", " ", "x"}]], Identity], TraditionalForm]], 
+          "Output"]}], 
+       XMLElement[
+       "dataformats", {}, {
+        "plaintext,minput,moutput,computabledata,formatteddata,formuladata"}]}\
+], 
+     XMLElement["subpod", {"title" -> ""}, {
+       XMLElement[
+       "minput", {}, {
+        "Simplify[1 - 5/(9 x) + x - 2 C1 x + C2 x - (4 x^2)/9 + C1 x^2 - 2 C2 \
+x^2 + (4 Log[x])/(3 x)]"}], 
+       XMLElement["cell", {"compressed" -> False, "string" -> True}, {
+         Cell[
+          BoxData[
+           FormBox[
+            TagBox[
+             FractionBox[
+              RowBox[{
+                RowBox[{
+                  SuperscriptBox["x", "3"], " ", 
+                  RowBox[{"(", 
+                    RowBox[{
+                    RowBox[{"9", " ", "C1"}], "-", 
+                    RowBox[{"18", " ", "C2"}], "-", "4"}], ")"}]}], "+", 
+                RowBox[{"9", " ", 
+                  SuperscriptBox["x", "2"], " ", 
+                  RowBox[{"(", 
+                    RowBox[{
+                    RowBox[{"-", 
+                    RowBox[{
+                    RowBox[{"2"}], " ", "C1"}]}], "+", "C2", "+", "1"}], 
+                    ")"}]}], "+", 
+                RowBox[{"9", " ", "x"}], "+", 
+                RowBox[{"12", " ", 
+                  RowBox[{"log", "(", "x", ")"}]}], "-", "5"}], 
+              RowBox[{"9", " ", "x"}]], Identity], TraditionalForm]], 
+          "Output"]}], 
+       XMLElement[
+       "dataformats", {}, {
+        "plaintext,minput,moutput,computabledata,formatteddata,formuladata"}]}\
+], 
+     XMLElement["subpod", {"title" -> ""}, {
+       XMLElement[
+       "minput", {}, {
+        "Factor[1 - 5/(9 x) + x - 2 C1 x + C2 x - (4 x^2)/9 + C1 x^2 - 2 C2 \
+x^2 + (4 Log[x])/(3 x)]"}], 
+       XMLElement["cell", {"compressed" -> False, "string" -> True}, {
+         Cell[
+          BoxData[
+           FormBox[
+            TagBox[
+             FractionBox[
+              RowBox[{
+                RowBox[{"9", " ", "C1", " ", 
+                  SuperscriptBox["x", "3"]}], "-", 
+                RowBox[{"18", " ", "C1", " ", 
+                  SuperscriptBox["x", "2"]}], "-", 
+                RowBox[{"18", " ", "C2", " ", 
+                  SuperscriptBox["x", "3"]}], "+", 
+                RowBox[{"9", " ", "C2", " ", 
+                  SuperscriptBox["x", "2"]}], "-", 
+                RowBox[{"4", " ", 
+                  SuperscriptBox["x", "3"]}], "+", 
+                RowBox[{"9", " ", 
+                  SuperscriptBox["x", "2"]}], "+", 
+                RowBox[{"9", " ", "x"}], "+", 
+                RowBox[{"12", " ", 
+                  RowBox[{"log", "(", "x", ")"}]}], "-", "5"}], 
+              RowBox[{"9", " ", "x"}]], Identity], TraditionalForm]], 
+          "Output"]}], 
+       XMLElement[
+       "dataformats", {}, {
+        "plaintext,minput,moutput,computabledata,formatteddata,formuladata"}]}\
+], 
+     XMLElement["states", {"count" -> "1"}, {
+       XMLElement[
+       "state", {"name" -> "More", "input" -> "AlternateForm__More"}, {}]}]}],
+    Typeset`pod4$$ = XMLElement[
+   "pod", {"title" -> "Property as a real function", "scanner" -> 
+     "FunctionProperties", "id" -> "PropertyAsARealFunction", "position" -> 
+     "400", "error" -> "false", "numsubpods" -> "1"}, {
+     XMLElement["subpod", {"title" -> "Domain"}, {
+       XMLElement["cell", {"compressed" -> False, "string" -> True}, {
+         Cell[
+          BoxData[
+           FormBox[
+            StyleBox[
+             TemplateBox[{
+               TemplateBox[{"\"{\"", 
+                 RowBox[{"x", "\[Element]", 
+                   TagBox["\[DoubleStruckCapitalR]", 
+                    Function[{}, Reals]]}], "\" : \"", 
+                 RowBox[{"x", ">", "0"}], "\"}\""}, "RowDefault"], "\"  \"", 
+               StyleBox[
+                
+                RowBox[{
+                 "\"(\"", "\[NoBreak]", "\"all positive real numbers\"", 
+                  "\[NoBreak]", "\")\""}], {
+                 GrayLevel[0.6], LinebreakAdjustments -> {1, 100, 1, 0, 100}, 
+                 LineIndent -> 0}, StripOnInput -> False]}, "RowDefault"], 
+             LineIndent -> 0], TraditionalForm]], "Output"]}], 
+       XMLElement[
+       "dataformats", {}, {"plaintext,computabledata,formatteddata"}]}], 
+     XMLElement["infos", {"count" -> "1"}, {
+       XMLElement[
+       "info", {
+        "text" -> "\[DoubleStruckCapitalR] is the set of real numbers"}, {
+         XMLElement[
+         "link", {
+          "url" -> "http://reference.wolfram.com/mathematica/ref/Reals.html", 
+           "text" -> "Documentation", "title" -> "Documentation"}, {}], 
+         XMLElement[
+         "link", {
+          "url" -> "http://mathworld.wolfram.com/R.html", "text" -> 
+           "Definition", "title" -> "MathWorld"}, {}], 
+         XMLElement["cell", {"compressed" -> False, "string" -> True}, {
+           Cell[
+            BoxData[
+             StyleBox[
+              FormBox[
+               StyleBox[
+                TemplateBox[{"  ", "\"  \"", 
+                  StyleBox[
+                   TagBox["\[DoubleStruckCapitalR]", 
+                    Function[{}, Reals]], FontFamily -> "Bitstream Charter", 
+                   Bold, 14, StripOnInput -> False], 
+                  "\"is the set of real numbers\""}, "RowWithSeparators"], 
+                GrayLevel[0.3], StripOnInput -> False], TraditionalForm], 
+              FontFamily -> "Verdana", FontSize -> 12]], "Output", 
+            LinebreakAdjustments -> {1, 10, 0, 0, 10}]}]}]}]}], 
+   Typeset`pod5$$ = XMLElement[
+   "pod", {"title" -> "Series expansion at x=0", "scanner" -> "Series", "id" -> 
+     "SeriesExpansionAt `1`x=0.", "position" -> "500", "error" -> "false", 
+     "numsubpods" -> "1"}, {
+     XMLElement["subpod", {"title" -> ""}, {
+       XMLElement[
+       "minput", {}, {
+        "Series[(-5 + 9 x + 9 (1 - 2 C1 + C2) x^2 + (-4 + 9 C1 - 18 C2) x^3 + \
+12 Log[x])/(9 x), {x, 0, 4}]"}], 
+       XMLElement["cell", {"compressed" -> False, "string" -> True}, {
+         Cell[
+          BoxData[
+           FormBox[
+            TagBox[
+             TemplateBox[{
+               RowBox[{
+                 FractionBox[
+                  RowBox[{
+                    FractionBox[
+                    RowBox[{"4", " ", 
+                    RowBox[{"log", "(", "x", ")"}]}], "3"], "-", 
+                    FractionBox["5", "9"]}], "x"], "+", "1", "+", 
+                 RowBox[{"x", " ", 
+                   RowBox[{"(", 
+                    RowBox[{
+                    RowBox[{"-", 
+                    RowBox[{
+                    RowBox[{"2"}], " ", "C1"}]}], "+", "C2", "+", "1"}], 
+                    ")"}]}], "+", 
+                 InterpretationBox[
+                  RowBox[{"O", "(", 
+                    SuperscriptBox["x", "2"], ")"}], 
+                  SeriesData[$CellContext`x, 0, {}, -1, 2, 1], Editable -> 
+                  False]}], 
+               RowBox[{"SeriesData", "[", 
+                 RowBox[{"x", ",", "0", ",", 
+                   RowBox[{"{", 
+                    RowBox[{
+                    RowBox[{
+                    RowBox[{"-", 
+                    FractionBox["5", "9"]}], "+", 
+                    FractionBox[
+                    RowBox[{"4", " ", 
+                    RowBox[{"Log", "[", "x", "]"}]}], "3"]}], ",", "1", ",", 
+                    RowBox[{"1", "-", 
+                    RowBox[{"2", " ", "C1"}], "+", "C2"}]}], "}"}], ",", 
+                   RowBox[{"-", "1"}], ",", "2", ",", "1"}], "]"}]}, 
+              "SeriesData", DisplayFunction -> (#& ), 
+              InterpretationFunction -> (#2& ), SyntaxForm -> Plus], 
+             Identity], TraditionalForm]], "Output"]}], 
+       XMLElement[
+       "dataformats", {}, {
+        "plaintext,minput,moutput,computabledata,formatteddata,formuladata"}]}\
+]}], Typeset`pod6$$ = XMLElement[
+   "pod", {"title" -> "Derivative", "scanner" -> "Derivative", "id" -> 
+     "Derivative", "position" -> "600", "error" -> "false", "numsubpods" -> 
+     "1"}, {
+     XMLElement["subpod", {"title" -> ""}, {
+       XMLElement[
+       "minput", {}, {
+        "D[1 - 5/(9 x) + x - 2 C1 x + C2 x - (4 x^2)/9 + C1 x^2 - 2 C2 x^2 + \
+(4 Log[x])/(3 x), x]"}], 
+       XMLElement["cell", {"compressed" -> False, "string" -> True}, {
+         Cell[
+          BoxData[
+           FormBox[
+            RowBox[{
+              FormBox[
+               TagBox[
+                FormBox[
+                 RowBox[{
+                   FormBox[
+                    TagBox[
+                    FractionBox[
+                    RowBox[{"\[PartialD]", "\"\""}], 
+                    RowBox[{"\[PartialD]", "x"}], MultilineFunction -> None], 
+                    HoldForm], TraditionalForm], "\[InvisibleApplication]", 
+                   RowBox[{"(", 
+                    TagBox[
+                    TagBox[
+                    RowBox[{"1", "-", 
+                    FractionBox["5", 
+                    RowBox[{"9", " ", "x"}]], "+", "x", "-", 
+                    RowBox[{"2", " ", "C1", " ", "x"}], "+", 
+                    RowBox[{"C2", " ", "x"}], "-", 
+                    FractionBox[
+                    RowBox[{"4", " ", 
+                    SuperscriptBox["x", "2"]}], "9"], "+", 
+                    RowBox[{"C1", " ", 
+                    SuperscriptBox["x", "2"]}], "-", 
+                    RowBox[{"2", " ", "C2", " ", 
+                    SuperscriptBox["x", "2"]}], "+", 
+                    FractionBox[
+                    RowBox[{"4", " ", 
+                    RowBox[{"log", "(", "x", ")"}]}], 
+                    RowBox[{"3", " ", "x"}]]}], HoldForm], 
+                    PolynomialForm[#, TraditionalOrder -> False]& ], ")"}]}], 
+                 TraditionalForm], Format[#, TraditionalForm]& ], 
+               TraditionalForm], "\[LongEqual]", 
+              TagBox[
+               RowBox[{
+                 RowBox[{"2", " ", "C1", " ", 
+                   RowBox[{"(", 
+                    RowBox[{"x", "-", "1"}], ")"}]}], "-", 
+                 RowBox[{
+                   RowBox[{"4"}], " ", "C2", " ", "x"}], "+", "C2", "+", 
+                 FractionBox["17", 
+                  RowBox[{"9", " ", 
+                    SuperscriptBox["x", "2"]}]], "-", 
+                 FractionBox[
+                  RowBox[{"4", " ", 
+                    RowBox[{"log", "(", "x", ")"}]}], 
+                  RowBox[{"3", " ", 
+                    SuperscriptBox["x", "2"]}]], "-", 
+                 FractionBox[
+                  RowBox[{"8", " ", "x"}], "9"], "+", "1"}], Identity]}], 
+            TraditionalForm]], "Output"]}], 
+       XMLElement[
+       "dataformats", {}, {
+        "plaintext,minput,moutput,computabledata,formatteddata,formuladata"}]}\
+], 
+     XMLElement["states", {"count" -> "1"}, {
+       XMLElement[
+       "state", {
+        "name" -> "Step-by-step solution", "input" -> 
+         "Derivative__Step-by-step solution"}, {}]}]}], Typeset`pod7$$ = 
+   XMLElement[
+   "pod", {"title" -> "Indefinite integral", "scanner" -> "Integral", "id" -> 
+     "IndefiniteIntegral", "position" -> "700", "error" -> "false", 
+     "numsubpods" -> "1", "primary" -> "true"}, {
+     XMLElement["subpod", {"title" -> ""}, {
+       XMLElement[
+       "minput", {}, {
+        "Integrate[1 - 5/(9 x) + x - 2 C1 x + C2 x - (4 x^2)/9 + C1 x^2 - 2 \
+C2 x^2 + (4 Log[x])/(3 x), x]"}], 
+       XMLElement["cell", {"compressed" -> False, "string" -> True}, {
+         Cell[
+          BoxData[
+           FormBox[
+            RowBox[{
+              TagBox[
+               RowBox[{"\[Integral]", 
+                 RowBox[{
+                   RowBox[{"(", 
+                    TagBox[
+                    RowBox[{"1", "-", 
+                    FractionBox["5", 
+                    RowBox[{"9", " ", "x"}]], "+", "x", "-", 
+                    RowBox[{"2", " ", "C1", " ", "x"}], "+", 
+                    RowBox[{"C2", " ", "x"}], "-", 
+                    FractionBox[
+                    RowBox[{"4", " ", 
+                    SuperscriptBox["x", "2"]}], "9"], "+", 
+                    RowBox[{"C1", " ", 
+                    SuperscriptBox["x", "2"]}], "-", 
+                    RowBox[{"2", " ", "C2", " ", 
+                    SuperscriptBox["x", "2"]}], "+", 
+                    FractionBox[
+                    RowBox[{"4", " ", 
+                    RowBox[{"log", "(", "x", ")"}]}], 
+                    RowBox[{"3", " ", "x"}]]}], HoldForm], ")"}], 
+                   RowBox[{"\[DifferentialD]", "x"}]}]}], HoldForm], 
+              "\[LongEqual]", 
+              TagBox[
+               StyleBox[
+                RowBox[{
+                  StyleBox[
+                   RowBox[{
+                    FractionBox["1", "54"], " ", 
+                    RowBox[{"(", 
+                    RowBox[{
+                    RowBox[{"x", " ", 
+                    RowBox[{"(", 
+                    RowBox[{
+                    RowBox[{"2", " ", 
+                    SuperscriptBox["x", "2"], " ", 
+                    RowBox[{"(", 
+                    RowBox[{
+                    RowBox[{"9", " ", "C1"}], "-", 
+                    RowBox[{"18", " ", "C2"}], "-", "4"}], ")"}]}], "+", 
+                    RowBox[{"27", " ", "x", " ", 
+                    RowBox[{"(", 
+                    RowBox[{
+                    RowBox[{"-", 
+                    RowBox[{
+                    RowBox[{"2"}], " ", "C1"}]}], "+", "C2", "+", "1"}], 
+                    ")"}]}], "+", "54"}], ")"}]}], "+", 
+                    RowBox[{"36", " ", 
+                    RowBox[{
+                    SuperscriptBox["log", "2"], "(", "x", ")"}]}], "-", 
+                    RowBox[{"30", " ", 
+                    RowBox[{"log", "(", "x", ")"}]}]}], ")"}]}], 
+                   LinebreakAdjustments -> {1, 100, 1, 0, 100}, LineIndent -> 
+                   0, 
+                   GrayLevel[0], StripOnInput -> False], "+", 
+                  StyleBox[
+                  "constant", FontFamily -> "Helvetica", Magnification -> 
+                   0.9 Inherited]}], 
+                LinebreakAdjustments -> {1, 100, 1, 0, 100}, LineIndent -> 0, 
+                
+                GrayLevel[0.6], StripOnInput -> False], Identity]}], 
+            TraditionalForm]], "Output"]}], 
+       XMLElement[
+       "dataformats", {}, {
+        "plaintext,minput,moutput,computabledata,formatteddata,formuladata"}]}\
+], 
+     XMLElement["states", {"count" -> "2"}, {
+       XMLElement[
+       "state", {
+        "name" -> "Approximate form", "input" -> 
+         "IndefiniteIntegral__Approximate form"}, {}], 
+       XMLElement[
+       "state", {
+        "name" -> "Step-by-step solution", "input" -> 
+         "IndefiniteIntegral__Step-by-step solution"}, {}]}]}], 
+   Typeset`pod8$$, Typeset`pod9$$, Typeset`pod10$$, Typeset`pod11$$, 
+   Typeset`pod12$$, Typeset`pod13$$, Typeset`pod14$$, Typeset`pod15$$, 
+   Typeset`pod16$$, Typeset`pod17$$, Typeset`pod18$$, Typeset`pod19$$, 
+   Typeset`pod20$$, Typeset`pod21$$, Typeset`pod22$$, Typeset`pod23$$, 
+   Typeset`pod24$$, Typeset`pod25$$, Typeset`pod26$$, Typeset`pod27$$, 
+   Typeset`pod28$$, Typeset`pod29$$, Typeset`pod30$$, Typeset`pod31$$, 
+   Typeset`pod32$$, Typeset`pod33$$, Typeset`pod34$$, Typeset`pod35$$, 
+   Typeset`pod36$$, Typeset`pod37$$, Typeset`aux1$$ = {
+   True, False, {False}, True}, Typeset`aux2$$ = {True, False, {False}, True},
+    Typeset`aux3$$ = {True, False, {False, False, False}, True}, 
+   Typeset`aux4$$ = {True, False, {False}, True}, Typeset`aux5$$ = {
+   True, False, {False}, True}, Typeset`aux6$$ = {True, False, {False}, True},
+    Typeset`aux7$$ = {True, False, {False}, True}, Typeset`aux8$$ = {
+   True, False, {False}, True}, Typeset`aux9$$ = {True, False, {False}, True},
+    Typeset`aux10$$ = {True, False, {False}, True}, Typeset`aux11$$ = {
+   True, False, {False}, True}, Typeset`aux12$$ = {
+   True, False, {False}, True}, Typeset`aux13$$ = {
+   True, False, {False}, True}, Typeset`aux14$$ = {
+   True, False, {False}, True}, Typeset`aux15$$ = {
+   True, False, {False}, True}, Typeset`aux16$$ = {
+   True, False, {False}, True}, Typeset`aux17$$ = {
+   True, False, {False}, True}, Typeset`aux18$$ = {
+   True, False, {False}, True}, Typeset`aux19$$ = {
+   True, False, {False}, True}, Typeset`aux20$$ = {
+   True, False, {False}, True}, Typeset`aux21$$ = {
+   True, False, {False}, True}, Typeset`aux22$$ = {
+   True, False, {False}, True}, Typeset`aux23$$ = {
+   True, False, {False}, True}, Typeset`aux24$$ = {
+   True, False, {False}, True}, Typeset`aux25$$ = {
+   True, False, {False}, True}, Typeset`aux26$$ = {
+   True, False, {False}, True}, Typeset`aux27$$ = {
+   True, False, {False}, True}, Typeset`aux28$$ = {
+   True, False, {False}, True}, Typeset`aux29$$ = {
+   True, False, {False}, True}, Typeset`aux30$$ = {
+   True, False, {False}, True}, Typeset`aux31$$ = {
+   True, False, {False}, True}, Typeset`aux32$$ = {
+   True, False, {False}, True}, Typeset`aux33$$ = {
+   True, False, {False}, True}, Typeset`aux34$$ = {
+   True, False, {False}, True}, Typeset`aux35$$ = {
+   True, False, {False}, True}, Typeset`aux36$$ = {
+   True, False, {False}, True}, Typeset`aux37$$ = {
+   True, False, {False}, True}, Typeset`asyncpods$$ = {}, Typeset`nonpods$$ = {
+    XMLElement["assumptions", {"count" -> "1"}, {
+      XMLElement[
+      "assumption", {
+       "type" -> "Function", "word" -> "Log", "template" -> 
+        "Assuming \"${word}\" is ${desc1}. Use ${desc2} instead", "count" -> 
+        "2"}, {
+        XMLElement[
+        "value", {
+         "name" -> "Log", "desc" -> "the natural logarithm", "input" -> 
+          "*FunClash.Log-_*Log.Log10-"}, {}], 
+        XMLElement[
+        "value", {
+         "name" -> "Log10", "desc" -> "the base 10 logarithm", "input" -> 
+          "*FunClash.Log-_*Log10.Log-"}, {}]}]}]}, Typeset`initdone$$ = True, 
+   Typeset`queryinfo$$ = {{
+    "success" -> "true", "error" -> "false", "numpods" -> "7", "datatypes" -> 
+     "Math", "timedout" -> 
+     "Reduce,GlobalExtrema,InterestingDefiniteIntegrals,\
+InterestingMultiDimensionalDefiniteIntegrals,MathematicalFunctionData", 
+     "timedoutpods" -> "", "timing" -> "5.342", "parsetiming" -> "1.833", 
+     "parsetimedout" -> "false", "recalculate" -> 
+     "http://www5a.wolframalpha.com/api/v2/recalc.jsp?id=\
+MSPa1621faf8f5bic87eh1e0000356di76b5ede4ee8&s=9", "id" -> 
+     "MSPa1631faf8f5bic87eh1e00002ha3f24eb6hi71h4", "host" -> 
+     "http://www5a.wolframalpha.com", "server" -> "9", "related" -> 
+     "http://www5a.wolframalpha.com/api/v2/relatedQueries.jsp?id=\
+MSPa1641faf8f5bic87eh1e00001haf2f772g6e8i4c&s=9", "version" -> "2.6"}, {
+    "success" -> "true", "error" -> "false", "numpods" -> "0", "datatypes" -> 
+     "Math", "timedout" -> 
+     "Reduce,GlobalExtrema,InterestingMultiDimensionalDefiniteIntegrals,\
+MathematicalFunctionData", "timedoutpods" -> "", "timing" -> "5.105", 
+     "parsetiming" -> "0.", "parsetimedout" -> "false", "recalculate" -> "", 
+     "id" -> "", "host" -> "http://www5a.wolframalpha.com", "server" -> "9", 
+     "related" -> "", "version" -> "2.6"}}, Typeset`sessioninfo$$ = {
+   "TimeZone" -> 8., 
+    "Date" -> {2014, 2, 11, 23, 50, 4.807997`7.434539176081126}, "Line" -> 
+    107, "SessionID" -> 28051179826525919669}, Typeset`showpods$$ = {1, 2, 3, 
+   4, 5, 6, 7}, Typeset`failedpods$$ = {8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 
+   18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36,
+    37}, Typeset`chosen$$ = {}, Typeset`open$$ = False, Typeset`newq$$ = 
+   "1 - 5/(9*x) + x - 2*C1*x + C2*x - (4*x^2)/9 + C1*x^2 - 2*C2*x^2 + \
+(4*Log[x])/(3*x)"}, 
+   DynamicBox[ToBoxes[
+     AlphaIntegration`FormatAlphaResults[
+      Dynamic[{
+       2, {Typeset`pod1$$, Typeset`pod2$$, Typeset`pod3$$, Typeset`pod4$$, 
+         Typeset`pod5$$, Typeset`pod6$$, Typeset`pod7$$, Typeset`pod8$$, 
+         Typeset`pod9$$, Typeset`pod10$$, Typeset`pod11$$, Typeset`pod12$$, 
+         Typeset`pod13$$, Typeset`pod14$$, Typeset`pod15$$, Typeset`pod16$$, 
+         Typeset`pod17$$, Typeset`pod18$$, Typeset`pod19$$, Typeset`pod20$$, 
+         Typeset`pod21$$, Typeset`pod22$$, Typeset`pod23$$, Typeset`pod24$$, 
+         Typeset`pod25$$, Typeset`pod26$$, Typeset`pod27$$, Typeset`pod28$$, 
+         Typeset`pod29$$, Typeset`pod30$$, Typeset`pod31$$, Typeset`pod32$$, 
+         Typeset`pod33$$, Typeset`pod34$$, Typeset`pod35$$, Typeset`pod36$$, 
+         Typeset`pod37$$}, {
+        Typeset`aux1$$, Typeset`aux2$$, Typeset`aux3$$, Typeset`aux4$$, 
+         Typeset`aux5$$, Typeset`aux6$$, Typeset`aux7$$, Typeset`aux8$$, 
+         Typeset`aux9$$, Typeset`aux10$$, Typeset`aux11$$, Typeset`aux12$$, 
+         Typeset`aux13$$, Typeset`aux14$$, Typeset`aux15$$, Typeset`aux16$$, 
+         Typeset`aux17$$, Typeset`aux18$$, Typeset`aux19$$, Typeset`aux20$$, 
+         Typeset`aux21$$, Typeset`aux22$$, Typeset`aux23$$, Typeset`aux24$$, 
+         Typeset`aux25$$, Typeset`aux26$$, Typeset`aux27$$, Typeset`aux28$$, 
+         Typeset`aux29$$, Typeset`aux30$$, Typeset`aux31$$, Typeset`aux32$$, 
+         Typeset`aux33$$, Typeset`aux34$$, Typeset`aux35$$, Typeset`aux36$$, 
+         Typeset`aux37$$}, Typeset`chosen$$, Typeset`open$$, 
+        Typeset`elements$$, Typeset`q$$, Typeset`opts$$, Typeset`nonpods$$, 
+        Typeset`queryinfo$$, Typeset`sessioninfo$$, Typeset`showpods$$, 
+        Typeset`failedpods$$, Typeset`newq$$}]], StandardForm],
+    ImageSizeCache->{661., {438., 443.}},
+    TrackedSymbols:>{Typeset`showpods$$, Typeset`failedpods$$}],
+   DynamicModuleValues:>{},
+   Initialization:>If[
+     Not[Typeset`initdone$$], Null; AlphaIntegration`DoAsyncInitialization[
+       Hold[{
+        2, {Typeset`pod1$$, Typeset`pod2$$, Typeset`pod3$$, Typeset`pod4$$, 
+          Typeset`pod5$$, Typeset`pod6$$, Typeset`pod7$$, Typeset`pod8$$, 
+          Typeset`pod9$$, Typeset`pod10$$, Typeset`pod11$$, Typeset`pod12$$, 
+          Typeset`pod13$$, Typeset`pod14$$, Typeset`pod15$$, Typeset`pod16$$, 
+          Typeset`pod17$$, Typeset`pod18$$, Typeset`pod19$$, Typeset`pod20$$, 
+          Typeset`pod21$$, Typeset`pod22$$, Typeset`pod23$$, Typeset`pod24$$, 
+          Typeset`pod25$$, Typeset`pod26$$, Typeset`pod27$$, Typeset`pod28$$, 
+          Typeset`pod29$$, Typeset`pod30$$, Typeset`pod31$$, Typeset`pod32$$, 
+          Typeset`pod33$$, Typeset`pod34$$, Typeset`pod35$$, Typeset`pod36$$, 
+          Typeset`pod37$$}, {
+         Typeset`aux1$$, Typeset`aux2$$, Typeset`aux3$$, Typeset`aux4$$, 
+          Typeset`aux5$$, Typeset`aux6$$, Typeset`aux7$$, Typeset`aux8$$, 
+          Typeset`aux9$$, Typeset`aux10$$, Typeset`aux11$$, Typeset`aux12$$, 
+          Typeset`aux13$$, Typeset`aux14$$, Typeset`aux15$$, Typeset`aux16$$, 
+          Typeset`aux17$$, Typeset`aux18$$, Typeset`aux19$$, Typeset`aux20$$, 
+          Typeset`aux21$$, Typeset`aux22$$, Typeset`aux23$$, Typeset`aux24$$, 
+          Typeset`aux25$$, Typeset`aux26$$, Typeset`aux27$$, Typeset`aux28$$, 
+          Typeset`aux29$$, Typeset`aux30$$, Typeset`aux31$$, Typeset`aux32$$, 
+          Typeset`aux33$$, Typeset`aux34$$, Typeset`aux35$$, Typeset`aux36$$, 
+          Typeset`aux37$$}, Typeset`chosen$$, Typeset`open$$, 
+         Typeset`elements$$, Typeset`q$$, Typeset`opts$$, Typeset`nonpods$$, 
+         Typeset`queryinfo$$, Typeset`sessioninfo$$, Typeset`showpods$$, 
+         Typeset`failedpods$$, Typeset`newq$$, 
+         "http://www5a.wolframalpha.com/api/v2/recalc.jsp?id=\
+MSPa1621faf8f5bic87eh1e0000356di76b5ede4ee8&s=9", Typeset`asyncpods$$}]]; 
+     Typeset`asyncpods$$ = {}; Typeset`initdone$$ = True],
+   SynchronousInitialization->False],
+  BaseStyle->{Deployed -> True},
+  DeleteWithContents->True,
+  Editable->False,
+  SelectWithContents->True]], "Print",
+ CellMargins->{{20, 10}, {Inherited, Inherited}},
+ CellChangeTimes->{3.601122605670637*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{"c2", "=", 
+  RowBox[{"(", 
+   RowBox[{"1", "-", "1.2676536759", "-", 
+    RowBox[{
+     RowBox[{"2", "/", "3"}], "*", 
+     RowBox[{"Log", "[", 
+      RowBox[{"1", "/", "2"}], "]"}]}]}], ")"}]}], "\[IndentingNewLine]", 
+ RowBox[{"c1", "=", 
+  RowBox[{"1", "-", "c2"}]}], "\[IndentingNewLine]", 
+ RowBox[{"Block", "[", 
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"C1", "=", "c1"}], ",", 
+     RowBox[{"C2", "=", "c2"}]}], "}"}], ",", 
+   RowBox[{"f", "[", 
+    RowBox[{"1", "/", "7.5"}], "]"}]}], "]"}]}], "Input",
+ CellChangeTimes->{{3.60112252074664*^9, 3.601122595019491*^9}}],
+
+Cell[BoxData["0.19444444447329673`"], "Output",
+ CellChangeTimes->{3.601122605844439*^9, 3.601122638086358*^9}],
+
+Cell[BoxData["0.8055555555267033`"], "Output",
+ CellChangeTimes->{3.601122605844439*^9, 3.601122638087686*^9}],
+
+Cell[BoxData["31.029561769010538`"], "Output",
+ CellChangeTimes->{3.601122605844439*^9, 3.60112263808884*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[""], "Input"],
+
+Cell[BoxData["31.029561769010538`"], "Output",
+ CellChangeTimes->{3.601122586267695*^9}]
+}, Open  ]],
+
+Cell[BoxData[""], "Input",
+ CellChangeTimes->{{3.6011225652345457`*^9, 3.601122566640147*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"N", "[", 
+  RowBox[{
+   RowBox[{
+    RowBox[{
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{"7", "/", "9"}], "+", 
+       RowBox[{"2", 
+        RowBox[{
+         RowBox[{"#", "^", "3"}], "/", "9"}]}], "-", 
+       RowBox[{"2", 
+        RowBox[{
+         RowBox[{"Log", "[", "#", "]"}], "/", "3"}]}]}], ")"}], "&"}], "[", 
+    RowBox[{"1", "/", "40"}], "]"}], ",", "20"}], "]"}]], "Input",
+ CellChangeTimes->{{3.601123420281863*^9, 3.601123489083577*^9}}],
+
+Cell[BoxData["3.237034219409290868568303798400478258967282803475238140616`20.\
+"], "Output",
+ CellChangeTimes->{{3.601123447280677*^9, 3.6011234894322968`*^9}}]
+}, Open  ]]
+},
+WindowSize->{740, 715},
+WindowMargins->{{148, Automatic}, {Automatic, 29}},
+FrontEndVersion->"9.0 for Linux x86 (64-bit) (November 20, 2012)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[579, 22, 1785, 59, 121, "Input"],
+Cell[2367, 83, 241, 3, 32, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[2645, 91, 539, 15, 32, "Input"],
+Cell[3187, 108, 8451, 255, 395, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[11675, 368, 490, 15, 32, "Input"],
+Cell[12168, 385, 640, 20, 47, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[12845, 410, 188, 4, 32, "Input"],
+Cell[13036, 416, 565, 17, 49, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[13638, 438, 182, 4, 32, "Input"],
+Cell[13823, 444, 616, 18, 51, "Output"]
+}, Open  ]],
+Cell[14454, 465, 431, 13, 51, "Input"],
+Cell[CellGroupData[{
+Cell[14910, 482, 400, 12, 48, InheritFromParent],
+Cell[15313, 496, 377, 12, 47, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[15727, 513, 710, 23, 55, "Input"],
+Cell[16440, 538, 1948, 61, 183, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[18425, 604, 311, 8, 32, "Input"],
+Cell[18739, 614, 1912, 60, 185, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[20688, 679, 812, 25, 73, "Input"],
+Cell[21503, 706, 439, 13, 49, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[21979, 724, 120, 3, 42, "WolframAlphaLong"],
+Cell[22102, 729, 30202, 642, 891, "Print"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[52341, 1376, 614, 18, 77, "Input"],
+Cell[52958, 1396, 111, 1, 32, "Output"],
+Cell[53072, 1399, 110, 1, 32, "Output"],
+Cell[53185, 1402, 109, 1, 32, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[53331, 1408, 26, 0, 32, "Input"],
+Cell[53360, 1410, 88, 1, 32, "Output"]
+}, Open  ]],
+Cell[53463, 1414, 94, 1, 32, "Input"],
+Cell[CellGroupData[{
+Cell[53582, 1419, 481, 15, 32, "Input"],
+Cell[54066, 1436, 160, 2, 32, "Output"]
+}, Open  ]]
+}
+]
+*)
+
+(* End of internal cache information *)
+

@@ -61,35 +61,124 @@ template<class edge> struct Graph {
     vector<edge>& operator [](int t) {return adj[t];}
 };
 
-const int64 N = 100, MOD = 1e8;
+const int64 N = 1e2, MOD = 1e8;
 
-int f[N + 1];
+int calc_sum(int64 L, int64 R) {
+    int64 a = R - L, b = R + L + 1;
+    if (a & 1) b >>= 1; else a >>= 1;
+    return (a % MOD) * (b % MOD) % MOD;
+}
+
+struct node *null;
+
+struct node {
+    node *lc, *rc;
+    int64 L, R, sum, len;
+
+    node(int64 l, int64 r) : lc(null), rc(null), L(l), R(r), sum(calc_sum(l, r)), len(R - L) {}
+    node(node *x) {*this = *x; }
+
+    node *update() {
+        sum = (lc->sum + rc->sum + calc_sum(L, R)) % MOD;
+        len = lc->len + rc->len + R - L;
+        return this;
+    }
+} ;
+
+node *merge(node *L, node *R) {
+    if (L == null) return R;
+    if (R == null) return L;
+    node *t;
+    if (drand48() < 1.0 * L->len / (L->len + R->len)) {
+        t = new node(L);
+        t->rc = merge(t->rc, R);
+    } else {
+        t = new node(R);
+        t->lc = merge(L, t->lc);
+    }
+    return t->update();
+}
+
+void split(node *t, int64 x, node *&L, node *&R) {
+    if (t == null) {
+        L = R = null;
+    } else if (t->lc->len >= x) {
+        R = new node(t);
+        split(t->lc, x, L, R->lc);
+        R->update();
+    } else if (t->lc->len + t->R - t->L >= x) {
+        x -= t->lc->len;
+        L = merge(t->lc, new node(t->L, t->L + x));
+        R = merge(new node(t->L + x, t->R), t->rc);
+    } else {
+        L = new node(t);
+        split(t->rc, x - t->lc->len - t->R + t->L, L->rc, R);
+        L->update();
+    }
+}
+
+// int f[N + 1];
 
 int64 calc(int64 n) {
     int64 a = n, b = n - 1;
     return a * b / 2;
 }
 
+// void bf() {
+//     int64 a = 1, b = 1, ans = 0;
+//     memset(f, -1, sizeof(f));
+//     // const int N = 100;
+    
+//     for (; b <= N; ) {
+//         int64 c = a + b;
+//         f[b] = 0;
+//         a = b, b = c;
+//     }
+//     int lx = 1;
+//     FOR (i, 1, N) {
+//         if (f[i] != -1) {
+//             // cerr << f[i] << " ";
+//             lx = i;
+//             continue;
+//         }
+//         f[i] = i - lx;
+//         if (f[i] * 2 >= lx) f[i] = f[i - lx];
+//         // cerr << f[i] << " ";
+//         ans += f[i];
+//     }
+//     cerr << "bf: " << ans << endl;
+//     // cerr << ans % MOD << endl;
+// }
+
+void dfs(node *t) {
+    if (t == null) return ;
+    dfs(t->lc);
+    FOR (i, t->L + 1, t->R) cerr << i << " ";
+    dfs(t->rc);
+}
+
 int main(int argc, char **argv) {
     ios_base::sync_with_stdio(false);
-    int64 a = 1, b = 1, ans = 0;
-    memset(f, -1, sizeof(f));
+
+    null = new node(0, 0);
+    null->lc = null->rc = null;
+    // bf();
+    auto root = new node(-1, 0);
+
+    int64 a = 1, b = 2;
     for (; b <= N; ) {
-        int64 c = a + b;
-        f[b] = 0;
-        a = b, b = c;
+        swap(a, b), b += a;     // construct (a, b]
+        auto p = (a - 1) / 2;
+        node *u, *m, *v;
+        split(root, p, u, m);
+        split(m, b - a - p - 1, m, v);
+        root = merge(root, new node(-1, p));
+        root = merge(root, m);
     }
-    int lx = 1;
-    FOR (i, 1, N) {
-        if (f[i] != -1) {
-            lx = i;
-            continue;
-        }
-        f[i] = i - lx;
-        if (f[i] * 2 >= lx) f[i] = f[i - lx];
-        ans += f[i];
-    }
-    cerr << ans % MOD << endl;
+    node *t;
+    split(root, N, root, t);
+    cerr << "ok: " << root->sum << endl;
+    dfs(root), cerr << endl;
 
     return 0; 
 }

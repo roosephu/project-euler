@@ -37,10 +37,8 @@ using namespace std;
 #define PB push_back
 #define SZ(x) (int)((x).size())
 #define ALL(x) (x).begin(), (x).end()
-#define For(i, a, b) for (int _end_ = (b), i = (a); i <= _end_; ++i)
-#define Rof(i, a, b) for (int _end_ = (b), i = (a); i >= _end_; --i)
-#define FOR(i, a, b) for (int _end_ = (b), i = (a); i != _end_; ++i)
-#define ROF(i, a, b) for (int _end_ = (b), i = (a); i != _end_; --i)
+#define FOR(i, a, b) for (int _end_ = (b), i = (a); i <= _end_; ++i)
+#define ROF(i, a, b) for (int _end_ = (b), i = (a); i >= _end_; --i)
 
 typedef unsigned int uint;
 typedef long long int64;
@@ -63,24 +61,49 @@ template<class edge> struct Graph {
     vector<edge>& operator [](int t) {return adj[t];}
 };
 
-const int N = 110000, M = 100;
+#include <gmpxx.h>
+#include <gmp.h>
 
-int a[N];
+typedef mpz_class ZZ;
+
+const ZZ N = 1e12;
+const int M = 1e6, L = 1e8;
+
+int a[L], f[L];
+ZZ cnt[M];
 
 int main(int argc, char **argv) {
     ios_base::sync_with_stdio(false);
-    a[1] = 1;
-    int64 s = 1;
-    FOR (i, 2, N) {
-        a[i] = s % i;
-        s += (int64)a[i] * i;
-    }
+    a[1] = 1; f[0] = -1;
 
-    s = 0;
-    FOR (i, 1, N) {
-        s += a[i];
-        cerr << s % M << endl;
+    int j = 0, P = 0;
+    ZZ s = 1;
+    FOR (i, 2, L) {
+        ZZ x = s % i;
+        a[i] = x.get_si();
+        s += (ZZ)a[i] * i;
+        (a[i] += a[i - 1]) %= M;
+        for (; j >= 0 && a[j + 1] != a[i]; j = f[j]);
+        f[i] = ++j;
+        if (f[i] * 2 == i) {
+            P = f[i];
+            break;
+        }
     }
-
+    cerr << P << " " << s << endl;
+    FOR (i, 1, P) {
+        assert(a[i] == a[i + P]);
+        // cerr << a[i] << " " << a[i + P] << endl;
+    }
+    ZZ ans = 0;
+    FOR (i, 1, P) {
+        cnt[a[i]] += ((ZZ)N + P - i) / P;
+    }
+    cnt[0] += 1;
+    FOR (i, 0, M - 1) {
+        ans += cnt[i] * (cnt[i] - 1) / 2;
+    }
+    cerr << ans << endl;
+    
     return 0; 
 }

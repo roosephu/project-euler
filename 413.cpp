@@ -71,27 +71,86 @@ template<class edge> struct Graph {
      vector<edge>& operator [](int t) {return adj[t];}
 };
 
-int64 calc(int d) {
-    memset(f, 0, sizeof(f));
-    f[0] = 1;
-    int m = 1;
-    FOR (i, 1, d) {
-        FOR (x, i == d, 9) {
-            
-        }
-    }
+const int N = 19;
 
+int64 dp[2][1 << N][2], (*f)[2] = dp[0], (*g)[2] = dp[1];
+int64 DP[2][43046721][2];
+
+int64 calc(int d) {
+    int mask = (1 << d) - 1;
+    memset(f, 0, sizeof(dp[0]));
+    f[0][0] = 1;
+    for (int i = 0; i < d; ++i) {
+        memset(g, 0, sizeof(dp[0]));
+        for (int j = 0; j <= mask; ++j) {
+            int64 s = 1;
+            for (int x = 0; x < d; ++x)
+                if (j >> x & 1)
+                    s |= 1 << (x * 10 % d);
+            for (int x = 0; x <= 9; ++x) {
+                if (i == 0 && x == 0) continue;
+                int y = x % d;
+                (s = (s << y) | (s >> (d - y))) &= mask;
+                if (s & 1) {
+                    g[s][1] += f[j][0];
+                } else {
+                    g[s][0] += f[j][0];
+                    g[s][1] += f[j][1];
+                }
+            }
+        }
+        swap(f, g);
+    }
+    
     int64 ret = 0;
-    return f[1 << d];
+    for (int s = 0; s <= mask; ++s)
+        ret += f[s][1];
+    cout << d << " " << ret << endl;
+    return ret;
+}
+
+int64 calc2(int d, int m) {
+    int64 (*f)[2] = DP[0], (*g)[2] = DP[1];
+    
+    memset(f, 0, sizeof(DP[0]));
+    f[0][0] = 1;
+    for (int i = 0; i < d; ++i) {
+        memset(g, 0, sizeof(DP[0]));
+        for (int j = 0; j <= mask; ++j) {
+            int64 s = 1;
+            for (int x = 0; x < m; ++x)
+                if (j >> x & 1)
+                    s |= 1 << (x * 10 % d);
+            for (int x = 0; x <= 9; ++x) {
+                if (i == 0 && x == 0) continue;
+                int y = x % d;
+                (s = (s << y) | (s >> (d - y))) &= mask;
+                if (s & 1) {
+                    g[s][1] += f[j][0];
+                } else {
+                    g[s][0] += f[j][0];
+                    g[s][1] += f[j][1];
+                }
+            }
+        }
+        swap(f, g);
+    }
+    
+    int64 ret = 0;
+    for (int s = 0; s <= mask; ++s)
+        ret += f[s][1];
+    cout << d << " " << ret << endl;
+    return ret;
 }
 
 int main(int argc, char **argv) {
-#ifndef ONLINE_JUDGE
-     freopen("413.in" , "r", stdin);
-     freopen("413.out", "w", stdout);
-#endif
-     ios_base::sync_with_stdio(false);
-     
+    ios_base::sync_with_stdio(false);
 
-     return 0; 
+    int64 ans = 0;
+    for (int i = 1; i <= 7; ++i) {
+        ans += calc(i);
+    }
+    cout << ans << endl;
+
+    return 0; 
 }

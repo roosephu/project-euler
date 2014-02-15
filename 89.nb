@@ -1,0 +1,130 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 9.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       157,          7]
+NotebookDataLength[      4170,        120]
+NotebookOptionsPosition[      3704,        100]
+NotebookOutlinePosition[      4042,        115]
+CellTagsIndexPosition[      3999,        112]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell[BoxData[
+ RowBox[{"Total", "[", 
+  RowBox[{"Map", "[", 
+   RowBox[{
+    RowBox[{"Function", "[", 
+     RowBox[{
+      RowBox[{"StringLength", "[", 
+       RowBox[{"ToString", "[", "#1", "]"}], "]"}], "-", 
+      "\[IndentingNewLine]", 
+      RowBox[{"StringLength", "[", 
+       RowBox[{"IntegerString", "[", 
+        RowBox[{
+         RowBox[{"FromDigits", "[", 
+          RowBox[{
+           RowBox[{"ToString", "[", "#1", "]"}], ",", "\"\<Roman\>\""}], 
+          "]"}], ",", " ", "\"\<Roman\>\""}], "]"}], "]"}]}], "]"}], ",", 
+    RowBox[{"ReadList", "[", "\"\<~/git/project-euler/89.txt\>\"", "]"}]}], 
+   "]"}], "]"}]], "Input",
+ CellChangeTimes->{{3.601039427449526*^9, 3.601039475600696*^9}, {
+  3.601039511785329*^9, 3.601039548001793*^9}, {3.601039583361974*^9, 
+  3.601039701578309*^9}, {3.6010397758694*^9, 3.601039817176806*^9}, {
+  3.601040036576275*^9, 3.601040067624032*^9}, {3.601040097671508*^9, 
+  3.601040137846283*^9}, {3.601040468164844*^9, 3.601040516172387*^9}, {
+  3.601040546327203*^9, 3.601040562614119*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"FromDigits", "::", "nrom"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"The expression \[NoBreak]\\!\\(\\\"MMMDLXVIIII\\\"\\)\
+\[NoBreak] is not a proper string of roman digits. \\!\\(\\*ButtonBox[\\\"\
+\[RightSkeleton]\\\", ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/FromDigits\\\", ButtonNote -> \\\"FromDigits::nrom\
+\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.601040562971813*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"FromDigits", "::", "nrom"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"The expression \[NoBreak]\\!\\(\\\"MMCCCLXXXXIX\\\"\\)\
+\[NoBreak] is not a proper string of roman digits. \\!\\(\\*ButtonBox[\\\"\
+\[RightSkeleton]\\\", ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/FromDigits\\\", ButtonNote -> \\\"FromDigits::nrom\
+\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.6010405629951982`*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"FromDigits", "::", "nrom"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"The expression \[NoBreak]\\!\\(\\\"MDCCCXXIIII\\\"\\)\
+\[NoBreak] is not a proper string of roman digits. \\!\\(\\*ButtonBox[\\\"\
+\[RightSkeleton]\\\", ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/FromDigits\\\", ButtonNote -> \\\"FromDigits::nrom\
+\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.601040563035077*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"General", "::", "stop"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Further output of \
+\[NoBreak]\\!\\(\\*StyleBox[\\(FromDigits :: nrom\\), \\\"MessageName\\\"]\\)\
+\[NoBreak] will be suppressed during this calculation. \
+\\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", ButtonStyle->\\\"Link\\\", \
+ButtonFrame->None, ButtonData:>\\\"paclet:ref/message/General/stop\\\", \
+ButtonNote -> \\\"General::stop\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.601040563049107*^9}],
+
+Cell[BoxData["743"], "Output",
+ CellChangeTimes->{3.6010405633972483`*^9}]
+}, Open  ]]
+},
+WindowSize->{740, 715},
+WindowMargins->{{148, Automatic}, {Automatic, 29}},
+FrontEndVersion->"9.0 for Linux x86 (64-bit) (November 20, 2012)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[579, 22, 1041, 23, 77, "Input"],
+Cell[1623, 47, 481, 10, 23, "Message"],
+Cell[2107, 59, 484, 10, 23, "Message"],
+Cell[2594, 71, 481, 10, 23, "Message"],
+Cell[3078, 83, 533, 11, 23, "Message"],
+Cell[3614, 96, 74, 1, 64, "Output"]
+}, Open  ]]
+}
+]
+*)
+
+(* End of internal cache information *)
+

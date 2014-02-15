@@ -3,14 +3,14 @@
 #include <cstring>
 using namespace std;
 
-const int N = 5000030;
+const int N = 5e6; // 5000030;
 
-int n = 200000;
+int n = 1;
 
 typedef long long int64;
 
 int64 ans = 0;
-int cnt[N];
+int cnt[N + 1];
 
 // void dfs(int a, int b, int d)
 // {
@@ -19,18 +19,14 @@ int cnt[N];
 //         dfs(b, a, d);
 // }
 
-int Q[N];
+int Q[100];
 
 void dfs(int a, int b, int d)
 {
-    int t = 1, *p = Q + 1; Q[0] = 1, Q[1] = 1;
+    int *p = Q + 1; Q[0] = 1, Q[1] = 1;
     for (; ; ) {
         for (; p != Q && (*p += *(p - 1)) > n; --p);
         if (p == Q) break;
-        // for (int i = 0; i <= t; ++i) {
-        //     cerr << Q[i] << " ";
-        // }
-        // cerr << endl;
         cnt[*p] += p - Q;
         *(p + 1) = *(p - 1), ++p;
     }
@@ -38,8 +34,8 @@ void dfs(int a, int b, int d)
 
 int main()
 {
-    int64 lx = 0;
-    for (; ; ++n) {
+    // int64 lx = 0;
+    for (n = N; n <= N; ++n) {
         ans = 0;
         memset(cnt, 0, sizeof(cnt));
         // for (int i = 2; i <= n; ++i)
@@ -57,10 +53,12 @@ int main()
         // cout << endl;
         // cout << sum << endl;
         ans = ans * 2 + n + n * (n - 1ll) / 2;
-        cout << n << " " << ans << " " << (ans - lx + n) / 2 << endl;
-        lx = ans;
-        break;
+        // cout << n << " " << ans << " " << (ans - lx + n) / 2 << endl;
+        cout << ans << endl;
+        // lx = ans;
+        // break;
     }
     cout << 1.0 * clock() / CLOCKS_PER_SEC << endl;
     return 0;
 }
+
