@@ -1,0 +1,205 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/usr/bin/node', '/usr/bin/npm', 'install', 'bigint' ]
+2 info using npm@1.2.18
+3 info using node@v0.10.5
+4 verbose read json /home/roosephu/git/project-euler/package.json
+5 verbose read json /home/roosephu/git/project-euler/node_modules/prelude-ls/package.json
+6 verbose read json /home/roosephu/git/project-euler/package.json
+7 verbose cache add [ 'bigint', null ]
+8 verbose cache add name=undefined spec="bigint" args=["bigint",null]
+9 verbose parsed url { protocol: null,
+9 verbose parsed url   slashes: null,
+9 verbose parsed url   auth: null,
+9 verbose parsed url   host: null,
+9 verbose parsed url   port: null,
+9 verbose parsed url   hostname: null,
+9 verbose parsed url   hash: null,
+9 verbose parsed url   search: null,
+9 verbose parsed url   query: null,
+9 verbose parsed url   pathname: 'bigint',
+9 verbose parsed url   path: 'bigint',
+9 verbose parsed url   href: 'bigint' }
+10 silly lockFile 5f9c9d32-bigint bigint
+11 verbose lock bigint /home/roosephu/.npm/5f9c9d32-bigint.lock
+12 silly lockFile 5f9c9d32-bigint bigint
+13 silly lockFile 5f9c9d32-bigint bigint
+14 verbose addNamed [ 'bigint', '' ]
+15 verbose addNamed [ null, '' ]
+16 silly lockFile 8616f86c-bigint bigint@
+17 verbose lock bigint@ /home/roosephu/.npm/8616f86c-bigint.lock
+18 silly addNameRange { name: 'bigint', range: '', hasData: false }
+19 verbose url raw bigint
+20 verbose url resolving [ 'https://registry.npmjs.org/', './bigint' ]
+21 verbose url resolved https://registry.npmjs.org/bigint
+22 info trying registry request attempt 1 at 08:14:49
+23 verbose etag "8KP390PU22VEPXQ3BWVDCPSKI"
+24 http GET https://registry.npmjs.org/bigint
+25 http 304 https://registry.npmjs.org/bigint
+26 silly registry.get cb [ 304,
+26 silly registry.get   { date: 'Wed, 28 May 2014 08:14:50 GMT',
+26 silly registry.get     server: 'Apache',
+26 silly registry.get     via: '1.1 varnish',
+26 silly registry.get     'last-modified': 'Wed, 28 May 2014 08:14:50 GMT',
+26 silly registry.get     'cache-control': 'max-age=1',
+26 silly registry.get     etag: '"8KP390PU22VEPXQ3BWVDCPSKI"',
+26 silly registry.get     'x-served-by': 'cache-sv60-SJC3',
+26 silly registry.get     'x-cache': 'MISS',
+26 silly registry.get     'x-cache-hits': '0',
+26 silly registry.get     'x-timer': 'S1401264890.342192,VS0,VE170',
+26 silly registry.get     vary: 'Accept',
+26 silly registry.get     'content-length': '0',
+26 silly registry.get     'keep-alive': 'timeout=10, max=50',
+26 silly registry.get     connection: 'Keep-Alive' } ]
+27 verbose etag bigint from cache
+28 silly addNameRange number 2 { name: 'bigint', range: '', hasData: true }
+29 silly addNameRange versions [ 'bigint',
+29 silly addNameRange   [ '0.0.1',
+29 silly addNameRange     '0.0.2',
+29 silly addNameRange     '0.0.5',
+29 silly addNameRange     '0.0.6',
+29 silly addNameRange     '0.0.7',
+29 silly addNameRange     '0.0.8',
+29 silly addNameRange     '0.0.9',
+29 silly addNameRange     '0.0.10',
+29 silly addNameRange     '0.0.11',
+29 silly addNameRange     '0.0.12',
+29 silly addNameRange     '0.1.0',
+29 silly addNameRange     '0.2.0',
+29 silly addNameRange     '0.2.1',
+29 silly addNameRange     '0.2.2',
+29 silly addNameRange     '0.3.0',
+29 silly addNameRange     '0.3.1',
+29 silly addNameRange     '0.3.2',
+29 silly addNameRange     '0.3.3',
+29 silly addNameRange     '0.3.4',
+29 silly addNameRange     '0.3.5',
+29 silly addNameRange     '0.3.6',
+29 silly addNameRange     '0.3.7',
+29 silly addNameRange     '0.3.8',
+29 silly addNameRange     '0.3.9',
+29 silly addNameRange     '0.4.0',
+29 silly addNameRange     '0.4.1',
+29 silly addNameRange     '0.4.2' ] ]
+30 verbose addNamed [ 'bigint', '0.4.2' ]
+31 verbose addNamed [ '0.4.2', '0.4.2' ]
+32 silly lockFile 12d7feba-bigint-0-4-2 bigint@0.4.2
+33 verbose lock bigint@0.4.2 /home/roosephu/.npm/12d7feba-bigint-0-4-2.lock
+34 verbose read json /home/roosephu/.npm/bigint/0.4.2/package/package.json
+35 silly lockFile 12d7feba-bigint-0-4-2 bigint@0.4.2
+36 silly lockFile 12d7feba-bigint-0-4-2 bigint@0.4.2
+37 silly lockFile 8616f86c-bigint bigint@
+38 silly lockFile 8616f86c-bigint bigint@
+39 silly resolved [ { name: 'bigint',
+39 silly resolved     version: '0.4.2',
+39 silly resolved     description: 'Arbitrary-precision integer arithmetic using libgmp',
+39 silly resolved     main: './index.js',
+39 silly resolved     repository:
+39 silly resolved      { type: 'git',
+39 silly resolved        url: 'http://github.com/substack/node-bigint.git' },
+39 silly resolved     keywords:
+39 silly resolved      [ 'gmp',
+39 silly resolved        'libgmp',
+39 silly resolved        'big',
+39 silly resolved        'bignum',
+39 silly resolved        'bigint',
+39 silly resolved        'integer',
+39 silly resolved        'arithmetic',
+39 silly resolved        'precision' ],
+39 silly resolved     author:
+39 silly resolved      { name: 'James Halliday',
+39 silly resolved        email: 'mail@substack.net',
+39 silly resolved        url: 'http://substack.net' },
+39 silly resolved     devDependencies: { tap: '~0.2.5', put: '~0.0.6' },
+39 silly resolved     license: 'MIT/X11',
+39 silly resolved     engine: { node: '>=0.2.0' },
+39 silly resolved     scripts: { install: 'node-gyp configure build', test: 'tap test/*.js' },
+39 silly resolved     readme: 'bigint\n======\n\nArbitrary precision integral arithmetic for node.js!\n\n[![build status](https://secure.travis-ci.org/substack/node-bigint.png)](http://travis-ci.org/substack/node-bigint)\n\nThis library wraps around [libgmp](http://gmplib.org/)\'s\n[integer functions](http://gmplib.org/manual/Integer-Functions.html#Integer-Functions)\nto perform infinite-precision arithmetic.\n\nYou should also consider using\n[bignum](https://github.com/justmoon/node-bignum),\nwhich is based on the bigint api but uses openssl instead of libgmp,\nwhich you are more likely to already have on your system.\n\nexample\n=======\n\nsimple.js\n---------\n\n    var bigint = require(\'bigint\');\n    \n    var b = bigint(\'782910138827292261791972728324982\')\n        .sub(\'182373273283402171237474774728373\')\n        .div(8)\n    ;\n    console.log(b);\n\n***\n    $ node simple.js\n    <BigInt 75067108192986261319312244199576>\n\nperfect.js\n----------\n\nGenerate the perfect numbers:\n\n    // If 2**n-1 is prime, then (2**n-1) * 2**(n-1) is perfect.\n    var bigint = require(\'bigint\');\n\n    for (var n = 0; n < 100; n++) {\n        var p = bigint.pow(2, n).sub(1);\n        if (p.probPrime(50)) {\n            var perfect = p.mul(bigint.pow(2, n - 1));\n            console.log(perfect.toString());\n        }\n    }\n\n***\n\n    6\n    28\n    496\n    8128\n    33550336\n    8589869056\n    137438691328\n    2305843008139952128\n    2658455991569831744654692615953842176\n    191561942608236107294793378084303638130997321548169216\n\nmethods[0]\n==========\n\nbigint(n, base=10)\n------------------\n\nCreate a new `bigint` from `n` and a base. `n` can be a string, integer, or\nanother `bigint`.\n\nIf you pass in a string you can set the base that string is encoded in.\n\n.toString(base=10)\n------------------\n\nPrint out the `bigint` instance in the requested base as a string.\n\nbigint.fromBuffer(buf, opts)\n----------------------\n\nCreate a new `bigint` from a `Buffer`.\n\nThe default options are:\n    {\n        order : \'forward\', // low-to-high indexed word ordering\n        endian : \'big\',\n        size : 1, // number of bytes in each word\n    }\n\nNote that endian doesn\'t matter when size = 1.\n\nmethods[1]\n==========\n\nFor all of the instance methods below you can write either\n\n    bigint.method(x, y, z)\n\nor if x is a `bigint` instance``\n\n    x.method(y, z)\n\n.toNumber()\n-----------\n\nTurn a `bigint` into a `Number`. If the `bigint` is too big you\'ll lose\nprecision or you\'ll get ±`Infinity`.\n\n.toBuffer(opts)\n-------------\n\nReturn a new `Buffer` with the data from the `bigint`.\n\nThe default options are:\n    {\n        order : \'forward\', // low-to-high indexed word ordering\n        endian : \'big\',\n        size : 1, // number of bytes in each word\n    }\n\nNote that endian doesn\'t matter when size = 1.\n\n.add(n)\n-------\n\nReturn a new `bigint` containing the instance value plus `n`.\n\n.sub(n)\n-------\n\nReturn a new `bigint` containing the instance value minus `n`.\n\n.mul(n)\n-------\n\nReturn a new `bigint` containing the instance value multiplied by `n`.\n\n.div(n)\n-------\n\nReturn a new `bigint` containing the instance value integrally divided by `n`.\n\n.abs()\n------\n\nReturn a new `bigint` with the absolute value of the instance.\n\n.neg()\n------\n\nReturn a new `bigint` with the negative of the instance value.\n\n.cmp(n)\n-------\n\nCompare the instance value to `n`. Return a positive integer if `> n`, a\nnegative integer if `< n`, and 0 if `== n`.\n\n.gt(n)\n------\n\nReturn a boolean: whether the instance value is greater than n (`> n`).\n\n.ge(n)\n------\n\nReturn a boolean: whether the instance value is greater than or equal to n\n(`>= n`).\n\n.eq(n)\n------\n\nReturn a boolean: whether the instance value is equal to n (`== n`).\n\n.lt(n)\n------\n\nReturn a boolean: whether the instance value is less than n (`< n`).\n\n.le(n)\n------\n\nReturn a boolean: whether the instance value is less than or equal to n\n(`<= n`).\n\n.and(n)\n-------\n\nReturn a new `bigint` with the instance value bitwise AND (&)-ed with `n`.\n\n.or(n)\n------\n\nReturn a new `bigint` with the instance value bitwise inclusive-OR (|)-ed with\n`n`.\n\n.xor(n)\n-------\n\nReturn a new `bigint` with the instance value bitwise exclusive-OR (^)-ed with\n`n`.\n\n.mod(n)\n-------\n\nReturn a new `bigint` with the instance value modulo `n`.\n\n`m`.\n.pow(n)\n-------\n\nReturn a new `bigint` with the instance value raised to the `n`th power.\n\n.powm(n, m)\n-----------\n\nReturn a new `bigint` with the instance value raised to the `n`th power modulo\n`m`.\n\n.invertm(m)\n-----------\n\nCompute the multiplicative inverse modulo `m`.\n\n.rand()\n-------\n.rand(upperBound)\n-----------------\n\nIf `upperBound` is supplied, return a random `bigint` between the instance value\nand `upperBound - 1`, inclusive.\n\nOtherwise, return a random `bigint` between 0 and the instance value - 1,\ninclusive.\n\n.probPrime()\n------------\n\nReturn whether the bigint is:\n\n* certainly prime (true)\n* probably prime (\'maybe\')\n* certainly composite (false)\n\nusing [mpz_probab_prime](http://gmplib.org/manual/Number-Theoretic-Functions.html).\n\n.nextPrime()\n------------\n\nReturn the next prime greater than `this` using\n[mpz_nextprime](http://gmplib.org/manual/Number-Theoretic-Functions.html).\n\n.sqrt()\n-------\n\nReturn a new `bigint` that is the square root.  This truncates.\n\n.root(n)\n--------\n\nReturn a new `bigint` that is the `nth` root.  This truncates.\n\n.shiftLeft(n)\n-------------\n\nReturn a new `bigint` that is the `2^n` multiple. Equivalent of the `<<`\noperator.\n\n.shiftRight(n)\n--------------\n\nReturn a new `bigint` of the value integer divided by\n`2^n`. Equivalent of the `>>` operator.\n\n.gcd(n)\n-------\n\nReturn the greatest common divisor of the current bigint with `n` as a new\nbigint.\n\n.bitLength()\n------------\n\nReturn the number of bits used to represent the current bigint as a javascript\nNumber.\n\ninstall\n=======\n\nYou\'ll need the libgmp source to compile this package. Under Debian-based systems,\n\n    sudo aptitude install libgmp3-dev\n\nOn a Mac with [Homebrew](https://github.com/mxcl/homebrew/),\n\n    brew install gmp\n\nAnd then install with [npm](http://npmjs.org):\n\n    npm install bigint\n',
+39 silly resolved     readmeFilename: 'README.markdown',
+39 silly resolved     _id: 'bigint@0.4.2',
+39 silly resolved     _from: 'bigint@' } ]
+40 info install bigint@0.4.2 into /home/roosephu/git/project-euler
+41 info installOne bigint@0.4.2
+42 verbose from cache /home/roosephu/.npm/bigint/0.4.2/package/package.json
+43 info /home/roosephu/git/project-euler/node_modules/bigint unbuild
+44 verbose read json /home/roosephu/git/project-euler/node_modules/bigint/package.json
+45 verbose tar unpack /home/roosephu/.npm/bigint/0.4.2/package.tgz
+46 silly lockFile 4e8917d1-roject-euler-node-modules-bigint /home/roosephu/git/project-euler/node_modules/bigint
+47 verbose lock /home/roosephu/git/project-euler/node_modules/bigint /home/roosephu/.npm/4e8917d1-roject-euler-node-modules-bigint.lock
+48 silly lockFile df551ef4-phu-npm-bigint-0-4-2-package-tgz /home/roosephu/.npm/bigint/0.4.2/package.tgz
+49 verbose lock /home/roosephu/.npm/bigint/0.4.2/package.tgz /home/roosephu/.npm/df551ef4-phu-npm-bigint-0-4-2-package-tgz.lock
+50 silly gunzTarPerm modes [ '755', '644' ]
+51 silly gunzTarPerm extractEntry package.json
+52 silly gunzTarPerm extractEntry .npmignore
+53 silly gunzTarPerm extractEntry index.js
+54 silly gunzTarPerm extractEntry .travis.yml
+55 silly gunzTarPerm extractEntry README.markdown
+56 silly gunzTarPerm extractEntry bigint.cc
+57 silly gunzTarPerm extractEntry binding.gyp
+58 silly gunzTarPerm extractEntry examples/gen.js
+59 silly gunzTarPerm extractEntry examples/perfect.js
+60 silly gunzTarPerm extractEntry examples/simple.js
+61 silly gunzTarPerm extractEntry test/arithmetic.js
+62 silly gunzTarPerm extractEntry test/buf.js
+63 silly gunzTarPerm extractEntry test/cmp.js
+64 silly gunzTarPerm extractEntry test/create.js
+65 silly gunzTarPerm extractEntry test/gcd.js
+66 silly gunzTarPerm extractEntry test/bitwise.js
+67 silly gunzTarPerm extractEntry test/mod.js
+68 silly gunzTarPerm extractEntry test/pow.js
+69 silly gunzTarPerm extractEntry test/primes.js
+70 silly gunzTarPerm extractEntry test/rand.js
+71 silly gunzTarPerm extractEntry test/seed.js
+72 silly gunzTarPerm extractEntry test/bit_length.js
+73 silly gunzTarPerm extractEntry test/shift.js
+74 silly gunzTarPerm extractEntry test/invertm.js
+75 silly gunzTarPerm extractEntry wscript
+76 verbose read json /home/roosephu/git/project-euler/node_modules/bigint/package.json
+77 silly lockFile 4e8917d1-roject-euler-node-modules-bigint /home/roosephu/git/project-euler/node_modules/bigint
+78 silly lockFile 4e8917d1-roject-euler-node-modules-bigint /home/roosephu/git/project-euler/node_modules/bigint
+79 silly lockFile df551ef4-phu-npm-bigint-0-4-2-package-tgz /home/roosephu/.npm/bigint/0.4.2/package.tgz
+80 silly lockFile df551ef4-phu-npm-bigint-0-4-2-package-tgz /home/roosephu/.npm/bigint/0.4.2/package.tgz
+81 info preinstall bigint@0.4.2
+82 verbose from cache /home/roosephu/git/project-euler/node_modules/bigint/package.json
+83 verbose readDependencies using package.json deps
+84 verbose from cache /home/roosephu/git/project-euler/node_modules/bigint/package.json
+85 verbose readDependencies using package.json deps
+86 silly resolved []
+87 verbose about to build /home/roosephu/git/project-euler/node_modules/bigint
+88 info build /home/roosephu/git/project-euler/node_modules/bigint
+89 verbose from cache /home/roosephu/git/project-euler/node_modules/bigint/package.json
+90 verbose linkStuff [ false,
+90 verbose linkStuff   false,
+90 verbose linkStuff   false,
+90 verbose linkStuff   '/home/roosephu/git/project-euler/node_modules' ]
+91 info linkStuff bigint@0.4.2
+92 verbose linkBins bigint@0.4.2
+93 verbose linkMans bigint@0.4.2
+94 verbose rebuildBundles bigint@0.4.2
+95 info install bigint@0.4.2
+96 verbose unsafe-perm in lifecycle true
+97 silly exec sh "-c" "node-gyp configure build"
+98 silly sh,-c,node-gyp configure build,/home/roosephu/git/project-euler/node_modules/bigint spawning
+99 info bigint@0.4.2 Failed to exec install script
+100 info /home/roosephu/git/project-euler/node_modules/bigint unbuild
+101 verbose from cache /home/roosephu/git/project-euler/node_modules/bigint/package.json
+102 info preuninstall bigint@0.4.2
+103 info uninstall bigint@0.4.2
+104 verbose true,/home/roosephu/git/project-euler/node_modules,/home/roosephu/git/project-euler/node_modules unbuild bigint@0.4.2
+105 info postuninstall bigint@0.4.2
+106 error bigint@0.4.2 install: `node-gyp configure build`
+106 error `sh "-c" "node-gyp configure build"` failed with 1
+107 error Failed at the bigint@0.4.2 install script.
+107 error This is most likely a problem with the bigint package,
+107 error not with npm itself.
+107 error Tell the author that this fails on your system:
+107 error     node-gyp configure build
+107 error You can get their info via:
+107 error     npm owner ls bigint
+107 error There is likely additional logging output above.
+108 error System Linux 3.11.10-11-desktop
+109 error command "/usr/bin/node" "/usr/bin/npm" "install" "bigint"
+110 error cwd /home/roosephu/git/project-euler
+111 error node -v v0.10.5
+112 error npm -v 1.2.18
+113 error code ELIFECYCLE
+114 verbose exit [ 1, true ]

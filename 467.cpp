@@ -61,47 +61,84 @@ template<class edge> struct Graph {
     vector<edge>& operator [](int t) {return adj[t];}
 };
 
-const int LMT = 1e7, N = LMT + 10;
+const int LMT = 1e6, n = 10000, N = n + 2, MOD = 1e9 + 7;
 
-int lnk[N], prime[N], phi[N];
-
-vector<int> factor(int n) {
-    vector<int> ret;
-    for (; n != 1; n /= lnk[n])
-        ret.push_back(lnk[n]);
-    return ret;
-}
-
-int get(int n) {
-    if (gcd(n, 10) != 1) return 0;
-    int x = phi[n * 9];
-    vector<int> t = factor(x);
-    for (auto v : t) {
-        if (x % v == 0 && (fpm(10, x / v, n * 9) - 1) / 9 % n == 0) {
-            x /= v;
-        }
-    }
-    return x;
-}
+int prime[LMT + 1], S[N], T[N];
+short f[N][N];
 
 int main(int argc, char **argv) {
     ios_base::sync_with_stdio(false);
 
     for (int i = 2; i <= LMT; ++i) {
-        if (!prime[i]) prime[++prime[0]] = i, lnk[i] = i, phi[i] = i - 1;
+        if (!prime[i]) prime[++prime[0]] = i;
         for (int j = 1, k = LMT / i, t; prime[j] <= k; ++j) {
-            prime[t = i * prime[j]] = 1, lnk[t] = prime[j];
-            if (i % prime[j] == 0) {phi[t] = phi[i] * prime[j]; break;}
-            else phi[t] = phi[i] * (prime[j] - 1);
+            prime[t = i * prime[j]] = 1;
+            if (i % prime[j] == 0) break;
         }
     }
-    cout << get(7) << endl;
-    for (int i = 100; ; ++i) {
-        if (get(i) > 1000000) {
-            cout << i << endl;
-            break;
+    
+    int a = n, b = n, p = 1;
+    for (int i = 2; a || b; ++i) {
+        int x = i - (i - 1) / 9 * 9;
+        if (i == prime[p]) {
+            if (a) {
+                --a;
+                S[a] = x;
+            }
+            ++p;
+        } else if (b) {
+            --b;
+            T[b] = x;
+        }
+    }
+    for (int i = 0; i < n; ++i)
+        printf("%d", S[i]);
+    puts("");
+    for (int i = 0; i < n; ++i)
+        printf("%d", T[i]);
+    puts("");
+
+    memset(f, 0x3F, sizeof(f));
+    f[0][0] = 0;
+    for (int i = 0; i <= n; ++i) {
+        for (int j = 0; j <= n; ++j) {
+            short x = f[i][j] + 1;
+            if (i < n) chkmin(f[i + 1][j], x);
+            if (j < n) chkmin(f[i][j + 1], x);
+            if (i < n && j < n && S[i] == T[j])
+                chkmin(f[i + 1][j + 1], x);
         }
     }
 
+    int64 ans = 0, cur = 1, cnt = 0;
+    for (int i = n, j = n; i > 0 || j > 0; ) {
+        int a = i > 0 ? S[i - 1] : 0, b = j > 0 ? T[j - 1] : 0, x;
+        if (i == 0) x = b;
+        else if (j == 0) x = a;
+        else if (i && j) {
+            if (a == b) x = a;
+            else if (a < b) {
+                if (f[i - 1][j] + 1 == f[i][j]) 
+                    x = a;
+                else
+                    x = b;
+            } else {
+                if (f[i][j - 1] + 1 == f[i][j]) 
+                    x = b;
+                else
+                    x = a;
+            }
+        }
+        if (x == a && i > 0) --i;
+        if (x == b && j > 0) --j;
+        // ans += cur * x % MOD;
+        // cur = cur * 10 % MOD;
+        (ans = ans * 10 + x) %= MOD;
+        printf("%d", x);
+        ++cnt;
+    }
+    printf("\n%lld %lld %d\n", ans % MOD, cnt, (int)f[n][n]);
+    
     return 0; 
 }
+

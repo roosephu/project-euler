@@ -31,19 +31,9 @@ using namespace std;
 #define DEBUG
 #endif
 
-#define oo 0x3F3F3F3F
-#ifdef DEBUG
-#define cvar(x) cerr << "<" << #x << ": " << x << ">"
-#define evar(x) cvar (x) << endl
-template<class T> void DISP(const char *s, T x, int n) {cerr << "[" << s << ": "; for (int i = 0; i < n; ++i) cerr << x[i] << " "; cerr << "]" << endl;}
-#define disp(x,n) DISP(#x " to " #n, x, n)
-#else
-#define cvar(...) ({})
-#define evar(...) ({})
-#define disp(...) ({})
-#endif
-#define car first
-#define cdr second
+#define inf 0x3F3F3F3F
+#define fst first
+#define snd second
 #define PB push_back
 #define SZ(x) (int)((x).size())
 #define ALL(x) (x).begin(), (x).end()
@@ -59,7 +49,7 @@ int64 fpm(int64 b, int64 e, int64 m) { int64 t = 1; for (; e; e >>= 1, b = b * b
 template<class T> inline bool chkmin(T &a, T b) {return a > b ? a = b, true : false;}
 template<class T> inline bool chkmax(T &a, T b) {return a < b ? a = b, true : false;}
 template<class T> inline T sqr(T x) {return x * x;}
-template <typename T> T gcd(T x, T y) {for (T t; x; t = x, x = y % x, y = t); return y; }
+template <typename T> T gcd(T x, T y) {for (T t; x; ) t = x, x = y % x, y = t; return y; }
 
 template<class edge> struct Graph {
     vector<vector<edge> > adj;
@@ -71,42 +61,53 @@ template<class edge> struct Graph {
     vector<edge>& operator [](int t) {return adj[t];}
 };
 
-const int n = 10000;
+const int n = 32, N = n + 3, lmt = 59049, m = 10;
 
-// int f[n + 1][n + 1];
-// int f[n + 1];
+int64 f[N][lmt];
+int Lv, Z[m + 2];
+
+void dfs(int p, int64 S, int64 v) {
+    if (p > m) {
+        f[Lv + 1][S] += v;
+        return ;
+    }
+    if (Z[p] != 0) return dfs(p + 1, S * 3 + Z[p] - 1, v);
+    if (Z[p - 1] != 2 && Z[p + 1] != 2)
+        Z[p] = 2, dfs(p + 1, S * 3 + 1, v);
+    if (Z[p - 1] != 3 && Z[p + 1] != 3)
+        Z[p] = 3, dfs(p + 1, S * 3 + 2, v);
+    Z[p] = 0;
+}
 
 int main(int argc, char **argv) {
-#ifndef ONLINE_JUDGE
-    // freopen("325.in" , "r", stdin);
-    // freopen("325.out", "w", stdout);
-#endif
     ios_base::sync_with_stdio(false);
 
-    int64 ans = 0;
-    // FOR (i, 1, n) {
-    //     FOR (j, i, n) {
-    //         for (int k = j - i; k >= 0; k -= i) {
-    //             if (k >= i && f[i][k] == 0) f[i][j] = 1;
-    //             if (k <= i && f[k][i] == 0) f[i][j] = 1;
-    //         }
-    //         if (!f[i][j]) ans += i + j, cerr << i << " " << j << endl;
-    //         // if (f[i][j] == (i < j && j <= i + ((i + 1) / 2))) {
-    //         //     cerr << i << " " << j << " " << f[i][j] << endl;
-    //         // }
-    //     }
-    // }
-    // cerr << ans << endl;
-    // FOR (i, 2, n) {
-    //     for (f[i] = f[i - 1]; f[i] < i - 1 && f[i] + f[f[i]] < i; ++f[i]);
-    //     cerr << f[i] << ", ";
-    // }
-    FOR (i, 0, n) {
-        int k = (3 - sqrt(5)) / 2 * i;
-        ans += 2 * i * k - k * (k + 1) / 2;
-        cerr << k << endl;
+    f[0][0] = 1;
+    for (int i = 0; i < n - 3; ++i) {
+        Lv = i;
+        for (int s = 0; s < lmt; ++s) {
+            if (!f[i][s]) continue;
+            for (int x = m, S = s; x; --x) {
+                Z[x] = S % 3;
+                S /= 3;
+            }
+            dfs(1, 0, f[i][s]);
+        }
+        cout << i << endl;
     }
-    cerr << ans << endl;
+
+    int64 ans = 0;
+    int v = n - 3;
+    for (int s = 0; s < lmt; ++s) {
+        bool b = true;
+        for (int x = m, S = s; x; --x) {
+            if (S % 3 == 2)
+                b = false;
+            S /= 3;
+        }
+        if (b) ans += f[v][s];
+    }
+    cout << ans << endl;
 
     return 0; 
 }

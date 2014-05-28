@@ -61,47 +61,69 @@ template<class edge> struct Graph {
     vector<edge>& operator [](int t) {return adj[t];}
 };
 
-const int LMT = 1e7, N = LMT + 10;
+const int n = 2e7, N = n + 10;
 
-int lnk[N], prime[N], phi[N];
+int prime[N], mu[N];
+pair<int64, int64> f[N];
+int64 w[N];
+map<int64, int> bit;
 
-vector<int> factor(int n) {
-    vector<int> ret;
-    for (; n != 1; n /= lnk[n])
-        ret.push_back(lnk[n]);
-    return ret;
+void modify(int64 x) {
+    for (; ~x >> 32 & 1; x += x & -x)
+        ++bit[x];
 }
 
-int get(int n) {
-    if (gcd(n, 10) != 1) return 0;
-    int x = phi[n * 9];
-    vector<int> t = factor(x);
-    for (auto v : t) {
-        if (x % v == 0 && (fpm(10, x / v, n * 9) - 1) / 9 % n == 0) {
-            x /= v;
-        }
-    }
-    return x;
+int query(int64 x) {
+    int t = 0;
+    for (; x; x &= x - 1)
+        t += bit[x];
+    return t;
+}
+
+bool cmp(const pair<int64, int64> &a, const pair<int64, int64> &b) {
+    auto k = (a.snd * 100 - a.fst * 99) - (b.snd * 100 - b.fst * 99);
+    if (k != 0) return k < 0;
+    return a.fst < b.fst;
 }
 
 int main(int argc, char **argv) {
     ios_base::sync_with_stdio(false);
+    for (int i = 2; i <= n; ++i) {
+        if (!prime[i]) prime[++prime[0]] = i, mu[i] = -1;
+        for (int t, j = 1, k = n / i; prime[j] <= k; ++j) {
+            prime[t = i * prime[j]] = 1;
+            if (i % prime[j]) mu[t] = -mu[i];
+            else {mu[t] = 0; break; }
+        }
+    }
+    mu[1] = 1;
+    for (int i = 1; i <= n; ++i) {
+        f[i] = f[i - 1];
+        if (mu[i] > 0) ++f[i].fst;
+        if (mu[i] < 0) ++f[i].snd;
+    }
+    sort(f, f + n + 1, cmp);
 
-    for (int i = 2; i <= LMT; ++i) {
-        if (!prime[i]) prime[++prime[0]] = i, lnk[i] = i, phi[i] = i - 1;
-        for (int j = 1, k = LMT / i, t; prime[j] <= k; ++j) {
-            prime[t = i * prime[j]] = 1, lnk[t] = prime[j];
-            if (i % prime[j] == 0) {phi[t] = phi[i] * prime[j]; break;}
-            else phi[t] = phi[i] * (prime[j] - 1);
-        }
+    int64 ans = 0;
+    for (int i = 0; i <= n; ++i) {
+        // ans += query();
+        // modify();
+        auto &x = f[i];
+        w[i] = x.fst * 100 + (n - x.snd) * 99;
+        // for (int j = 0; j < i; ++j) {
+        //     if (w[j] <= w[i]) {
+        //         // int64 P = f[i].fst - f[j].fst, N = f[i].snd - f[j].snd;
+        //         // cout << P << " " << N << " " << w[i] << " " << w[j] << endl;
+        //         // cout << P << " " << N << " " << 100 * P - 99 * N << " " << 100 * N - 99 * P << endl;
+        //         ++ans;
+        //     }
+        // }
+        ans += query(w[i]);
+        modify(w[i]);
+        if (i % 10000 == 0) cout << i << endl;
+        // cout << x.fst << " " << x.snd << " " << 100 * x.snd - 99 * x.fst << endl;
     }
-    cout << get(7) << endl;
-    for (int i = 100; ; ++i) {
-        if (get(i) > 1000000) {
-            cout << i << endl;
-            break;
-        }
-    }
+    cout << ans << endl;
 
     return 0; 
 }

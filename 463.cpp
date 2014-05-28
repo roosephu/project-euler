@@ -61,47 +61,70 @@ template<class edge> struct Graph {
     vector<edge>& operator [](int t) {return adj[t];}
 };
 
-const int LMT = 1e7, N = LMT + 10;
+const int64 n = 450283905890997363ll;
+const int MOD = 1e9;
 
-int lnk[N], prime[N], phi[N];
+// int f[N];
+map<int64, uint> F, G;
 
-vector<int> factor(int n) {
-    vector<int> ret;
-    for (; n != 1; n /= lnk[n])
-        ret.push_back(lnk[n]);
-    return ret;
+int64 calc(int64 x) {
+    for (; ~x & 1; x >>= 1);
+    if (F.count(x)) return F[x];
+    int64 t = 0;
+    if (x & 2)
+        t = 3 * calc(x >> 1    ) - 2 * calc(x >> 2);
+    else
+        t = 2 * calc(x >> 1 | 1) -     calc(x >> 2);
+    return F[x] = (t % MOD + MOD) % MOD;
 }
 
-int get(int n) {
-    if (gcd(n, 10) != 1) return 0;
-    int x = phi[n * 9];
-    vector<int> t = factor(x);
-    for (auto v : t) {
-        if (x % v == 0 && (fpm(10, x / v, n * 9) - 1) / 9 % n == 0) {
-            x /= v;
-        }
-    }
-    return x;
+int64 S(int64 x) {
+    if (G.count(x)) return G[x];
+    int64 t = 0;
+    if (~x & 3)
+        t = calc(x) + S(x - 1);
+    else
+        t += 6 * S(x >> 1) - 8 * S(x >> 2) - 1;
+    return G[x] = (t % MOD + MOD) % MOD;
 }
 
 int main(int argc, char **argv) {
     ios_base::sync_with_stdio(false);
+    // f[1] = f[2] = 1, f[3] = 3;
+    // for (int i = 4; i <= n + 2; ++i) {
+    //     if (i & 1) {
+    //         if (i & 2)
+    //             f[i] = 3 * f[i >> 1    ] - 2 * f[i >> 2];
+    //         else
+    //             f[i] = 2 * f[i >> 1 | 1] -     f[i >> 2];
+    //     } else
+    //         f[i] = f[i >> 1];
+    // }
+    // for (int i = 1; i <= n; i *= 2) {
+    //     int64 s = 0;
+    //     for (int j = 1; j <= i; ++j)
+    //         s += f[j];
+    //     cout << s << endl;
+    // }
+    F[1] = 1, F[3] = 3;
+    for (int i = 1, s = 0; i <= 33; ++i)
+        G[i] = s += calc(i);
 
-    for (int i = 2; i <= LMT; ++i) {
-        if (!prime[i]) prime[++prime[0]] = i, lnk[i] = i, phi[i] = i - 1;
-        for (int j = 1, k = LMT / i, t; prime[j] <= k; ++j) {
-            prime[t = i * prime[j]] = 1, lnk[t] = prime[j];
-            if (i % prime[j] == 0) {phi[t] = phi[i] * prime[j]; break;}
-            else phi[t] = phi[i] * (prime[j] - 1);
-        }
-    }
-    cout << get(7) << endl;
-    for (int i = 100; ; ++i) {
-        if (get(i) > 1000000) {
-            cout << i << endl;
-            break;
-        }
-    }
+    cout << S(n) << endl;
+    // cout << S(63) << endl
+    //      << S(31) << " " << S(15) << endl;
+    // int64 x = 0;
+    // for (int i = 1; i <= 1000000; ++i) {
+    //     // (x += calc(i)) %= MOD;
+    //     if (i >= 1e5) cout << x << endl;
+    //     if (x != S(i)) {
+    //         cout << i << " " << x << " " << S(i) << " " << S(31) << " " << S(15) << endl;
+    //         break;
+    //     }
+    // }
+    // for (int i = 1; i <= 1000; i += i)
+    //     cout << S(i) << endl;
+    cout << SZ(F) << " " << SZ(G) << endl;
 
     return 0; 
 }

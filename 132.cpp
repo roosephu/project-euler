@@ -31,19 +31,9 @@ using namespace std;
 #define DEBUG
 #endif
 
-#define oo 0x3F3F3F3F
-#ifdef DEBUG
-#define cvar(x) cerr << "<" << #x << ": " << x << ">"
-#define evar(x) cvar (x) << endl
-template<class T> void DISP(const char *s, T x, int n) {cerr << "[" << s << ": "; for (int i = 0; i < n; ++i) cerr << x[i] << " "; cerr << "]" << endl;}
-#define disp(x,n) DISP(#x " to " #n, x, n)
-#else
-#define cvar(...) ({})
-#define evar(...) ({})
-#define disp(...) ({})
-#endif
-#define car first
-#define cdr second
+#define inf 0x3F3F3F3F
+#define fst first
+#define snd second
 #define PB push_back
 #define SZ(x) (int)((x).size())
 #define ALL(x) (x).begin(), (x).end()
@@ -59,7 +49,7 @@ int64 fpm(int64 b, int64 e, int64 m) { int64 t = 1; for (; e; e >>= 1, b = b * b
 template<class T> inline bool chkmin(T &a, T b) {return a > b ? a = b, true : false;}
 template<class T> inline bool chkmax(T &a, T b) {return a < b ? a = b, true : false;}
 template<class T> inline T sqr(T x) {return x * x;}
-template <typename T> T gcd(T x, T y) {for (T t; x; t = x, x = y % x, y = t); return y; }
+template <typename T> T gcd(T x, T y) {for (T t; x; ) t = x, x = y % x, y = t; return y; }
 
 template<class edge> struct Graph {
     vector<vector<edge> > adj;
@@ -71,42 +61,49 @@ template<class edge> struct Graph {
     vector<edge>& operator [](int t) {return adj[t];}
 };
 
-const int n = 10000;
+const int LMT = 1e7, N = LMT + 10, n = 1e9;
 
-// int f[n + 1][n + 1];
-// int f[n + 1];
+int lnk[N], prime[N], phi[N];
+
+vector<int> factor(int n) {
+    vector<int> ret;
+    for (; n != 1; n /= lnk[n])
+        ret.push_back(lnk[n]);
+    return ret;
+}
+
+int get(int n) {
+    if (gcd(n, 10) != 1) return 0;
+    int x = phi[n * 9];
+    vector<int> t = factor(x);
+    for (auto v : t) {
+        if (x % v == 0 && (fpm(10, x / v, n * 9) - 1) / 9 % n == 0) {
+            x /= v;
+        }
+    }
+    return x;
+}
 
 int main(int argc, char **argv) {
-#ifndef ONLINE_JUDGE
-    // freopen("325.in" , "r", stdin);
-    // freopen("325.out", "w", stdout);
-#endif
     ios_base::sync_with_stdio(false);
 
-    int64 ans = 0;
-    // FOR (i, 1, n) {
-    //     FOR (j, i, n) {
-    //         for (int k = j - i; k >= 0; k -= i) {
-    //             if (k >= i && f[i][k] == 0) f[i][j] = 1;
-    //             if (k <= i && f[k][i] == 0) f[i][j] = 1;
-    //         }
-    //         if (!f[i][j]) ans += i + j, cerr << i << " " << j << endl;
-    //         // if (f[i][j] == (i < j && j <= i + ((i + 1) / 2))) {
-    //         //     cerr << i << " " << j << " " << f[i][j] << endl;
-    //         // }
-    //     }
-    // }
-    // cerr << ans << endl;
-    // FOR (i, 2, n) {
-    //     for (f[i] = f[i - 1]; f[i] < i - 1 && f[i] + f[f[i]] < i; ++f[i]);
-    //     cerr << f[i] << ", ";
-    // }
-    FOR (i, 0, n) {
-        int k = (3 - sqrt(5)) / 2 * i;
-        ans += 2 * i * k - k * (k + 1) / 2;
-        cerr << k << endl;
+    for (int i = 2; i <= LMT; ++i) {
+        if (!prime[i]) prime[++prime[0]] = i, lnk[i] = i, phi[i] = i - 1;
+        for (int j = 1, k = LMT / i, t; prime[j] <= k; ++j) {
+            prime[t = i * prime[j]] = 1, lnk[t] = prime[j];
+            if (i % prime[j] == 0) {phi[t] = phi[i] * prime[j]; break;}
+            else phi[t] = phi[i] * (prime[j] - 1);
+        }
     }
-    cerr << ans << endl;
+    int ans = 0;
+    for (int i = 1, cnt = 40; cnt > 0; ++i) {
+        if (gcd(prime[i], 10) == 1 && n % get(prime[i]) == 0) {
+            --cnt;
+            ans += prime[i];
+            cout << prime[i] << endl;
+        }
+    }
+    cout << "ans: " << ans << endl;
 
     return 0; 
 }

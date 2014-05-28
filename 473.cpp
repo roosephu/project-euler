@@ -31,19 +31,9 @@ using namespace std;
 #define DEBUG
 #endif
 
-#define oo 0x3F3F3F3F
-#ifdef DEBUG
-#define cvar(x) cerr << "<" << #x << ": " << x << ">"
-#define evar(x) cvar (x) << endl
-template<class T> void DISP(const char *s, T x, int n) {cerr << "[" << s << ": "; for (int i = 0; i < n; ++i) cerr << x[i] << " "; cerr << "]" << endl;}
-#define disp(x,n) DISP(#x " to " #n, x, n)
-#else
-#define cvar(...) ({})
-#define evar(...) ({})
-#define disp(...) ({})
-#endif
-#define car first
-#define cdr second
+#define inf 0x3F3F3F3F
+#define fst first
+#define snd second
 #define PB push_back
 #define SZ(x) (int)((x).size())
 #define ALL(x) (x).begin(), (x).end()
@@ -59,7 +49,7 @@ int64 fpm(int64 b, int64 e, int64 m) { int64 t = 1; for (; e; e >>= 1, b = b * b
 template<class T> inline bool chkmin(T &a, T b) {return a > b ? a = b, true : false;}
 template<class T> inline bool chkmax(T &a, T b) {return a < b ? a = b, true : false;}
 template<class T> inline T sqr(T x) {return x * x;}
-template <typename T> T gcd(T x, T y) {for (T t; x; t = x, x = y % x, y = t); return y; }
+template <typename T> T gcd(T x, T y) {for (T t; x; ) t = x, x = y % x, y = t; return y; }
 
 template<class edge> struct Graph {
     vector<vector<edge> > adj;
@@ -71,42 +61,69 @@ template<class edge> struct Graph {
     vector<edge>& operator [](int t) {return adj[t];}
 };
 
-const int n = 10000;
+struct node {                   // (x + y sqrt{5}) / 2
+    int64 x, y;
+} ;
 
-// int f[n + 1][n + 1];
-// int f[n + 1];
+node operator * (node a, node b) {
+    return (node){(a.x * b.x + 5 * a.y * b.y) / 2, (a.x * b.y + a.y * b.x) / 2};
+}
+
+node operator + (node a, node b) {
+    return (node){a.x + b.x, a.y + b.y};
+}
+
+const int N = 56;
+const double s5 = sqrt(5);
+const int64 n = 1e10, LMT = (n + 10) * 2;
+
+node f[N];
+
+long long ans;
+int cnt;
+
+void dfs(node now, int x) {
+    // if (now.x + now.y * s5 >= LMT) return ;
+    // if (x >= N) {
+    //     if (now.y == 0 && now.x / 2 <= n) {
+    //         // cout << now.x / 2 << endl;
+    //         ++cnt;
+    //         ans += now.x / 2;
+    //     }
+    //     return ;
+    // }
+    // dfs(now + f[x], x + 2);
+    // dfs(now       , x + 1);
+    if (now.y == 0) {
+        ++cnt;
+        ans += now.x / 2;
+    }
+    for (int i = x; i < N; ++i) {
+        node v = now + f[i];
+        if (v.x + v.y * s5 >= LMT) return ;
+        dfs(v, i + 2);
+    }
+}
 
 int main(int argc, char **argv) {
-#ifndef ONLINE_JUDGE
-    // freopen("325.in" , "r", stdin);
-    // freopen("325.out", "w", stdout);
-#endif
     ios_base::sync_with_stdio(false);
 
-    int64 ans = 0;
-    // FOR (i, 1, n) {
-    //     FOR (j, i, n) {
-    //         for (int k = j - i; k >= 0; k -= i) {
-    //             if (k >= i && f[i][k] == 0) f[i][j] = 1;
-    //             if (k <= i && f[k][i] == 0) f[i][j] = 1;
-    //         }
-    //         if (!f[i][j]) ans += i + j, cerr << i << " " << j << endl;
-    //         // if (f[i][j] == (i < j && j <= i + ((i + 1) / 2))) {
-    //         //     cerr << i << " " << j << " " << f[i][j] << endl;
-    //         // }
-    //     }
-    // }
-    // cerr << ans << endl;
-    // FOR (i, 2, n) {
-    //     for (f[i] = f[i - 1]; f[i] < i - 1 && f[i] + f[f[i]] < i; ++f[i]);
-    //     cerr << f[i] << ", ";
-    // }
-    FOR (i, 0, n) {
-        int k = (3 - sqrt(5)) / 2 * i;
-        ans += 2 * i * k - k * (k + 1) / 2;
-        cerr << k << endl;
+    f[0] = (node){2, 0};
+    node a = (node){2, 0}, b = (node){-1, 1};
+    for (int i = 1; i < N; ++i) {
+        a = a * (node){1, 1};
+        b = b * (node){-1, 1};
+        f[i] = a + b;
+        cout << f[i].x << " " << f[i].y << endl;
+        // if (f[i].x + s5 * f[i].y >= LMT) {
+        //     cout << i << " " << endl;
+        //     break;
+        // }
     }
-    cerr << ans << endl;
+    dfs((node){0, 0}, 1);
+    cout << "ans: " << ans + 1 << endl;
+    cout << "cnt: " << cnt << endl;
 
     return 0; 
 }
+

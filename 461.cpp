@@ -31,19 +31,9 @@ using namespace std;
 #define DEBUG
 #endif
 
-#define oo 0x3F3F3F3F
-#ifdef DEBUG
-#define cvar(x) cerr << "<" << #x << ": " << x << ">"
-#define evar(x) cvar (x) << endl
-template<class T> void DISP(const char *s, T x, int n) {cerr << "[" << s << ": "; for (int i = 0; i < n; ++i) cerr << x[i] << " "; cerr << "]" << endl;}
-#define disp(x,n) DISP(#x " to " #n, x, n)
-#else
-#define cvar(...) ({})
-#define evar(...) ({})
-#define disp(...) ({})
-#endif
-#define car first
-#define cdr second
+#define inf 0x3F3F3F3F
+#define fst first
+#define snd second
 #define PB push_back
 #define SZ(x) (int)((x).size())
 #define ALL(x) (x).begin(), (x).end()
@@ -59,7 +49,7 @@ int64 fpm(int64 b, int64 e, int64 m) { int64 t = 1; for (; e; e >>= 1, b = b * b
 template<class T> inline bool chkmin(T &a, T b) {return a > b ? a = b, true : false;}
 template<class T> inline bool chkmax(T &a, T b) {return a < b ? a = b, true : false;}
 template<class T> inline T sqr(T x) {return x * x;}
-template <typename T> T gcd(T x, T y) {for (T t; x; t = x, x = y % x, y = t); return y; }
+template <typename T> T gcd(T x, T y) {for (T t; x; ) t = x, x = y % x, y = t; return y; }
 
 template<class edge> struct Graph {
     vector<vector<edge> > adj;
@@ -71,42 +61,50 @@ template<class edge> struct Graph {
     vector<edge>& operator [](int t) {return adj[t];}
 };
 
-const int n = 10000;
+const int n = 1e4, N = 1.1e8, M = 1e5;
+const real pi = acos(-1);
 
-// int f[n + 1][n + 1];
-// int f[n + 1];
+real D[N];
+real v[M];
 
 int main(int argc, char **argv) {
-#ifndef ONLINE_JUDGE
-    // freopen("325.in" , "r", stdin);
-    // freopen("325.out", "w", stdout);
-#endif
     ios_base::sync_with_stdio(false);
 
-    int64 ans = 0;
-    // FOR (i, 1, n) {
-    //     FOR (j, i, n) {
-    //         for (int k = j - i; k >= 0; k -= i) {
-    //             if (k >= i && f[i][k] == 0) f[i][j] = 1;
-    //             if (k <= i && f[k][i] == 0) f[i][j] = 1;
-    //         }
-    //         if (!f[i][j]) ans += i + j, cerr << i << " " << j << endl;
-    //         // if (f[i][j] == (i < j && j <= i + ((i + 1) / 2))) {
-    //         //     cerr << i << " " << j << " " << f[i][j] << endl;
-    //         // }
-    //     }
-    // }
-    // cerr << ans << endl;
-    // FOR (i, 2, n) {
-    //     for (f[i] = f[i - 1]; f[i] < i - 1 && f[i] + f[f[i]] < i; ++f[i]);
-    //     cerr << f[i] << ", ";
-    // }
-    FOR (i, 0, n) {
-        int k = (3 - sqrt(5)) / 2 * i;
-        ans += 2 * i * k - k * (k + 1) / 2;
-        cerr << k << endl;
+    int K = 0, m = 0;
+    for (int i = 0; ; ++i) {
+        v[i] = exp(1.0 * i / n) - 1;
+        if (v[i] <= pi) m = i;
+        else break;
     }
-    cerr << ans << endl;
+    for (int i = 1; i <= m; ++i) {
+        for (int j = i; j <= m; ++j) {
+            D[++K] = v[i] + v[j];
+        }
+    }
+    sort(D + 1, D + K + 1);
+
+    real ans = 1e300; int xi, xj;
+    for (int i = 1, j = K; i <= K; ++i) {
+        for (; j && D[i] + D[j] > pi; --j);
+        if (j > 0 && pi - (D[i] + D[j]) < ans) {
+            ans = pi - (D[i] + D[j]);
+            xi = i, xj = j;
+        }
+        if (j < K && (D[i] + D[j + 1]) - pi < ans) {
+            ans = (D[i] + D[j + 1]) - pi;
+            xi = i, xj = j + 1;
+        }
+    }
+    cout << setprecision(20) << ans << " " << xi << " " << xj << endl;
+
+    for (int i = 1; i <= m; ++i) {
+        for (int j = i; j <= m; ++j) {
+            if (v[i] + v[j] == D[xi])
+                cout << "xi: " << i << " " << j << endl;
+            if (v[i] + v[j] == D[xj])
+                cout << "xj: " << i << " " << j << endl;
+        }
+    }
 
     return 0; 
 }

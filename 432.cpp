@@ -63,13 +63,13 @@ template <typename T> T gcd(T x, T y) {for (T t; x; t = x, x = y % x, y = t); re
 
 template<class edge> struct Graph
 {
-     vector<vector<edge> > adj;
-     Graph(int n) {adj.clear (); adj.resize (n + 5);}
-     Graph() {adj.clear (); }
-     void resize(int n) {adj.resize (n + 5); }
-     void add(int s, edge e){adj[s].push_back (e);}
-     void del(int s, edge e) {adj[s].erase (find (iter (adj[s]), e)); }
-     vector<edge>& operator [](int t) {return adj[t];}
+    vector<vector<edge> > adj;
+    Graph(int n) {adj.clear (); adj.resize (n + 5);}
+    Graph() {adj.clear (); }
+    void resize(int n) {adj.resize (n + 5); }
+    void add(int s, edge e){adj[s].push_back (e);}
+    void del(int s, edge e) {adj[s].erase (find (iter (adj[s]), e)); }
+    vector<edge>& operator [](int t) {return adj[t];}
 };
 
 const int MOD = 1000000000, LMT = 100000000;
@@ -80,53 +80,53 @@ int prime[LMT], phi[LMT];
 
 int prephi(int64 n)
 {
-     if (n < LMT) return phi[n];
-     if (f.count(n)) return f[n];
-     int &t = f[n];
-     if (n & 1) t = ((n + 1) / 2 % MOD) * (n % MOD) % MOD;
-     else t = (n / 2 % MOD) * ((n + 1) % MOD) % MOD;
-     for (int64 i = 2, j; i <= n; i = j) {
-          j = n / (n / i) + 1;
-          (t += MOD - (j - i) % MOD * prephi(n / i) % MOD) %= MOD;
-     }
-     // cerr << n << " " << t << endl;
-     return t;
+    if (n < LMT) return phi[n];
+    if (f.count(n)) return f[n];
+    int &t = f[n];
+    if (n & 1) t = ((n + 1) / 2 % MOD) * (n % MOD) % MOD;
+    else t = (n / 2 % MOD) * ((n + 1) % MOD) % MOD;
+    for (int64 i = 2, j; i <= n; i = j) {
+        j = n / (n / i) + 1;
+        (t += MOD - (j - i) % MOD * prephi(n / i) % MOD) %= MOD;
+    }
+    // cerr << n << " " << t << endl;
+    return t;
 }
 
 int dfs(int d, int64 n)
 {
-     if (d == 7) return prephi(n);
-     if (n == 0) return 0;
-     int p = P[d];
-     return ((p - 1ll) * dfs(d + 1, n) + dfs(d, n / p)) % MOD;
+    if (d == 7) return prephi(n);
+    if (n == 0) return 0;
+    int p = P[d];
+    return ((p - 1ll) * dfs(d + 1, n) + dfs(d, n / p)) % MOD;
 }
 
 int main(int argc, char **argv)
 {
 #ifndef ONLINE_JUDGE
 #endif
-     ios_base::sync_with_stdio(false);
+    ios_base::sync_with_stdio(false);
 
-     FOR (i, 2, LMT - 1) {
-          if (!prime[i]) prime[++prime[0]] = i, phi[i] = i - 1;
-          for (int j = 1, k = (LMT - 1) / i, t; prime[j] <= k; ++j) {
-               prime[t = i * prime[j]] = 1;
-               if (i % prime[j]) phi[t] = phi[i] * phi[prime[j]];
-               else {phi[t] = phi[i] * prime[j]; break; }
-          }
-     }
-     phi[1] = 1;
-     FOR (i, 1, LMT - 1) (phi[i] += phi[i - 1]) %= MOD;
+    FOR (i, 2, LMT - 1) {
+        if (!prime[i]) prime[++prime[0]] = i, phi[i] = i - 1;
+        for (int j = 1, k = (LMT - 1) / i, t; prime[j] <= k; ++j) {
+            prime[t = i * prime[j]] = 1;
+            if (i % prime[j]) phi[t] = phi[i] * phi[prime[j]];
+            else {phi[t] = phi[i] * prime[j]; break; }
+        }
+    }
+    phi[1] = 1;
+    FOR (i, 1, LMT - 1) (phi[i] += phi[i - 1]) %= MOD;
 
-     // cout << prephi(100) << endl;
-     // int ans = 0;
-     // FOR (i, 1, 5) {
-     // 	ans += phi[i * 2] - phi[i * 2 - 1];
-     // }
-     cout << dfs(0, 1e11) << endl;
-     // cout << ans << endl;
+    // cout << prephi(100) << endl;
+    // int ans = 0;
+    // FOR (i, 1, 5) {
+    // 	ans += phi[i * 2] - phi[i * 2 - 1];
+    // }
+    cout << dfs(0, 1e11) << endl;
+    // cout << ans << endl;
 
-     cerr << 1.0 * clock() / CLOCKS_PER_SEC << endl;
-     return 0; 
+    cerr << 1.0 * clock() / CLOCKS_PER_SEC << endl;
+    return 0; 
 }
 

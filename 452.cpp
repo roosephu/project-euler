@@ -65,7 +65,7 @@ const int MOD = 1234567891;
 
 int64 ans = 0;
 int x[200], y[200];
-uint n = 1e9;
+uint n = 1e6;
 
 int64 cnt[100];
 int inv[100];
