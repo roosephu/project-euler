@@ -61,44 +61,43 @@ template<class edge> struct Graph {
     vector<edge>& operator [](int t) {return adj[t];}
 };
 
-const int n = 25, N = n + 10;
+#include <gmpxx.h>
 
-real f[N], g[N], P[N];
+const int D = 8;
+
+int64 F[10][60000];
+int n;
+
+void dfs(int d, int U, int ux, int B, int bx, int T) {
+    if (d == n * 2 - 1) {
+        assert(B < 60000);
+        F[n][B] += F[n - 1][U] << T;
+        return ;
+    }
+    if (d & 1) {
+        dfs(d + 1, U * 3 + 0, 0, B, bx, T);
+        dfs(d + 1, U * 3 + 1, 1, B, bx, T);
+        dfs(d + 1, U * 3 + 2, 2, B, bx, T);
+    } else {
+        if (bx == ux || bx == 0 || ux == 0) dfs(d + 1, U, ux, B * 3 + 0, 0, T + (bx == 0 && ux == 0));
+        if (bx == ux || bx == 1 || ux == 1) dfs(d + 1, U, ux, B * 3 + 1, 1, T + (bx == 1 && ux == 1));
+        if (bx == ux || bx == 2 || ux == 2) dfs(d + 1, U, ux, B * 3 + 2, 2, T + (bx == 2 && ux == 2));
+    }
+}
 
 int main(int argc, char **argv) {
     ios_base::sync_with_stdio(false);
 
-    cout << setprecision(20);
-    real ans = 0;
-    for (int _ = 10; _ <= 10; ++_) {
-        
-        real p = _ / (real)100.0;
-        f[1] = 1, g[1] = 0, g[0] = 1e300;
-        for (int i = 0; i <= n; ++i)
-            P[i] = pow(1 - p, i);
-
-        for (int i = 2; i <= n; ++i) {
-            f[i] = g[i] = i;
-
-            int a = i, b = i;
-            for (int k = 1; k < i; ++k) {
-                real t = (P[k] - P[i]) / (1 - P[i]); cout << t << endl;
-                if (chkmin(g[i], (1 - t) * (f[i - k] + g[k]) + t * g[i - k] + 1))
-                    a = k;
-            }
-            for (int k = 1; k <= i; ++k) {
-                real t = P[i];
-                if (chkmin(f[i], f[i - k] + (1 - t) * g[k] + 1))
-                    b = k;
-            }
-            cout << i << " " << f[i] << " " << g[i] << " " << a << " " << b << endl;
-            // cout << f[i] - f[i - 1] << endl;
-        }
-        // cout << p << " " << f[n] << endl;
-        ans += f[n];
+    F[0][0] = 1;
+    for (n = 1; n <= D; ++n) {
+        cout << n << endl;
+        dfs(0, 0, -1, 0, -1, 0);
     }
-    cout << ans << endl;
+
+    int64 ans = 0;
+    for (int i = 0; i < 60000; ++i)
+        ans += F[D][i];
+    cout << "ans: " << ans << endl;
 
     return 0; 
 }
-

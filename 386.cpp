@@ -61,44 +61,62 @@ template<class edge> struct Graph {
     vector<edge>& operator [](int t) {return adj[t];}
 };
 
-const int n = 25, N = n + 10;
+const int n = 1e8, N = n + 10;
 
-real f[N], g[N], P[N];
+int prime[N], lnk[N];
+
+int f[100];
+
+int calc(vector<int> &e) {
+    memset(f, 0, sizeof(f));
+    f[0] = 1;
+    
+    int s = 0;
+    for (auto x : e)
+        s += x;
+    s /= 2;
+    for (auto x : e)
+        for (int t = s; t; --t)
+            for (int i = 1; i <= x && i <= t; ++i)
+                f[t] += f[t - i];
+    return f[s];
+}
 
 int main(int argc, char **argv) {
     ios_base::sync_with_stdio(false);
 
-    cout << setprecision(20);
-    real ans = 0;
-    for (int _ = 10; _ <= 10; ++_) {
-        
-        real p = _ / (real)100.0;
-        f[1] = 1, g[1] = 0, g[0] = 1e300;
-        for (int i = 0; i <= n; ++i)
-            P[i] = pow(1 - p, i);
-
-        for (int i = 2; i <= n; ++i) {
-            f[i] = g[i] = i;
-
-            int a = i, b = i;
-            for (int k = 1; k < i; ++k) {
-                real t = (P[k] - P[i]) / (1 - P[i]); cout << t << endl;
-                if (chkmin(g[i], (1 - t) * (f[i - k] + g[k]) + t * g[i - k] + 1))
-                    a = k;
-            }
-            for (int k = 1; k <= i; ++k) {
-                real t = P[i];
-                if (chkmin(f[i], f[i - k] + (1 - t) * g[k] + 1))
-                    b = k;
-            }
-            cout << i << " " << f[i] << " " << g[i] << " " << a << " " << b << endl;
-            // cout << f[i] - f[i - 1] << endl;
+    // cout << calc({1, 1, 1}) << endl;
+    
+    for (int i = 2; i <= n; ++i) {
+        if (!prime[i]) prime[++prime[0]] = i, lnk[i] = 1;
+        for (int j = 1, k = n / i, t; prime[j] <= k; ++j) {
+            prime[t = i * prime[j]] = 1, lnk[t] = i;
+            if (i % prime[j] == 0) break;
         }
-        // cout << p << " " << f[n] << endl;
-        ans += f[n];
+    }
+
+    int64 ans = 1;
+    for (int i = 2; i <= n; ++i) {
+        vector<int> e;
+        for (int j = i, lx = 0, c = 0; j; j = lnk[j]) {
+            int d = lnk[j] ? j / lnk[j] : 0;
+            if (d != lx) {
+                if (c) e.push_back(c);
+                lx = d, c = 1;
+            } else {
+                ++c;
+            }
+        }
+        if (i == 128) {
+            for (auto x : e)
+                cout << "e: " << x << endl;
+            cout << calc(e) << endl;
+        }
+
+        ans += calc(e);
+        if (i % 1000000 == 1) cout << i << endl;
     }
     cout << ans << endl;
 
     return 0; 
 }
-

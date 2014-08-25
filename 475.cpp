@@ -61,44 +61,37 @@ template<class edge> struct Graph {
     vector<edge>& operator [](int t) {return adj[t];}
 };
 
-const int n = 25, N = n + 10;
+const int n = 600, N = n / 3 + 10, MOD = 1e9 + 7;
 
-real f[N], g[N], P[N];
+int f[N][N][N];                 // 3, 2, 1
+int64 cb[N][N], fac[N];
 
 int main(int argc, char **argv) {
     ios_base::sync_with_stdio(false);
+    f[n / 3][0][0] = 1;
+    for (int i = 0; i < N; ++i)
+        for (int j = 0; j <= i; ++j)
+            cb[i][j] = j ? (cb[i - 1][j - 1] + cb[i - 1][j]) % MOD : 1;
+    fac[0] = 1;
+    for (int i = 1; i < N; ++i)
+        fac[i] = fac[i - 1] * i % MOD;
+    
+    for (int i = n / 3; i >= 0; --i)
+        for (int j = n / 3; j >= 0; --j)
+            for (int k = n / 3; k >= 0; --k)
+                if (f[i][j][k])
+                    for (int a = 0; a <= 4 && a <= i; ++a)
+                        for (int b = 0; a + b <= 4 && b <= j; ++b) {
+                            int c = 4 - a - b;
+                            if (c > k) continue;
+                            int64 x = cb[j][b] % MOD * cb[k][c] % MOD * fac[b] % MOD * fac[c] % MOD * cb[4][a] % MOD * cb[4 - a][b] % MOD;
+                            (f[i - a][j - b + a][k - c + b] += f[i][j][k] * x % MOD) %= MOD;
+                        }
 
-    cout << setprecision(20);
-    real ans = 0;
-    for (int _ = 10; _ <= 10; ++_) {
-        
-        real p = _ / (real)100.0;
-        f[1] = 1, g[1] = 0, g[0] = 1e300;
-        for (int i = 0; i <= n; ++i)
-            P[i] = pow(1 - p, i);
-
-        for (int i = 2; i <= n; ++i) {
-            f[i] = g[i] = i;
-
-            int a = i, b = i;
-            for (int k = 1; k < i; ++k) {
-                real t = (P[k] - P[i]) / (1 - P[i]); cout << t << endl;
-                if (chkmin(g[i], (1 - t) * (f[i - k] + g[k]) + t * g[i - k] + 1))
-                    a = k;
-            }
-            for (int k = 1; k <= i; ++k) {
-                real t = P[i];
-                if (chkmin(f[i], f[i - k] + (1 - t) * g[k] + 1))
-                    b = k;
-            }
-            cout << i << " " << f[i] << " " << g[i] << " " << a << " " << b << endl;
-            // cout << f[i] - f[i - 1] << endl;
-        }
-        // cout << p << " " << f[n] << endl;
-        ans += f[n];
-    }
+    int64 ans = f[0][0][0];
+    // for (int i = 1; i <= n / 3; ++i)
+    //     ans = ans * fpm(i, MOD - 2, MOD) % MOD;
     cout << ans << endl;
 
     return 0; 
 }
-

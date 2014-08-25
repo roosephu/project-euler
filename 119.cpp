@@ -61,44 +61,31 @@ template<class edge> struct Graph {
     vector<edge>& operator [](int t) {return adj[t];}
 };
 
-const int n = 25, N = n + 10;
+const int64 LMT = 1e15;
 
-real f[N], g[N], P[N];
+int sum(int64 x) {
+    return x ? x % 10 + sum(x / 10) : 0;
+}
 
 int main(int argc, char **argv) {
     ios_base::sync_with_stdio(false);
 
-    cout << setprecision(20);
-    real ans = 0;
-    for (int _ = 10; _ <= 10; ++_) {
-        
-        real p = _ / (real)100.0;
-        f[1] = 1, g[1] = 0, g[0] = 1e300;
-        for (int i = 0; i <= n; ++i)
-            P[i] = pow(1 - p, i);
-
-        for (int i = 2; i <= n; ++i) {
-            f[i] = g[i] = i;
-
-            int a = i, b = i;
-            for (int k = 1; k < i; ++k) {
-                real t = (P[k] - P[i]) / (1 - P[i]); cout << t << endl;
-                if (chkmin(g[i], (1 - t) * (f[i - k] + g[k]) + t * g[i - k] + 1))
-                    a = k;
+    set<int64> S;
+    for (int i = 2; i <= 200; ++i) {
+        int64 y = 1;
+        for (; y <= LMT / i; ) {
+            y *= i;
+            if (sum(y) == i && y >= 10) {
+                S.insert(y);
             }
-            for (int k = 1; k <= i; ++k) {
-                real t = P[i];
-                if (chkmin(f[i], f[i - k] + (1 - t) * g[k] + 1))
-                    b = k;
-            }
-            cout << i << " " << f[i] << " " << g[i] << " " << a << " " << b << endl;
-            // cout << f[i] - f[i - 1] << endl;
         }
-        // cout << p << " " << f[n] << endl;
-        ans += f[n];
     }
-    cout << ans << endl;
 
+    int d = 0;
+    for (auto x : S) {
+        ++d;
+        cout << d << " " << x << endl;
+    }
+    
     return 0; 
 }
-

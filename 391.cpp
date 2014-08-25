@@ -19,11 +19,9 @@
 #include <ctime>
 #include <cstring>
 #include <cassert>
-#if __cplusplus > 201103L
 #include <initializer_list>
 #include <unordered_map>
 #include <unordered_set>
-#endif
 
 using namespace std;
 
@@ -61,44 +59,45 @@ template<class edge> struct Graph {
     vector<edge>& operator [](int t) {return adj[t];}
 };
 
-const int n = 25, N = n + 10;
+int n, S, cur;
 
-real f[N], g[N], P[N];
+unordered_map<int, int> F;
+
+int f(int s, int h, int k) {    // to reach a N state,
+    if (h == 0) {
+        if (k < s) return n;
+        return k - s;
+    }
+    int x = 1100 * 1100 * s + 1100 * h + k;
+    if (F.count(x)) return F[x];
+    int t = f(s + 1, h - 1, k);
+    return F[x] = f(s, h - 1, t);
+}
+
+void dfs(int s, int h, int k) {
+    if (h == 0) {
+        if (k < s && S <= n) cur = S;
+        S += s;
+        return ;
+    }
+    int t = f(s + 1, h - 1, k);
+    dfs(s, h - 1, t);
+    if (S <= n) dfs(s + 1, h - 1, k);
+}
 
 int main(int argc, char **argv) {
     ios_base::sync_with_stdio(false);
 
-    cout << setprecision(20);
-    real ans = 0;
-    for (int _ = 10; _ <= 10; ++_) {
-        
-        real p = _ / (real)100.0;
-        f[1] = 1, g[1] = 0, g[0] = 1e300;
-        for (int i = 0; i <= n; ++i)
-            P[i] = pow(1 - p, i);
+    int64 ans = 0;
+    for (n = 1; n <= 1000; ++n) {
+        F.clear();
 
-        for (int i = 2; i <= n; ++i) {
-            f[i] = g[i] = i;
-
-            int a = i, b = i;
-            for (int k = 1; k < i; ++k) {
-                real t = (P[k] - P[i]) / (1 - P[i]); cout << t << endl;
-                if (chkmin(g[i], (1 - t) * (f[i - k] + g[k]) + t * g[i - k] + 1))
-                    a = k;
-            }
-            for (int k = 1; k <= i; ++k) {
-                real t = P[i];
-                if (chkmin(f[i], f[i - k] + (1 - t) * g[k] + 1))
-                    b = k;
-            }
-            cout << i << " " << f[i] << " " << g[i] << " " << a << " " << b << endl;
-            // cout << f[i] - f[i - 1] << endl;
-        }
-        // cout << p << " " << f[n] << endl;
-        ans += f[n];
+        cur = S = 0;
+        dfs(0, n + 1, -1);
+        ans += cur * cur * cur;
+        cout << n << " " << cur << " " << SZ(F) << endl;
     }
     cout << ans << endl;
 
     return 0; 
 }
-

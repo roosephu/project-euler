@@ -61,44 +61,53 @@ template<class edge> struct Graph {
     vector<edge>& operator [](int t) {return adj[t];}
 };
 
-const int n = 25, N = n + 10;
+set<int> S;
 
-real f[N], g[N], P[N];
+void dfs(vector<double> v) {
+    int t = SZ(v);
+    if (t == 1) {
+        int k = v[0] + 1e-5;
+        if (abs(k - v[0]) <= 1e-4)
+            S.insert(v[0]);
+        return ;
+    }
+    for (int i = 0; i < t; ++i)
+        for (int j = 0; j < t; ++j)
+            if (i != j) {
+                vector<double> x;
+                for (int k = 0; k < t; ++k)
+                    if (k != i && k != j)
+                        x.push_back(v[k]);
+
+                double p = v[i], q = v[j];
+                if (p <= q) { auto A = x; A.push_back(p + q); dfs(A); }
+                if (p >  q) { auto B = x; B.push_back(p - q); dfs(B); }
+                if (p <= q) { auto C = x; C.push_back(p * q); dfs(C); }
+                if (     q) { auto D = x; D.push_back(1.0 * p / q); dfs(D); }
+            }
+}
 
 int main(int argc, char **argv) {
     ios_base::sync_with_stdio(false);
 
-    cout << setprecision(20);
-    real ans = 0;
-    for (int _ = 10; _ <= 10; ++_) {
-        
-        real p = _ / (real)100.0;
-        f[1] = 1, g[1] = 0, g[0] = 1e300;
-        for (int i = 0; i <= n; ++i)
-            P[i] = pow(1 - p, i);
+    
+    int mx = 0, L = 9;
+    for (int a = 1; a <= L; ++a)
+        for (int b = a + 1; b <= L; ++b)
+            for (int c = b + 1; c <= L; ++c)
+                for (int d = c + 1; d <= L; ++d) {
+                    S.clear();
+                    vector<double> v = {a, b, c, d};
+                    dfs(v);
 
-        for (int i = 2; i <= n; ++i) {
-            f[i] = g[i] = i;
-
-            int a = i, b = i;
-            for (int k = 1; k < i; ++k) {
-                real t = (P[k] - P[i]) / (1 - P[i]); cout << t << endl;
-                if (chkmin(g[i], (1 - t) * (f[i - k] + g[k]) + t * g[i - k] + 1))
-                    a = k;
-            }
-            for (int k = 1; k <= i; ++k) {
-                real t = P[i];
-                if (chkmin(f[i], f[i - k] + (1 - t) * g[k] + 1))
-                    b = k;
-            }
-            cout << i << " " << f[i] << " " << g[i] << " " << a << " " << b << endl;
-            // cout << f[i] - f[i - 1] << endl;
-        }
-        // cout << p << " " << f[n] << endl;
-        ans += f[n];
-    }
-    cout << ans << endl;
+                    int n = 1;
+                    for (; S.count(n); ++n)
+                        ;
+                    if (n > mx) {
+                        mx = n;
+                        cout << SZ(S) << " " << mx << " " << a << b << c << d << endl;
+                    }
+                }
 
     return 0; 
 }
-

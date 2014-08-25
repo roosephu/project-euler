@@ -61,44 +61,33 @@ template<class edge> struct Graph {
     vector<edge>& operator [](int t) {return adj[t];}
 };
 
-const int n = 25, N = n + 10;
+const int64 LMT = 1e15;
 
-real f[N], g[N], P[N];
+char *S = "UDDDUdddDDUDDddDdDddDDUDDdUUDd";
 
 int main(int argc, char **argv) {
     ios_base::sync_with_stdio(false);
 
-    cout << setprecision(20);
-    real ans = 0;
-    for (int _ = 10; _ <= 10; ++_) {
-        
-        real p = _ / (real)100.0;
-        f[1] = 1, g[1] = 0, g[0] = 1e300;
-        for (int i = 0; i <= n; ++i)
-            P[i] = pow(1 - p, i);
-
-        for (int i = 2; i <= n; ++i) {
-            f[i] = g[i] = i;
-
-            int a = i, b = i;
-            for (int k = 1; k < i; ++k) {
-                real t = (P[k] - P[i]) / (1 - P[i]); cout << t << endl;
-                if (chkmin(g[i], (1 - t) * (f[i - k] + g[k]) + t * g[i - k] + 1))
-                    a = k;
+    int64 a = 1, b = 0, c = 1, d = 0;
+    for (char *p = S; *p; ++p) {
+        int m = *p == 'U' ? 1 : *p == 'D' ? 0 : 2;
+        for (int x = 0; x < 3; ++x)
+            if ((a * x + b) % 3 == m) {
+                d += c * x;
+                c *= 3;
+                if (m == 0)
+                    b = (a * x * 1 + b * 1    ) / 3;
+                else if (m == 1) {
+                    b = (a * x * 4 + b * 4 + 2) / 3;
+                    a *= 4;
+                } else if (m == 2) {
+                    b = (a * x * 2 + b * 2 + 1) / 3;
+                    a *= 2;
+                }
+                break;
             }
-            for (int k = 1; k <= i; ++k) {
-                real t = P[i];
-                if (chkmin(f[i], f[i - k] + (1 - t) * g[k] + 1))
-                    b = k;
-            }
-            cout << i << " " << f[i] << " " << g[i] << " " << a << " " << b << endl;
-            // cout << f[i] - f[i - 1] << endl;
-        }
-        // cout << p << " " << f[n] << endl;
-        ans += f[n];
     }
-    cout << ans << endl;
+    cout << c << " " << d << " " << ((LMT - d - 1) / c + 1) * c + d << endl;
 
     return 0; 
 }
-

@@ -61,43 +61,48 @@ template<class edge> struct Graph {
     vector<edge>& operator [](int t) {return adj[t];}
 };
 
-const int n = 25, N = n + 10;
+const int N = 1e6, m = 65432, M = 1e5;
+const int64 MOD = (int64)1e16 + 61;
 
-real f[N], g[N], P[N];
+int64 f[M], g[M];
+int prime[N + 10];
+
+int expo(int x) {
+    int t = N, v = 0;
+    for (; t /= x; v += t)
+        ;
+    return v;
+}
 
 int main(int argc, char **argv) {
     ios_base::sync_with_stdio(false);
 
-    cout << setprecision(20);
-    real ans = 0;
-    for (int _ = 10; _ <= 10; ++_) {
-        
-        real p = _ / (real)100.0;
-        f[1] = 1, g[1] = 0, g[0] = 1e300;
-        for (int i = 0; i <= n; ++i)
-            P[i] = pow(1 - p, i);
-
-        for (int i = 2; i <= n; ++i) {
-            f[i] = g[i] = i;
-
-            int a = i, b = i;
-            for (int k = 1; k < i; ++k) {
-                real t = (P[k] - P[i]) / (1 - P[i]); cout << t << endl;
-                if (chkmin(g[i], (1 - t) * (f[i - k] + g[k]) + t * g[i - k] + 1))
-                    a = k;
-            }
-            for (int k = 1; k <= i; ++k) {
-                real t = P[i];
-                if (chkmin(f[i], f[i - k] + (1 - t) * g[k] + 1))
-                    b = k;
-            }
-            cout << i << " " << f[i] << " " << g[i] << " " << a << " " << b << endl;
-            // cout << f[i] - f[i - 1] << endl;
+    for (int i = 2; i <= N; ++i) {
+        if (!prime[i]) prime[++prime[0]] = i;
+        for (int j = 1, k = N / i, t; prime[j] <= k; ++j) {
+            prime[t = i * prime[j]] = 1;
+            if (i % prime[j] == 0) break; 
         }
-        // cout << p << " " << f[n] << endl;
-        ans += f[n];
     }
-    cout << ans << endl;
+
+    printf("total: %d\n", prime[0]);
+    f[8] = 1;
+    for (int _ = 2; _ <= prime[0]; ++_) {
+        int p = prime[_];
+        int e = expo(p);
+        if (p == 5) continue;
+        printf("cur: %d %d %d\n", _, p, e);
+        for (int i = 8; i < M; i += 8)
+            g[i] = 0;
+        for (int i = 8; i < M; i += 8)
+            if (f[i] != 0)
+                for (int j = 0, t = i; j <= e; ++j, t = (int64)t * p % M)
+                    (g[t] += f[i]) %= MOD;
+        for (int i = 8; i < M; i += 8)
+            f[i] = g[i];
+    }
+
+    printf("%lld\n", f[m]);
 
     return 0; 
 }

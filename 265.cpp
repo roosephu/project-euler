@@ -61,44 +61,31 @@ template<class edge> struct Graph {
     vector<edge>& operator [](int t) {return adj[t];}
 };
 
-const int n = 25, N = n + 10;
+int S[32];
+int64 ans = 0;
 
-real f[N], g[N], P[N];
+void dfs(int d, int x) {
+    if (S[x & 31]) return ;
+    if (d < 0) {
+        if (S[(x & 15) << 1]) return ;
+        if (S[(x &  7) << 2]) return ;
+        if (S[(x &  3) << 3]) return ;
+        if (S[(x &  1) << 4]) return ;
+        cout << x << endl;
+        ans += x;
+        return ;
+    }
+    ++S[x & 31];
+    dfs(d - 1, x << 1    );
+    dfs(d - 1, x << 1 | 1);
+    --S[x & 31];
+}
 
 int main(int argc, char **argv) {
     ios_base::sync_with_stdio(false);
 
-    cout << setprecision(20);
-    real ans = 0;
-    for (int _ = 10; _ <= 10; ++_) {
-        
-        real p = _ / (real)100.0;
-        f[1] = 1, g[1] = 0, g[0] = 1e300;
-        for (int i = 0; i <= n; ++i)
-            P[i] = pow(1 - p, i);
-
-        for (int i = 2; i <= n; ++i) {
-            f[i] = g[i] = i;
-
-            int a = i, b = i;
-            for (int k = 1; k < i; ++k) {
-                real t = (P[k] - P[i]) / (1 - P[i]); cout << t << endl;
-                if (chkmin(g[i], (1 - t) * (f[i - k] + g[k]) + t * g[i - k] + 1))
-                    a = k;
-            }
-            for (int k = 1; k <= i; ++k) {
-                real t = P[i];
-                if (chkmin(f[i], f[i - k] + (1 - t) * g[k] + 1))
-                    b = k;
-            }
-            cout << i << " " << f[i] << " " << g[i] << " " << a << " " << b << endl;
-            // cout << f[i] - f[i - 1] << endl;
-        }
-        // cout << p << " " << f[n] << endl;
-        ans += f[n];
-    }
+    dfs(26, 0);
     cout << ans << endl;
 
     return 0; 
 }
-

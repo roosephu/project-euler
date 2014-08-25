@@ -61,43 +61,39 @@ template<class edge> struct Graph {
     vector<edge>& operator [](int t) {return adj[t];}
 };
 
-const int n = 25, N = n + 10;
+const int period = 57984, P2 = period * 2;
+const int MOD = 1e9 + 7, n = 1e8, N = n + 10;
 
-real f[N], g[N], P[N];
+const int64 diff = 14522049026080ll, base = 23415402629325ll;
+
+// ans for n = BASE + 0 * PERIOD: 23415402629325
+// ans for n = BASE + 1 * PERIOD: 37937451655405 = 14522049026080 + lx
+// ans for n = BASE + 2 * PERIOD: 52459500681485 = 14522049026080 + lx
+
+int D[N];
+int64 S[N], F[N];
 
 int main(int argc, char **argv) {
     ios_base::sync_with_stdio(false);
 
-    cout << setprecision(20);
-    real ans = 0;
-    for (int _ = 10; _ <= 10; ++_) {
-        
-        real p = _ / (real)100.0;
-        f[1] = 1, g[1] = 0, g[0] = 1e300;
-        for (int i = 0; i <= n; ++i)
-            P[i] = pow(1 - p, i);
+    for (int i = 2; i <= n; ++i)
+        D[i] = ((int64)D[i - 1] * D[i - 1] + 45) % MOD;
+    int lx = n;
 
-        for (int i = 2; i <= n; ++i) {
-            f[i] = g[i] = i;
-
-            int a = i, b = i;
-            for (int k = 1; k < i; ++k) {
-                real t = (P[k] - P[i]) / (1 - P[i]); cout << t << endl;
-                if (chkmin(g[i], (1 - t) * (f[i - k] + g[k]) + t * g[i - k] + 1))
-                    a = k;
-            }
-            for (int k = 1; k <= i; ++k) {
-                real t = P[i];
-                if (chkmin(f[i], f[i - k] + (1 - t) * g[k] + 1))
-                    b = k;
-            }
-            cout << i << " " << f[i] << " " << g[i] << " " << a << " " << b << endl;
-            // cout << f[i] - f[i - 1] << endl;
-        }
-        // cout << p << " " << f[n] << endl;
-        ans += f[n];
-    }
+    int64 ans = base;
+    for (; lx > period && D[lx - period] == D[lx]; )
+        lx -= period, ans += diff;
     cout << ans << endl;
+
+    // for (int i = 1; i <= lx; ++i)
+    //     S[i] = S[i - 1] + D[i];
+    // for (int i = lx; i; --i) {
+    //     if (i % 1000 == 1) cout << i << endl;
+    //     F[i] = D[i];
+    //     for (int j = i + 1; j <= lx; ++j)
+    //         F[j] = (S[j] - S[i - 1]) - min(F[j], F[j - 1]);
+    // }
+    // cout << F[lx] << endl;
 
     return 0; 
 }
