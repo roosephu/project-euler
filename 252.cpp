@@ -1,82 +1,65 @@
-#include <vector>
-#include <list>
-#include <map>
-#include <set>
-#include <queue>
-#include <deque>
-#include <stack>
-#include <bitset>
-#include <algorithm>
-#include <functional>
-#include <numeric>
-#include <utility>
-#include <sstream>
-#include <iostream>
-#include <iomanip>
 #include <cstdio>
+#include <vector>
 #include <cmath>
-#include <cstdlib>
-#include <ctime>
-#include <cstring>
-#include <cassert>
-#if __cplusplus > 201103L
-#include <initializer_list>
-#include <unordered_map>
-#include <unordered_set>
-#endif
-
 using namespace std;
-
-#ifndef ONLINE_JUDGE
-#define DEBUG
-#endif
-
-#define inf 0x3F3F3F3F
-#define fst first
-#define snd second
-#define PB push_back
-#define SZ(x) (int)((x).size())
-#define ALL(x) (x).begin(), (x).end()
-#define FOR(i, a, b) for (int _end_ = (b), i = (a); i <= _end_; ++i)
-#define ROF(i, a, b) for (int _end_ = (b), i = (a); i >= _end_; --i)
-
-typedef unsigned int uint;
-typedef long long int64;
-typedef unsigned long long uint64;
-typedef long double real;
-
-int64 fpm(int64 b, int64 e, int64 m) { int64 t = 1; for (; e; e >>= 1, b = b * b % m) e & 1 ? t = t * b % m : 0; return t; }
-template<class T> inline bool chkmin(T &a, T b) {return a > b ? a = b, true : false;}
-template<class T> inline bool chkmax(T &a, T b) {return a < b ? a = b, true : false;}
-template<class T> inline T sqr(T x) {return x * x;}
-template <typename T> T gcd(T x, T y) {for (T t; x; ) t = x, x = y % x, y = t; return y; }
-
-template<class edge> struct Graph {
-    vector<vector<edge> > adj;
-    Graph(int n) {adj.clear(); adj.resize(n + 5);}
-    Graph() {adj.clear(); }
-    void resize(int n) {adj.resize(n + 5); }
-    void add(int s, edge e){adj[s].push_back(e);}
-    void del(int s, edge e) {adj[s].erase(find(iter(adj[s]), e)); }
-    vector<edge>& operator [](int t) {return adj[t];}
-};
 
 const int n = 500, N = n + 10;
 
+vector<int> T[N][N];
 int x[N], y[N];
-vector<int> [N][N];
+int S[N * 2];
+int idx[N];
+double ang[N];
 
-int main(int argc, char **argv) {
-    ios_base::sync_with_stdio(false);
+bool cmp(int a, int b) {
+  return ang[a] < ang[b];
+}
 
-    int64 s = 290797;
-    for (int i = 1; i <= n; ++i) {
-        s = s * s % 50515093;
-        x[i] = s % 2000 - 1000;
-        s = s * s % 50515093;
-        y[i] = s % 2000 - 1000;
-        cout << x[i] << " " << y[i] << endl;
+int next_to(int i, int j) {
+  ++j;
+  if (j > n)
+    return i + 1;
+  return j;
+}
+
+double cross(int i, int j, int k) {
+  return (x[i] - x[j]) * (y[k] - y[j]) - (x[k] - x[j]) * (y[i] - y[j]);
+}
+
+int main() {
+  S[0] = 290797;
+  for (int i = 1; i <= n * 2; ++i)
+    S[i] = (long long)S[i - 1] * S[i - 1] % 50515093;
+
+  for (int i = 1; i <= n; ++i) {
+    x[i] = S[2 * i - 1] % 2000 - 1000;
+    y[i] = S[2 * i - 0] % 2000 - 1000;
+  }
+  for (int i = 1; i <= n; ++i)
+    for (int j = 1; j <= n; ++j)
+      for (int k = 1; k <= n; ++k)
+        if (i != j && j != k && i != k && cross(i, j, k) == 0)
+          printf("%d(%d, %d) %d(%d, %d) %d(%d, %d)\n", i, x[i], y[i], j, x[j], y[j], k, x[k], y[k]);
+  return 0;
+
+  for (int i = 1; i <= n; ++i) {
+    for (int j = i + 1; j <= n; ++j) {
+      idx[j] = j;
+      ang[j] = atan2(y[j] - y[i], x[j] - x[i]);
     }
+    sort(idx + i + 1, idx + n + 1);
 
-    return 0; 
+    for (int j = i + 1; j <= n; ++j) { // deciding triangles i --- j
+      int last = 0;
+      for (int k = next_to(i, j); k != j; k = next_to(i, k)) {
+        if (cross(idx[j], i, idx[k]) <= 0) // wrong direction
+          break;
+        if (last == 0 || cross(last, idx[j], idx[k]) > 0) {
+          last = idx[k];
+          T[i][idx[j]].push_back(idx[k]);
+        }
+      }
+    }
+  }
+  return 0;
 }

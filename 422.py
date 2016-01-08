@@ -1,20 +1,22 @@
 from fractions import *
 
-class Frac(Fraction) :
-    def __repr__(self) :
-        return "%d/%d" % (self.numerator, self.denominator)
+Qx, Qy = Fraction(7), Fraction(1)
+Px1, Py1 = Fraction(13), Fraction(61, 4)
+Px2, Py2 = Fraction(-43, 6), Fraction(-4, 1)
 
-def delta(x0, y0, k) :
-    return -(((24 + 7 * k) * x0 + (7 - 24 * k) * y0) / (12 + 7 * k - 12 * k * k))
+def M(x1, y1, x2, y2):
+    return 12 * x1 * x2 + Fraction(7, 2) * (x1 * y2 + x2 * y1) - 12 * y1 * y2
 
-X = (7, 1)
-P = [(Frac(13), Frac(61, 4)), (Frac(-43, 6), Frac(-4, 1))]
+last = 1
+for i in range(10):
+    Dx, Dy = Px1 - Qx, Py1 - Qy
+    mu = M(Dx, Dy, Px2, Py2) / M(Dx, Dy, Dx, Dy) * 2 # (625 - M(Px1, Py1, Qx, Qy))
+    Px3, Py3 = Px2 - mu * Dx, Py2 - mu * Dy
 
-for i in range(10) :
-    x0, y0 = P[i + 1]
-    x1, y1 = P[i]
-    k = (y1 - X[1]) / (x1 - X[0])
-    dx = delta(x0, y0, k)
-    P += [(Frac(x0 + dx), Frac(y0 + dx * k))]
+    print Px3, Py3
+    cur = gcd(Px3.denominator, Py3.denominator)
+    # print cur / last, last
+    last = cur
 
-print(P)
+    Px1, Py1 = Px2, Py2
+    Px2, Py2 = Px3, Py3
