@@ -1,0 +1,33 @@
+import sage.all as _
+
+MOD = 100000007
+n = 1000000
+GF = _.Integers(MOD)
+
+cdef long fac[1100000], caf[1100000], power[1100000]
+cdef int i
+
+fac[0] = 1
+for i in range(n):
+  fac[i + 1] = fac[i] * (i + 1) % MOD
+caf[n] = _.inverse_mod(fac[n], MOD)
+for i in range(n, 0, -1):
+  caf[i - 1] = caf[i] * i % MOD
+
+power[0] = 1
+for i in range(n):
+  power[i + 1] = power[i] * 2 % MOD
+
+def solve(n, p):
+  print n, p
+
+  ret = 0
+  for y in range((n + 1) % 2, n, 2):
+    x = (n - y + 1) / 2
+    if x <= y:
+      break
+    ret += fac[x] * fac[y + p] % MOD * fac[n - x - y] % MOD * fac[x - 1] % MOD * caf[y] % MOD * caf[x - 1 - y] % MOD * power[y] % MOD
+  return GF(ret)
+
+ans = solve(n, 0) + solve(n - 1, 1) * 2 + solve(n - 2, 2)
+print ans

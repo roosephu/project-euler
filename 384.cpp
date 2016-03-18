@@ -61,6 +61,13 @@ template<class edge> struct Graph {
     vector<edge>& operator [](int t) {return adj[t];}
 };
 
+/*
+  simple digital DP.
+
+  let f(i, j, k, l) be the # of k's in {s(0), ..., s(2^i - 1)}, given the prefix has sum j and last bit l.
+  f(i, j, k, l) = f(i - 1, j + ??, k, 0) + f(i - 1, j + ???, k - start, 1)
+ */
+
 int64 count(int64 n, int x) {
     int64 ret = 0, start = 0; int now = 0;
     for (int hi = 62; hi >= 0; --hi)

@@ -1,0 +1,21 @@
+import sage.all as _
+
+# print _.Combinations(_.primes(5000), 3).cardinality()
+
+def f(p, q, r):
+  ret = 0
+  for x in range(p * q * r * 3):
+    # x = p * q * r * (i + 1) - 1
+    z = int(_.Integers(r)(x) / p / q) * p * q + int(_.Integers(p)(x) / q / r) * q * r + int(_.Integers(q)(x) / r / p) * r * p
+    if x < z:
+      ret = x
+  return ret
+
+ans = 0
+for p, q, r in _.Combinations(_.primes(20), 3):
+  t = f(p, q, r)
+  # print p, q, r, t
+  print t, (p, t % p), (q, t % q), (r, t % r)
+  ans += t
+
+print ans

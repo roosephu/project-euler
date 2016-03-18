@@ -1,7 +1,7 @@
 #include <cstdio>
 using namespace std;
 
-const long long n = 1e11, m = 3e5;
+const long long n = 1e11, m = 5e6; // 10^11 / 5^3 / 13^2
 
 int primes[m + 1], used[m];
 int o[10];

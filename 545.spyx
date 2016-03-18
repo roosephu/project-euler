@@ -1,0 +1,39 @@
+import sage.all as _
+
+n = 20010
+fac = _.prime_factors(n)
+print fac
+lb = _.lcm([x - 1 for x in fac])
+
+# lb = 2 * 2 * 7 * 11
+
+def D(n):
+  return _.prod(filter(_.is_prime, [x + 1 for x in _.divisors(n)]))
+
+cdef int T, i, j, x
+cdef int ok[3300000]
+T = 3000000
+
+for i in range(T):
+  ok[i] = True
+
+for d in _.divisors(lb):
+  for i in range(1, T):
+    if ok[i] == False:
+      continue
+    x = i * d + 1
+    if _.is_prime(x) and x not in fac:
+      for j in range(1, T / i + 1):
+        ok[i * j] = False
+
+cnt = 0
+for i in range(1, T):
+  if ok[i]:
+    cnt += 1
+    print cnt, i * lb
+
+# cnt = 0
+# for i in range(1, 1000):
+#   if D(i * 308) == 20010:
+#     cnt += 1
+#     print cnt, i * 308
