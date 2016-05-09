@@ -25,18 +25,28 @@ bool is_prime(int x) {
 }
 
 int main() {
-  long long ans = 0, k = 1e3, a = 1e9, b = 1e5, complexity = 0;
+  long long ans = 0, k = 1e5, a = 1e9, b = 1e5, complexity = 0;
   // printf("%lld\n", C(1, 0, 101));
   for (int p = a; p < a + b; ++p) {
     if (!is_prime(p))
       continue;
-    printf("%d\n", p);
-    complexity += p;
+    // printf("%d\n", p);
+    // complexity += p;
     // long long cur = 0;
     // int n = p - 1;
+    // for (int i = 1; i <= n; ++i) {
+    //     long prod = 1;
+    //     for (int x = 1; x <= k - 2; ++x)
+    //         prod = prod * (x + i) % p;
+    //     cur += prod;
+    //     // printf("prod = %ld\n", prod);
+    // }
+    // for (int i = 1; i <= k - 2; ++i)
+    //     cur = cur * fpm(i, p - 2, p) % p;
+    // printf("cur = %ld, p = %d\n", cur % p, p);
     // for (int i = 1; i <= n; ++i)
-    //   cur += fpm(i, p - 2, p) * C(n - i + k - 1, n - i, p) % p;
-    // ans += cur % p;
+    //   cur += fpm(k - 1, p - 2, p) * C(i + k - 2, k - 2, p) % p;
+    ans += fpm(k - 1, p - 2, p);
   }
   printf("ans = %lld, complexity = %lld\n", ans, complexity);
   return 0;

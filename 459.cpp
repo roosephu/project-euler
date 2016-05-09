@@ -1,105 +1,135 @@
-#include <vector>
-#include <list>
-#include <map>
-#include <set>
-#include <queue>
-#include <deque>
-#include <stack>
-#include <bitset>
-#include <algorithm>
-#include <functional>
-#include <numeric>
-#include <utility>
-#include <sstream>
-#include <iostream>
-#include <iomanip>
 #include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <ctime>
-#include <cstring>
-#include <cassert>
-#if __cplusplus > 201103L
-#include <initializer_list>
-#include <unordered_map>
-#include <unordered_set>
-#endif
-
+#include <set>
 using namespace std;
 
-#ifndef ONLINE_JUDGE
-#define DEBUG
-#endif
+const int n = 1000000, N = n + 100, M = 1024;
 
-#define inf 0x3F3F3F3F
-#define fst first
-#define snd second
-#define PB push_back
-#define SZ(x) (int)((x).size())
-#define ALL(x) (x).begin(), (x).end()
-#define FOR(i, a, b) for (int _end_ = (b), i = (a); i <= _end_; ++i)
-#define ROF(i, a, b) for (int _end_ = (b), i = (a); i >= _end_; --i)
+// int f[N][N], g[N][N], h[N][N];
+long w[N], f[N], g[N], ff[M], gg[M];
+int o[N];
 
-typedef unsigned int uint;
-typedef long long int64;
-typedef unsigned long long uint64;
-typedef long double real;
+void compute(long *f, long *ff) {
+    int mx = 0;
+    for (int i = 0; i <= n; ++i)
+        o[i] = -1;
 
-int64 fpm(int64 b, int64 e, int64 m) { int64 t = 1; for (; e; e >>= 1, b = b * b % m) e & 1 ? t = t * b % m : 0; return t; }
-template<class T> inline bool chkmin(T &a, T b) {return a > b ? a = b, true : false;}
-template<class T> inline bool chkmax(T &a, T b) {return a < b ? a = b, true : false;}
-template<class T> inline T sqr(T x) {return x * x;}
-template <typename T> T gcd(T x, T y) {for (T t; x; ) t = x, x = y % x, y = t; return y; }
+    for (int x = 1; x <= n; ++x) {
+        if (x % 100000 == 0)
+            printf("x = %d\n", x);
+        for (int i = 1; w[i] > 0 && w[i] <= x; ++i)
+            o[f[x - 1] ^ f[x - w[i]]] = x;
 
-template<class edge> struct Graph {
-    vector<vector<edge> > adj;
-    Graph(int n) {adj.clear(); adj.resize(n + 5);}
-    Graph() {adj.clear(); }
-    void resize(int n) {adj.resize(n + 5); }
-    void add(int s, edge e){adj[s].push_back(e);}
-    void del(int s, edge e) {adj[s].erase(find(iter(adj[s]), e)); }
-    vector<edge>& operator [](int t) {return adj[t];}
-};
+        int t = 0;
+        while (o[t] == x)
+            t += 1;
+        f[x] = f[x - 1] ^ t;
 
-const int N = 1.1e5;
-
-int f[N], g[N];
-
-int main(int argc, char **argv) {
-    ios_base::sync_with_stdio(false);
-    f[0] = 0;
-
-    for (int i = 1; i <= 100; ++i) {
-        // cout << "---- " << i << endl;
-        set<int> S;
-        // for (int j = 1, k = 1; j <= i; ++k, j += k)
-        //     S.insert(g[i - 1] ^ g[i - j]);
-        for (int j = 1; j * j <= i; ++j)
-            S.insert(g[i - 1] ^ g[i - j]);
-        
-        for (int x = 0; ; ++x) {
-            if (S.count(x) == 0) {
-                f[i] = x;
-                break;
-            }
+        for (int i = 1; w[i] > 0 && w[i] <= x; ++i) {
+            int v = f[x] ^ f[x - w[i]];
+            if (v > mx)
+                printf("new mx = %d\n", v), mx = v;
+            ++ff[f[x] ^ f[x - w[i]]];
         }
-        // if (f[i] == 8)
-            cout << i << " " << f[i] << endl;
-        g[i] = g[i - 1] ^ f[i];
     }
-    // cout << endl;
-    // for (int i = 1; i <= 100; ++i) {
-    //     cout << f[i] << endl;
+}
+
+long mul(long a, long b) {
+    long ret = 0;
+    for (long i = 0; a >> i; ++i)
+        for (long j = 0; b >> j; ++j)
+            if ((a >> i & 1) && (b >> j & 1)) {
+                long t = 1l << (i ^ j);
+                for (int x = 0; (i & j) >> x; ++x)
+                    if ((i & j) >> x & 1) {
+                        // printf("%ld %ld: x = %d, %d\n", a, b, x, t);
+                        t = mul(t, 3 * (1 << ((1 << x) - 1)));
+                    }
+                ret ^= t;
+            }
+    return ret;
+}
+
+int main() {
+
+
+    // set<int> S, T;
+    // for (int i = 1; i <= n; ++i) {
+    //     S.insert(i * (i + 1) / 2);
+    //     T.insert(i * i);
+    // }
+    // for (int i = 0; i <= n; ++i)
+    //     for (int j = 0; j <= n; ++j)
+    //         h[i][j] = -1;
+
+    for (long i = 1; i * i <= n; ++i)
+        w[i] = i * i;
+    compute(g, gg);
+    for (long i = 1; i * (i + 1) / 2 <= n; ++i)
+        w[i] = i * (i + 1) / 2;
+    compute(f, ff);
+
+    // for (int i = 0; i <= n; ++i)
+    //     for (int j = 0; j <= n; ++j) {
+    //         set<int> S;
+    //         for (int a = 0; a < i; ++a)
+    //             for (int b = 0; b < j; ++b)
+    //                 S.insert(mul[a][b] ^ mul[a][j] ^ mul[i][b]);
+    //         while (S.count(mul[i][j]) != 0)
+    //             mul[i][j] += 1;
+    //         // printf("%d %d: %d\n", i, j, mul[i][j]);
+    //     }
+
+    // for (int a = 1; a <= n; ++a)
+    //     for (int b = 1; b <= n; ++b) {
+    //         set<int> v;
+    //         for (auto x : S) {
+    //             if (x > a) break;
+    //             for (auto y : T) {
+    //                 if (y > b) break;
+    //                 v.insert(g[a - x][b - y] ^ g[a - x][b] ^ g[a][b - y]);
+    //             }
+    //         }
+
+    //         g[a][b] = g[a - 1][b] ^ g[a][b - 1] ^ g[a - 1][b - 1];
+    //         int t = 0;
+    //         while (v.count(g[a][b] ^ t) > 0)
+    //             t += 1;
+    //         f[a][b] = t;
+    //         g[a][b] ^= t;
+    //         // printf("%d ", g[a][b]);
+    //         // if (b == n)
+    //         //     printf("\n");
+
+    //         int x = g[a][1], y = g[1][b];
+    //         if (h[x][y] == -1) {
+    //             h[x][y] = g[a][b];
+    //             printf("%d x %d = %d\n", x, y, g[a][b]);
+    //         } else {
+    //             if (h[x][y] != g[a][b]) {
+    //                 printf("xxx\n");
+    //             }
+    //         }
+    //     }
+    // for (int i = 0; i < 16; ++i) {
+    //     for (int j = 0; j < 16; ++j)
+    //         printf("%d %d = %ld\n", i, j, mul(i, j));
     // }
 
-    // int s = 0;
-    // for (int i = 1; i <= 20; ++i) {
-    //     int x = i * (i + 1) / 2;
-    //     if (x > 100) break;
-    //     if (f[x] == 3)
-    //         s += 101 - x;
-    // }
-    // cout << s << endl;
-    
-    return 0; 
+    long ans = 0;
+    for (int a = 0; a < M; ++a) {
+        for (int b = 0; b < M; ++b) {
+            if (ff[a] && gg[b] && mul(a, b) == mul(f[n], g[n]))
+                ans += (long) ff[a] * gg[b];
+        }
+    }
+    // for (int a = 1; a <= n; ++a)
+    //     for (int b = 1; b <= n; ++b)
+    //         for (auto x : S)
+    //             for (auto y : T)
+    //                 if (x <= a && y <= b && (g[a][b] ^ g[a - x][b] ^ g[a][b - y] ^ g[a - x][b - y]) == g[n][n]) {
+    //                     printf("%d %d %d %d\n", a, b, x, y);
+    //                     ans += 1;
+    //                 }
+    printf("ans = %ld\n", ans);
+    return 0;
 }
