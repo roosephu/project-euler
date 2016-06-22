@@ -23,24 +23,25 @@ double distance(int a, int b) {
   return d * d;
 }
 
-double solve(long long n, int LMT) {
-  long long cnt = 0;
-  for (long long i = 0; i * i <= n * n; ++i)
-    for (long long j = 0; j * j + i * i <= n * n; ++j) {
-      long long s = n * n - i * i - j * j;
-      long long t = sqrt(s);
+double solve(long n, int LMT) {
+  long cnt = 0;
+  for (long i = 0; i * i <= n * n; ++i)
+    for (long j = 0; j * j + i * i <= n * n; ++j) {
+      long s = n * n - i * i - j * j;
+      long t = sqrt(s);
       if (t * t == s) {
         double x = 1. * i / n, y = 1. * j / n, z = 1. * t / n;
         p[++cnt] = (node){x, y, z};
-        if (i != 0) p[++cnt] = (node){-x, y, z};
-        if (j != 0) p[++cnt] = (node){x, -y, z};
-        if (t != 0) p[++cnt] = (node){x, y, -z};
+        if (i) p[++cnt] = (node){-x, y, z};
+        if (j) p[++cnt] = (node){x, -y, z};
+        if (t) p[++cnt] = (node){x, y, -z};
         if (i && j) p[++cnt] = (node){-x, -y, z};
         if (j && t) p[++cnt] = (node){x, -y, -z};
         if (t && i) p[++cnt] = (node){-x, y, -z};
         if (i && j && t) p[++cnt] = (node){-x, -y, -z};
       }
     }
+  printf("cnt = %ld\n", cnt);
   sort(p + 1, p + cnt + 1, cmp);
   for (int i = 1; i <= cnt; ++i)
     dist[i] = 1e300;
@@ -59,7 +60,7 @@ double solve(long long n, int LMT) {
 int main() {
   double ans = 0;
   for (int i = 1; i <= 15; ++i) {
-    double cur = solve((1 << i) - 1, 40000);
+    double cur = solve((1 << i) - 1, 4000);
     printf("Computing %d: %.10f\n", i, cur);
     ans += cur;
   }

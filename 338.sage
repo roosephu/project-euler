@@ -28,10 +28,18 @@ for x in range(1, n + 1):
 
 for i in range(2, n + 1): # delete the case (w, h) -> (h, w)
     ans -= int(n / i)
+# for x in range(1, n + 1):
+#     for y in range(1, min(x + 1, n / x + 10)):
+#         ans -= int(n / x / (y + 1))
+# for x in range(1, n + 1):
+#     for y in range(1, min(x, n / (x + 1) + 10)):
+#         ans -= int(n / (x + 1) / (y + 1))
 for x in range(1, n + 1):
-    for y in range(1, min(x + 1, n / x + 10)):
-        ans -= int(n / x / (y + 1))
-for x in range(1, n + 1):
-    for y in range(1, min(x, n / (x + 1) + 10)):
-        ans -= int(n / (x + 1) / (y + 1))
+    if x * x <= n:
+        ans -= int(n / x / x)
+    else:
+        break
+for x in range(2, n + 1):
+    for y in range(2, min(x, n / x + 10)):
+        ans -= int(n / x / y)
 print ans
