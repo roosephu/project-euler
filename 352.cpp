@@ -1,36 +1,36 @@
-#include <cstdio>
-#include <queue>
-#include <cmath>
+#include "fmt/format.h"
+#include <algorithm>
 using namespace std;
+using namespace fmt;
 
-const int n = 25;
-const double p = 0.1;
+const int n = 10000, N = n + 10;
 
-priority_queue<double, vector<double>, greater<double>> Q;
-
-void dfs(int d, double prob) {
-  if (d == 0) {
-    Q.push(prob);
-    return;
-  }
-  dfs(d - 1, prob *      p );
-  dfs(d - 1, prob * (1 - p));
-}
+double f[N], g[N], P[N];
 
 int main() {
-  dfs(n, 1);
+    double ans = 0;
+    for (int p100 = 1; p100 <= 50; ++p100) {
+        double p = p100 / 100.;
+        f[1] = 1;
+        g[1] = 0;
 
-  double ans = 0;
-  while (Q.size() > 1) {
-    if (Q.size() % 1000000 == 0)
-      printf("%d\n", (int)Q.size());
-    double x = Q.top(); Q.pop();
-    double y = Q.top(); Q.pop();
-    double z = x + y;
-    // printf("%.6f %.6f\n", x, y);
-    ans += z;
-    Q.push(z);
-  }
-  printf("%.6f\n", ans);
-  return 0;
+        P[0] = 1;
+        for (int i = 1; i <= n; ++i) {
+            P[i] = P[i - 1] * (1 - p);
+        }
+        for (int i = 2; i <= n; ++i) {
+            g[i] = f[i] = i;
+            for (int k = 1; k < i; ++k) {
+                double p_pos = (1 - P[k]) / (1 - P[i]);
+                g[i] = min(g[i], 1 + p_pos * (f[i - k] + g[k]) + (1 - p_pos) * g[i - k]);
+            }
+            for (int k = 1; k <= i; ++k) {
+                double p_pos = 1 - P[k];
+                f[i] = min(f[i], 1 + p_pos * (g[k] + f[i - k]) + (1 - p_pos) * f[i - k]);
+            }
+        }
+        ans += f[n];
+        print("p = {}, ans = {:.6f}\n", p, ans);
+    }
+    return 0;
 }

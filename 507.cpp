@@ -1,7 +1,9 @@
-#include <cstdio>
 #include <algorithm>
-#include <cmath>
-using namespace std;
+#include <NTL/LLL.h>
+#include <NTL/ZZ.h>
+#include "fmt/format.h"
+using namespace NTL;
+using namespace fmt;
 
 const int MOD = 1e7;
 
@@ -19,43 +21,56 @@ long R() {
     return t0;
 }
 
-vector next_vec() {
-    return (vector){R() - R(), R() + R(), R() * R()};
+Vec<ZZ> next_vec() {
+    Vec<ZZ> ret;
+    ret.append(ZZ(R() - R()));
+    ret.append(ZZ(R() + R()));
+    ret.append(ZZ(R() * R()));
+    return ret;
 }
 
-long abs(long t) {
-    return t >= 0 ? t : -t;
-}
-
-long norm(vector x) {
-    return abs(x.a) + abs(x.b) + abs(x.c);
+ZZ norm(Vec<ZZ> x) {
+    ZZ ret(0);
+    for (int i = 0; i < x.length(); ++i) {
+        ZZ &t = x[i];
+        if (t > 0)
+            ret += t;
+        else
+            ret -= t;
+    }
+    return ret;
 }
 
 int main() {
     long ans = 0;
-    for (int t = 1; t <= 20000000; ++t) {
+    for (int t = 1; t <= (long) 2e7; ++t) {
         if (t % 100000 == 0) {
-            printf("%d\n", t);
+            print("t = {}\n", t);
         }
-        vector a = next_vec(), b = next_vec();
+        Mat<ZZ> M;
+        M.SetDims(2, 3);
+        ZZ det2;
+        M[0] = next_vec();
+        M[1] = next_vec();
 
-        for (int i = 0; i < 500; ++i) {
-            double r = (double)a.a * b.a + (double)a.b * b.b + (double)a.c * b.c;
-            r /= (double)b.a * b.a + (double)b.b * b.b + (double)b.c * b.c;
-            long c = round(r);
-            a.a -= c * b.a;
-            a.b -= c * b.b;
-            a.c -= c * b.c;
+        LLL(det2, M, 0);
 
-            vector T = a;
-            a = b;
-            b = T;
-        }
-
-        long cur = min(norm(a), norm(b));
+        Vec<ZZ> a = M[0], b = M[1];
+        ZZ z_cur(-1);
+        for (int i = -1; i <= 1; ++i)
+            for (int j = -1; j <= 1; ++j)
+                if (i || j) {
+                    ZZ now = norm(a * i + b * j);
+                    if (z_cur < 0 || z_cur > now)
+                        z_cur = now;
+                }
+        // z_cur = max(norm(a), norm(b));
+        long cur = trunc_long(z_cur, 64);
         ans += cur;
-        // printf("cur: %ld\n", cur);
+        // cout << "cur: " << z_cur << endl
+        //      << "M: " << M[0] << ", " << M[1] << endl;
     }
-    printf("%ld\n", ans);
+    print("ans = {}\n", ans);
+
     return 0;
 }

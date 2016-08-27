@@ -1,103 +1,42 @@
-#include <vector>
-#include <list>
-#include <map>
-#include <set>
-#include <queue>
-#include <deque>
-#include <stack>
-#include <bitset>
+#include "fmt/format.h"
 #include <algorithm>
-#include <functional>
-#include <numeric>
-#include <utility>
-#include <sstream>
-#include <iostream>
-#include <iomanip>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <ctime>
-#include <cstring>
-#include <cassert>
-#include <initializer_list>
-#include <unordered_map>
-#include <unordered_set>
-
+using namespace fmt;
 using namespace std;
 
-#ifndef ONLINE_JUDGE
-#define DEBUG
-#endif
+const int n = 1000, N = n + 10;
 
-#define inf 0x3F3F3F3F
-#define fst first
-#define snd second
-#define PB push_back
-#define SZ(x) (int)((x).size())
-#define ALL(x) (x).begin(), (x).end()
-#define FOR(i, a, b) for (int _end_ = (b), i = (a); i <= _end_; ++i)
-#define ROF(i, a, b) for (int _end_ = (b), i = (a); i >= _end_; --i)
+int F[2][N][N];
 
-typedef unsigned int uint;
-typedef long long int64;
-typedef unsigned long long uint64;
-typedef long double real;
+int compute(int n) {
+    n += 1;
 
-int64 fpm(int64 b, int64 e, int64 m) { int64 t = 1; for (; e; e >>= 1, b = b * b % m) e & 1 ? t = t * b % m : 0; return t; }
-template<class T> inline bool chkmin(T &a, T b) {return a > b ? a = b, true : false;}
-template<class T> inline bool chkmax(T &a, T b) {return a < b ? a = b, true : false;}
-template<class T> inline T sqr(T x) {return x * x;}
-template <typename T> T gcd(T x, T y) {for (T t; x; ) t = x, x = y % x, y = t; return y; }
+    int (*f)[N] = F[0], (*g)[N] = F[1];
+    for (int s = 0; s <= n + 1; ++s)
+        for (int x = 0; x <= n; ++x)
+            if (s + x >= n)
+                f[s][x] = 0;
+            else
+                f[s][x] = s + x;
 
-template<class edge> struct Graph {
-    vector<vector<edge> > adj;
-    Graph(int n) {adj.clear(); adj.resize(n + 5);}
-    Graph() {adj.clear(); }
-    void resize(int n) {adj.resize(n + 5); }
-    void add(int s, edge e){adj[s].push_back(e);}
-    void del(int s, edge e) {adj[s].erase(find(iter(adj[s]), e)); }
-    vector<edge>& operator [](int t) {return adj[t];}
-};
-
-int n, S, cur;
-
-unordered_map<int, int> F;
-
-int f(int s, int h, int k) {    // to reach a N state,
-    if (h == 0) {
-        if (k < s) return n;
-        return k - s;
+    for (int h = 1; h <= n; ++h) {
+        for (int s = 0; s <= n - h; ++s) {
+            for (int x = 0; x <= n; ++x) {
+                int y = f[s + 1][x];
+                g[s][x] = f[s][y];
+            }
+        }
+        swap(f, g);
     }
-    int x = 1100 * 1100 * s + 1100 * h + k;
-    if (F.count(x)) return F[x];
-    int t = f(s + 1, h - 1, k);
-    return F[x] = f(s, h - 1, t);
+    return f[0][0];
 }
 
-void dfs(int s, int h, int k) {
-    if (h == 0) {
-        if (k < s && S <= n) cur = S;
-        S += s;
-        return ;
+int main() {
+    long ans = 0;
+    for (int i = 1; i <= n; ++i) {
+        long x = compute(i);
+        ans += x * x * x;
+        print("{}: {}\n", i, x);
     }
-    int t = f(s + 1, h - 1, k);
-    dfs(s, h - 1, t);
-    if (S <= n) dfs(s + 1, h - 1, k);
-}
-
-int main(int argc, char **argv) {
-    ios_base::sync_with_stdio(false);
-
-    int64 ans = 0;
-    for (n = 1; n <= 1000; ++n) {
-        F.clear();
-
-        cur = S = 0;
-        dfs(0, n + 1, -1);
-        ans += cur * cur * cur;
-        cout << n << " " << cur << " " << SZ(F) << endl;
-    }
-    cout << ans << endl;
-
-    return 0; 
+    print("ans = {}\n", ans);
+    return 0;
 }

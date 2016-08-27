@@ -1,156 +1,114 @@
-#include <vector>
-#include <list>
-#include <map>
-#include <set>
-#include <queue>
-#include <deque>
-#include <stack>
-#include <bitset>
-#include <algorithm>
-#include <functional>
-#include <numeric>
-#include <utility>
-#include <sstream>
-#include <iostream>
-#include <iomanip>
-#include <cstdio>
+#include "fmt/format.h"
 #include <cmath>
-#include <cstdlib>
-#include <ctime>
-#include <cstring>
-#include <cassert>
-#if __cplusplus > 201103L
-#include <initializer_list>
-#include <unordered_map>
-#include <unordered_set>
-#endif
-
+#include <algorithm>
+using namespace fmt;
 using namespace std;
 
-#ifndef ONLINE_JUDGE
-#define DEBUG
-#endif
+constexpr int n = 6, p2 = 3, State2 = 8, p3 = 2, State3 = 9;
 
-#define oo 0x3F3F3F3F
-#ifdef DEBUG
-#define cvar(x) cerr << "<" << #x << ": " << x << ">"
-#define evar(x) cvar (x) << endl
-template<class T> void DISP(const char *s, T x, int n) {cerr << "[" << s << ": "; for (int i = 0; i < n; ++i) cerr << x[i] << " "; cerr << "]" << endl;}
-#define disp(x,n) DISP(#x " to " #n, x, n)
-#else
-#define cvar(...) ({})
-#define evar(...) ({})
-#define disp(...) ({})
-#endif
-#define car first
-#define cdr second
-#define PB push_back
-#define SZ(x) (int)((x).size())
-#define ALL(x) (x).begin(), (x).end()
-#define FOR(i, a, b) for (int _end_ = (b), i = (a); i <= _end_; ++i)
-#define ROF(i, a, b) for (int _end_ = (b), i = (a); i >= _end_; --i)
+long f[n + 1][2][n][State2][State3];
 
-typedef unsigned int uint;
-typedef long long int64;
-typedef unsigned long long uint64;
-typedef long double real;
-
-int64 fpm(int64 b, int64 e, int64 m) { int64 t = 1; for (; e; e >>= 1, b = b * b % m) e & 1 ? t = t * b % m : 0; return t; }
-template<class T> inline bool chkmin(T &a, T b) {return a > b ? a = b, true : false;}
-template<class T> inline bool chkmax(T &a, T b) {return a < b ? a = b, true : false;}
-template<class T> inline T sqr(T x) {return x * x;}
-template <typename T> T gcd(T x, T y) {for (T t; x; t = x, x = y % x, y = t); return y; }
-
-template<class edge> struct Graph {
-     vector<vector<edge> > adj;
-     Graph(int n) {adj.clear (); adj.resize (n + 5);}
-     Graph() {adj.clear (); }
-     void resize(int n) {adj.resize (n + 5); }
-     void add(int s, edge e){adj[s].push_back (e);}
-     void del(int s, edge e) {adj[s].erase (find (iter (adj[s]), e)); }
-     vector<edge>& operator [](int t) {return adj[t];}
-};
-
-const int N = 19;
-
-int64 dp[2][1 << N][2], (*f)[2] = dp[0], (*g)[2] = dp[1];
-int64 DP[2][43046721][2];
-
-int64 calc(int d) {
-    int mask = (1 << d) - 1;
-    memset(f, 0, sizeof(dp[0]));
-    f[0][0] = 1;
-    for (int i = 0; i < d; ++i) {
-        memset(g, 0, sizeof(dp[0]));
-        for (int j = 0; j <= mask; ++j) {
-            int64 s = 1;
-            for (int x = 0; x < d; ++x)
-                if (j >> x & 1)
-                    s |= 1 << (x * 10 % d);
-            for (int x = 0; x <= 9; ++x) {
-                if (i == 0 && x == 0) continue;
-                int y = x % d;
-                (s = (s << y) | (s >> (d - y))) &= mask;
-                if (s & 1) {
-                    g[s][1] += f[j][0];
-                } else {
-                    g[s][0] += f[j][0];
-                    g[s][1] += f[j][1];
-                }
-            }
-        }
-        swap(f, g);
+void decode(int S, int *v, int p, int base) {
+    for (int i = 0; i < p; ++i) {
+        v[i * 10 % p] += S % base;
+        S /= base;
     }
-    
-    int64 ret = 0;
-    for (int s = 0; s <= mask; ++s)
-        ret += f[s][1];
-    cout << d << " " << ret << endl;
+}
+
+int encode(int *v, int p, int base) {
+    int ret = 0, pow = 1;
+    for (int i = 0; i < p; ++i) {
+        int t = min(base - 1, v[i] + (i == 0));
+        ret += pow * t;
+        pow *= base;
+    }
     return ret;
 }
 
-int64 calc2(int d, int m) {
-    int64 (*f)[2] = DP[0], (*g)[2] = DP[1];
-    
-    memset(f, 0, sizeof(DP[0]));
-    f[0][0] = 1;
-    for (int i = 0; i < d; ++i) {
-        memset(g, 0, sizeof(DP[0]));
-        for (int j = 0; j <= mask; ++j) {
-            int64 s = 1;
-            for (int x = 0; x < m; ++x)
-                if (j >> x & 1)
-                    s |= 1 << (x * 10 % d);
-            for (int x = 0; x <= 9; ++x) {
-                if (i == 0 && x == 0) continue;
-                int y = x % d;
-                (s = (s << y) | (s >> (d - y))) &= mask;
-                if (s & 1) {
-                    g[s][1] += f[j][0];
-                } else {
-                    g[s][0] += f[j][0];
-                    g[s][1] += f[j][1];
+int main() {
+    f[0][0][0][1] = 1;
+    for (int i = 0; i < n; ++i) {
+        for (int b = 0; b < 2; ++b) {
+            for (int m = 0; m < n; ++m) {
+                for (int S2 = 0; S2 < State2; ++S2) {
+                    for (int S3 = 0; S3 < State3; ++S3) {
+                        if (f[i][b][m][S2][S3] == 0)
+                            continue;
+                        int v2[p2] = {0}, v3[p3] = {0};
+                        decode(S2, v2, p2, 2);
+                        decode(S3, v3, p3, 3);
+                        print("i = {}, b = {}, m = {}, S = {}, v = [{}, {}]\n", i, b, m, S2, v[0], v[1]);
+                        for (int x = 0; x <= 9; ++x) {
+                            if (x != 0 || i != 0) {
+                                int y = (m * 10 + x) % n;
+                                int n_i = i + 1;
+                                int n_S2 = encode(v2, p2, 2);
+                                int n_S3 = encode(v3, p3, 3);
+                                int n_m = y;
+                                int n_b = b + v2[0];
+                                // print("| i = {}, b = {}, m = {}, S = {}\n", n_i, n_b, n_m, n_S);
+                                if (n_b <= 1) {
+                                    f[n_i][n_b][n_m][n_S2][n_S3] += f[i][b][m][S2][S3];
+                                }
+                            }
+                            rotate(v2, v2 + p2 - 1, v2 + p2);
+                            rotate(v3, v3 + p3 - 1, v3 + p3);
+                        }
+                    }
                 }
             }
         }
-        swap(f, g);
     }
-    
-    int64 ret = 0;
-    for (int s = 0; s <= mask; ++s)
-        ret += f[s][1];
-    cout << d << " " << ret << endl;
-    return ret;
+    long ans = 0;
+    for (int m = 0; m < n; ++m)
+        for (int S = 0; S < State; ++S)
+            ans += f[n][1][m][S];
+
+    long ans2 = 0;
+    for (int a = 2; a <= 2; ++a)
+        for (int b = 0; b <= 9; ++b)
+            for (int c = 0; c <= 9; ++c)
+                for (int d = 0; d <= 9; ++d) {
+                    int x = (a % n == 0) +
+                            (b % n == 0) +
+                            ((a * 10 + b) % n == 0) +
+                            (c % n == 0) +
+                            ((b * 10 + c) % n == 0) +
+                            ((a * 100 + b * 10 + c) % n == 0) +
+                            (d % n == 0) +
+                            ((c * 10 + d) % n == 0) +
+                            ((b * 100 + c * 10 + d) % n == 0) +
+                            ((a * 1000 + b * 100 + c * 10 + d) % n == 0);
+                    if (x == 1) {
+                        ++ans2;
+                        // print("{}\n", a * 1000 + b * 100 + c * 10 + d);
+                    }
+                }
+    print("ans2 = {}\n", ans2);
+
+    print("n = {}, f(n) = {}\n", n, ans);
+    return 0;
 }
 
-int main(int argc, char **argv) {
-    ios_base::sync_with_stdio(false);
-
-    int64 ans = 0;
-    for (int i = 1; i <= 7; ++i) {
-        ans += calc(i);
-    }
-    cout << ans << endl;
-
-    return 0; 
-}
+/*
+ans:
+1: 9
+2: 20
+3: 360
+4: 2701
+5: 4096
+6:
+7: 161022
+8:
+9: 2136960
+10: 0
+11: 71101800
+12:
+13: 1057516028
+14:
+15:
+16:
+17: 195741994241
+18:
+19: 2253334981970
+ */

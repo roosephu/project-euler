@@ -1,60 +1,81 @@
-#include <cstdio>
+#include "fmt/format.h"
+#include <NTL/ZZ.h>
 #include <algorithm>
 using namespace std;
+using namespace NTL;
+using namespace fmt;
 
-const int n = 1e8, N = n + 10;
+const long n = 1e10, N = 2e7;
 
 int primes[N];
-int dvs[10000], top;
 
-void dfs(int n, int last, int d) {
-  if (n == 1) {
-    dvs[++top] = d;
-    return;
-  }
-
-  int p = primes[n];
-  dfs(n / p, p - 1, d);
-  if (p <= last)
-    dfs(n / p, p, d * p);
+bool is_practical(long n) {
+    long s = 1;
+    // print("{} ", n);
+    for (int i = 1; s < n; ++i) {
+        long p = primes[i], q = 1;
+        if (p * p > n || p > s + 1)
+            break;
+        while (n % p == 0) {
+            n /= p;
+            q = q * p + 1;
+        }
+        if (q != 1) {
+            // print("{},", p);
+            s *= q;
+        }
+    }
+    // print("\n");
+    return s >= n;
 }
 
-bool practical(int n) {
-  top = 0;
-  dfs(n, n + 1, 1);
-  sort(dvs + 1, dvs + top + 1);
-  for (long long i = 1, s = 0; i < top; ++i) {
-    if (dvs[i] > s + 1)
-      return false;
-    s += dvs[i];
-  }
-  return true;
-}
-
-bool is_prime(int n) {
-  return primes[n] == n;
+bool is_prime(long n) {
+    return ProbPrime(n);
 }
 
 int main() {
-  for (int i = 2; i <= n; ++i)
-    if (!primes[i])
-      for (int j = 1; i * j <= n; ++j)
-        primes[i * j] = i;
+    PrimeSeq gen;
+    for (int i = 1; i < N; ++i)
+        primes[i] = gen.next();
+    // print("{}\n", gen.next());
+    // for (int i = 1; i <= 200; ++i)
+    //     if (is_practical(i))
+    //         print("{}\n", i)
+    //         ;
 
-  for (int i = 10; i <= n; i += 10) {
-    if (is_prime(i - 9) &&
-        is_prime(i - 3) &&
-        is_prime(i + 3) &&
-        is_prime(i + 9)) {
-      // printf("step 1: %d\n", i);
-      if (practical(i - 8) &&
-          practical(i - 4) &&
-          practical(i) &&
-          practical(i + 4) &&
-          practical(i + 8)) {
-        printf("ans += %d\n", i);
-      }
+    long cnt = 0, ans = 0;
+    for (long i = 10; i <= n; i += 10) {
+        if (i % 10000000 == 0)
+            print("{}\n", i);
+        bool prime_criterion =
+            is_prime(i - 9) &&
+            is_prime(i - 3) &&
+            is_prime(i + 3) &&
+            is_prime(i + 9);
+        bool practical_criterion =
+            prime_criterion &&
+            is_practical(i - 8) &&
+            is_practical(i - 4) &&
+            is_practical(i) &&
+            is_practical(i + 4) &&
+            is_practical(i + 8);
+        bool consecutive_criterion =
+            practical_criterion &&
+            !is_prime(i - 7) &&
+            !is_prime(i - 1) &&
+            !is_prime(i + 1) &&
+            !is_prime(i + 7);
+
+        if (consecutive_criterion) {
+            print("found: {}\n", i);
+            cnt += 1;
+            ans += i;
+
+            if (cnt == 4)
+                break;
+        }
     }
-  }
-  return 0;
+
+    print("ans = {}\n", ans);
+    return 0;
 }
