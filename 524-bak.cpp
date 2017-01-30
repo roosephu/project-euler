@@ -1,14 +1,14 @@
+#include <cstdio>
+#include <algorithm>
+#include <cassert>
 #include <NTL/ZZ.h>
-#include "fmt/format.h"
 using namespace std;
-using namespace fmt;
 using namespace NTL;
 
-const long L = 8916100448256ll - (1ll << 43);
+const long L = 8916100448256ll;
 
 int perm[100];
 bool used[100];
-int dbg;
 
 long count_perm(int *perm, int n) {
     long ret = 0;
@@ -72,52 +72,27 @@ bool is_possible(int *prefix, int n, int finished, long rank) {
 void dfs(int n, int dep) {
     // printf("dep: %d ", dep);
     long current = L - count_perm(perm, dep - 1);
-    if (weight(current) > (n - dep + 1)) {
-        // printf("cut bin @ %d: %d %d\n", dep, weight(current), n - dep + 1);
+    if (weight(cnt) > (n - dep + 1)) {
+        printf("cut bin @ %d: %d %d\n", dep, weight(cnt), n - dep + 1);
         return;
     }
     if (dep > n) {
-        print("count = {}\n", current);
-        int m = n + 2;
-        perm[m - 1] = m;
-        perm[m] = m - 1;
-        for (int i = 1; i <= m; ++i) {
-            print("{}\n", perm[i]);
+        for (int i = 1; i <= n; ++i) {
+            printf("%d\n", perm[i]);
         }
-
-        long fac = 1, rank = 1;
-        for (int i = m; i; --i) {
-            for (int j = m; j > i; --j)
-                if (perm[i] > perm[j]) {
-                    rank += fac;
-                }
-            fac *= m + 1 - i;
-        }
-        print("rank = {}\n", rank);
-        exit(0);
+        return;
     }
 
     int min_pos = 1;
     for (; used[min_pos]; )
         ++min_pos;
     if (current & ((1ll << (min_pos - 1)) - 1)) {
-        if (dep < 33)
-            print("cut tail {}\n", dep);
         return;
     }
 
-    dbg += 1;
-    if (dbg % 500000 == 0) {
-        print("--- dep = {}: ", dep);
-        for (int i = 1; i <= dep; ++i) {
-            print("{} ", perm[i]);
-        }
-        print("\n");
-    }
-
     if (!is_possible(perm, n, dep - 1, L)) {
-        if (dep < 33)
-            print("cut @ {}\n", dep);
+        if (dep < 35)
+            printf("cut @ %d\n", dep);
         return;
     }
     for (int i = 1; i <= n; ++i) {
@@ -131,6 +106,6 @@ void dfs(int n, int dep) {
 }
 
 int main() {
-    dfs(43, 1);
+    dfs(45, 1);
     return 0;
 }
