@@ -1,2 +1,5 @@
 .vscode
 .DS_Store
+.gdbinit
+info.plist
+*.dSYM
