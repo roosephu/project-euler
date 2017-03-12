@@ -6,7 +6,7 @@ using namespace std;
 using namespace NTL;
 
 const int MAX_PRIMES = 10000000;
-const long start = 1e16 - 2e9, LENGTH = 1e9 + 8, LMT = 1e8;
+const long start = 1e16 - 1e9, LENGTH = 1e9 + 8, LMT = 1e8;
 // const long start = 1, LENGTH = 100 + 8, LMT = 10;
 
 // long mark[LENGTH], ans[LENGTH];
@@ -26,6 +26,8 @@ long max_prime_factor(long x) {
                 x /= p;
             } while (x % p == 0);
             ret = p;
+            if (x != 1 && ProbPrime(x))
+                break;
         } else if (p * p > x) {
             break;
         }
@@ -60,28 +62,33 @@ int main() {
             // ans[i] = p;
         }
     }
-    // print("sieved\n");
+    print("sieved\n");
     // for (int i = 0; i < LENGTH; ++i)
     //     if (mark[i] != 1)
     //         ans[i] = mark[i];
 
     long sum = 0, cnt = 0;
+    long mx = 0;
     for (int i = 0; i < LENGTH; ++i) {
         sum += getbit(mark, i);
         // print("{}: {}\n", start + i, ans[i]);
         if (i >= 9)
             sum -= getbit(mark, i - 9);
         if (i >= 8 && sum <= 5) {
-            long x = start + i;
-            // long y = calc(x - 8);
-            cnt += 1;
-            // print("#{} {}: {}\n", cnt, x, y);
-            print("{},", x);
-            // mx = max(mx, y);
+            long x = start + i - 8;
+            if (((x + 3) % 4 == 0 && ProbPrime((x + 3) / 4) && ProbPrime((x + 5) / 2)) ||
+                ((x + 5) % 4 == 0 && ProbPrime((x + 5) / 4) && ProbPrime((x + 3) / 2))) {
+
+                long y = calc(x);
+                cnt += 1;
+                print("#{} {}: {}\n", cnt, x, y);
+                // print("{},", x);
+                mx = max(mx, y);
+            }
         }
     }
-    print("\n");
-    // print("ans = {}\n", mx);
+    // print("\n");
+    print("ans = {}\n", mx);
 
     return 0;
 }

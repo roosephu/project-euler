@@ -3,11 +3,9 @@
 #include <NTL/matrix.h>
 #include <NTL/mat_ZZ_p.h>
 #include <cmath>
+#include "bitset.h"
 using namespace std;
 using namespace NTL;
-
-#define setbit(x, p) (x[(p) >> 5] |= 1u << ((p) & 31))
-#define getbit(x, p) (x[(p) >> 5] >> ((p) & 31) & 1)
 
 const int n = 1e8, N = 1.5e8;
 const long MOD = 1e16;
