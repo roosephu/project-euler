@@ -1,23 +1,53 @@
+P = matrix([[7 / 50, 1 / 50], [1 / 50, -7 / 50]])
+D = matrix([[1, 0], [0, -1]])
+print "P^-1 = %s" % P.inverse()
 
-Qx, Qy = 7, 1
-Px1, Py1 = 13, 61 / 4
-Px2, Py2 = -43 / 6, -4 / 1
+Q = P * vector([7, 1])
+print "Q = %s" % Q
+P1 = P * vector([13, 61 / 4])
+P2 = P * vector([-43 / 6, -4 / 1])
+print P1
+print P2
 
-def M(x1, y1, x2, y2):
-    return 24 * x1 * x2 + 7 * (x1 * y2 + x2 * y1) - 24 * y1 * y2
+def M(p1, p2):
+    return p1 * D * p2
 
 MOD = int(1e9) + 7
 
 last = 1
-for i in range(10):
-    Dx, Dy = Px1 - Qx, Py1 - Qy
-    mu = M(Dx, Dy, Px2, Py2) / M(Dx, Dy, Qx, Qy) # (625 - M(Px1, Py1, Qx, Qy))
-    Px3, Py3 = Px2 + mu * Dx, Py2 + mu * Dy
+for i in range(3, 14):
+    d = P1 - Q
+    mu = M(d, P2) / M(d, Q)
+    P3 = P2 + mu * d
 
-    print (Px3.numerator + Px3.denominator + Py3.numerator + Py3.denominator) % MOD, Px3 - Qx, Py3 - Qy
-    cur = gcd(Px3.denominator, Py3.denominator)
-    # print cur / last, last
+#     print P.inverse() * P3
+#     print P3, P1[0] * P2[0] - P1[1] * P2[1], P1[1] * P2[0] - P1[0] * P2[1]
+    print P.inverse() * P3
+    a, b = fibonacci(i - 2), fibonacci(i - 1)
+    if i % 2 == 0:
+        pass
+#         print a, b, "(%d/%d, %d/%d)" % (2^(4 * a + 2 * b + 2) - (-3)^(2 * b + 1), (-3)^b * 2^(2 * a + b), 2^(4 * a + 2 * b - 2) + (-3)^(2 * b - 1), (-3)^(b-1) * 2^(2 * a + b - 2))
+    else:
+        print a, b, "(%d/%d, %d/%d)" % (2^(4 * a + 2 * b - 2) - (-3)^(2 * b - 1), -(-3)^(b-1) * 2^(2 * a + b - 2), 2^(4 * a + 2 * b + 2) + (-3)^(2 * b + 1), (-3)^b * 2^(2 * a + b))
+
     last = cur
 
-    Px1, Py1 = Px2, Py2
-    Px2, Py2 = Px3, Py3
+    P1 = P2
+    P2 = P3
+
+
+n = 11^14
+
+MOD = 10^9 + 7
+Rx = Integers(MOD - 1)
+Fp = Integers(MOD)
+U = matrix(Rx, [[1, 1], [1, 0]])
+x = vector(Rx, [1, 0])
+fib_p = lambda n: (U^(n-1) * x)[0]
+a, b = fib_p(n - 2), fib_p(n - 1)
+print a, b
+
+print sum([Fp(2)^(4 * a + 2 * b - 2) - Fp(-3)^(2 * b - 1),
+           -Fp(-3)^(b-1) * Fp(2)^(2 * a + b - 2),
+           Fp(2)^(4 * a + 2 * b + 2) + Fp(-3)^(2 * b + 1),
+           Fp(-3)^b * Fp(2)^(2 * a + b)])

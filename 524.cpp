@@ -1,136 +1,181 @@
 #include <NTL/ZZ.h>
 #include "fmt/format.h"
+#include <algorithm>
 using namespace std;
 using namespace fmt;
 using namespace NTL;
 
-const long L = 8916100448256ll - (1ll << 43);
+namespace PE524 {
+    const int n = 45;
 
-int perm[100];
-bool used[100];
-int dbg;
+    int p[n] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 25, 24, 26, 27, 29, 31, 33, 35, 37, 39, 38, 41, 44, 42, 40, 36, 34, 32, 30, 28, 43};
+    long store[10];
 
-long count_perm(int *perm, int n) {
-    long ret = 0;
-    int mx = 0;
-    for (int i = 1; i <= n; ++i) {
-        // assert(1 <= perm[i] && perm[i] <= n);
-        if (perm[i] > mx) {
-            mx = perm[i];
-        } else {
-            int cnt = 0;
-            for (int j = 1; j < i; ++j)
-                if (perm[j] < perm[i])
-                    ++cnt;
-            ret += 1ll << cnt;
-        }
-    }
-    return ret;
-}
-
-bool is_possible(int *prefix, int n, int finished, long rank) {
-    long lb = 0, ub = 0;
-    int cur_max = 0;
-    for (int i = 1; i <= finished; ++i) {
-        cur_max = max(cur_max, prefix[i]);
-    }
-
-    // lower bound
-    for (int pos = finished + 1, x = max(cur_max - 1, 0), y = cur_max + 1; pos <= n; ++pos) {
-        while (x > 0 && used[x])
-            --x;
-        if (x == 0) {
-            while (used[y])
-                ++y;
-            prefix[pos] = y;
-            y += 1;
-        } else {
-            prefix[pos] = x;
-            x -= 1;
-        }
-    }
-    lb = count_perm(prefix, n);
-
-    // upper bound
-    int ub_pos = finished + 1;
-    if (!used[n]) {
-        prefix[ub_pos] = n;
-        ub_pos += 1;
-    }
-    for (int pos = ub_pos, x = 1, y = n; pos <= n; ++pos) {
-        while (used[x])
-            ++x;
-        prefix[pos] = x;
-        x += 1;
-    }
-    ub = count_perm(prefix, n);
-    // printf("%lld %lld %lld\n", lb, ub, rank);
-
-    return lb <= rank && rank <= ub;
-}
-
-void dfs(int n, int dep) {
-    // printf("dep: %d ", dep);
-    long current = L - count_perm(perm, dep - 1);
-    if (weight(current) > (n - dep + 1)) {
-        // printf("cut bin @ %d: %d %d\n", dep, weight(current), n - dep + 1);
-        return;
-    }
-    if (dep > n) {
-        print("count = {}\n", current);
-        int m = n + 2;
-        perm[m - 1] = m;
-        perm[m] = m - 1;
-        for (int i = 1; i <= m; ++i) {
-            print("{}\n", perm[i]);
-        }
-
-        long fac = 1, rank = 1;
-        for (int i = m; i; --i) {
-            for (int j = m; j > i; --j)
-                if (perm[i] > perm[j]) {
-                    rank += fac;
+    long FS(int *p) {
+        int mx = -1;
+        long ret = 0;
+        for (int i = 0; i < n; ++i) {
+            if (p[i] > mx) {
+                mx = p[i];
+            } else {
+                int x = 0;
+                for (int j = 0; j < i; ++j) {
+                    x += p[j] < p[i];
                 }
-            fac *= m + 1 - i;
+                ret += 1ll << x;
+            }
         }
-        print("rank = {}\n", rank);
-        exit(0);
+        return ret;
     }
 
-    int min_pos = 1;
-    for (; used[min_pos]; )
-        ++min_pos;
-    if (current & ((1ll << (min_pos - 1)) - 1)) {
-        if (dep < 33)
-            print("cut tail {}\n", dep);
+    void gen(long x, int *p) {
+        // print("x = {}\n", x);
+        int i = 0;
+        int t = 0;
+        while (x >> i) {
+            while (~x >> i & 1) {
+                p[t++] = i;
+                ++i;
+            }
+            int cnt = 0, j = i, nz = 0;
+            for (; x >> j; ++j) {
+                if (x >> j & 1) {
+                    ++cnt;
+                    ++nz;
+                } else {
+                    --cnt;
+                }
+                if (cnt == 0) {
+                    ++j;
+                    break;
+                }
+            }
+            // print("i = {}, j = {}\n", i, j);
+            vector<int> us, vs;
+            for (int d = 0; d < j - i - nz; ++d) {
+                us.push_back(i + d * 2 + 1);
+            }
+            if (cnt > 0) {
+                us.push_back(j);
+            }
+            vs.push_back(0);
+            for (int d = 0; d < (int)us.size() - 1; ++d) {
+                for (int r = us[d] + 1; r < us[d + 1]; ++r) {
+                    vs.push_back(r);
+                }
+            }
+            print("us:");
+            for (auto u : us) {
+                print(" {}", u);
+            }
+            print("\n");
+            print("vs:");
+            for (auto v : vs) {
+                print(" {}", v);
+            }
+            print("\n");
+
+            int d = i;
+            for (auto v : vs) {
+                while (~x >> d & 1) {
+                    ++d;
+                }
+                if (d == i) {
+                    us.push_back(i);
+                    ++d;
+                    continue;
+                }
+                print("d = {}, v = {}\n", d, v);
+                for (int r = 0, find_max = false, c = d - i; r < us.size(); ++r) {
+                    if (r < us.size() && us[r] > v) {
+                        find_max = true;
+                    }
+                    if (us[r] < v) {
+                        --c;
+                    }
+                    if (find_max && c == 0) {
+                        // print("insert pos: {}\n", r + 1);
+                        us.insert(us.begin() + r + 1, v);
+                        break;
+                    }
+                }
+                ++d;
+
+                // print("us:");
+                // for (auto u : us) {
+                //     print(" {}", u);
+                // }
+                // print("\n");
+            }
+            for (auto u : us) {
+                p[t++] = u;
+            }
+            i = j;
+        }
+    }
+
+    long perm_index(int *p) {
+        long ret = 1;
+        for (int i = 0; i < n; ++i) {
+            long t = p[i];
+            for (int j = 0; j < i; ++j) {
+                t -= p[j] < p[i];
+            }
+            for (int j = 1; i + j < n; ++j) {
+                t *= j;
+            }
+            ret += t;
+        }
+        return ret;
+    }
+
+    void main() {
+        print("FS: {}\n", perm_index(p));
         return;
-    }
-
-    dbg += 1;
-    if (dbg % 500000 == 0) {
-        print("--- dep = {}: ", dep);
-        for (int i = 1; i <= dep; ++i) {
-            print("{} ", perm[i]);
+        gen(39, p);
+        print("p:");
+        for (int i = 0; i < n; ++i) {
+            print(" {}", p[i]);
         }
         print("\n");
-    }
-
-    if (!is_possible(perm, n, dep - 1, L)) {
-        if (dep < 33)
-            print("cut @ {}\n", dep);
         return;
-    }
-    for (int i = 1; i <= n; ++i) {
-        if (used[i])
-            continue;
-        used[i] = true;
-        perm[dep] = i;
-        dfs(n, dep + 1);
-        used[i] = false;
+        for (int i = 0; i < n; ++i) {
+            p[i] = i;
+        }
+
+        int idx = 0;
+        do {
+            long t = FS(p);
+            idx += 1;
+            if (store[t] == 0) {
+                store[t] = idx;
+                // if (t == 11) {
+                    print("target {0:3d} {0:09b}:", t);
+                    for (int i = 0; i < n; ++i) {
+                        print(" {}", p[i]);
+                    }
+                    print("\n");
+                // }
+            }
+            assert(perm_index(p) == idx);
+        } while (next_permutation(p, p + n));
+
+        for (int i = (1 << (n - 2)); i < (1 << (n - 1)); ++i) {
+            gen(i, p);
+            if (perm_index(p) != store[i]) {
+                print("x {0} {0:b}:", i);
+                for (int t = 0; t < n; ++t) {
+                    print(" {}", p[t]);
+                }
+                print("\n");
+            } else {
+                print("  {0} {0:b}\n", i);
+            }
+        }
     }
 }
 
 int main() {
-    dfs(43, 1);
+    PE524::main();
     return 0;
 }
