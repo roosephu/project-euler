@@ -1,50 +1,46 @@
 #include "fmt/format.h"
 #include "fmt/ostream.h"
-#include <NTL/lzz_p.h>
+#include <NTL/ZZ.h>
 #include <map>
 #include "mertens.h"
 using namespace fmt;
 using namespace std;
 using namespace NTL;
 
-const long n = 111, N = n + 10;
+const long n = 4, N = n + 10, maxT = 10000;
+const long nn = n + 1;
+const long MOD = 2e8;
 
 int primes[N], mu[N];
-map<long, zz_p> G;
-zz_p two;
+long g[maxT + 10];
 
-zz_p cb2(zz_p n) {
-    long t = rep(n);
-    if (t % 2 == 0)
-        return zz_p(t / 2) * (t + 1);
-    return zz_p((t + 1) / 2) * t;
+long cb2(long n) {
+    n = n % MOD;
+    if (n % 2 == 0)
+        return (n / 2) * (n + 1) % MOD;
+    return ((n + 1) / 2) * n % MOD;
 }
 
-zz_p func(long k) {
-    zz_p r{(n + 1) / k};
-    zz_p s = (n + 1) * r - k * cb2(r);
-    return s * s;
+long func(long k) {
+    long r = nn / k % MOD;
+    long s = (nn % MOD * r - k % MOD * cb2(r)) % MOD;
+    return s * s % MOD;
 }
 
-zz_p get_G(long n) {
-    if (n == 1)
-        return two;
-    if (!G.count(n)) {
-        zz_p ret = power(two, n + 1) - 2;
-        for (long i = 2, j; i <= n; ) {
-            j = n / (n / i) + 1;
-            ret -= (j - i) * get_G(n / i);
-            i = j;
-        }
-        G[n] = ret;
+long G(long n) {
+    if (n <= maxT) {
+        return g[n];
     }
-    return G[n];
+    long ret = 0;
+    for (int i = 1, pi = PowerMod(2, i, MOD); i <= n; ) {
+        int j = n / (n / i) + 1, pj = PowerMod(2, j, MOD);
+        ret += func(n / i) * (pj - pi) % MOD;
+        i = j, pi = pj;
+    }
+    return (ret % MOD + MOD) % MOD;
 }
 
 int main() {
-    zz_p::init(200000000);
-    two = zz_p(2);
-
     mu[1] = 1;
     for (int i = 2; i <= n; ++i) {
         if (!primes[i]) primes[++primes[0]] = i, mu[i] = -1;
@@ -63,23 +59,33 @@ int main() {
         // M += mu[m];
     }
 
-    zz_p n2 = (n + zz_p(1)) * (n + 1);
-    zz_p ans = power(power(two, n + 1), n + 1) - 1 + cb2(n2) - 2 * (n + 1) * (power(two, n + 1) - 1);
+    long n2 = (nn % MOD) * (nn % MOD) % MOD;
+    long ans = (PowerMod(2, n2 % MOD, MOD) - 1 + cb2(n2) - 2 * nn % MOD * (PowerMod(2, nn, MOD) - 1) % MOD) % MOD;
 
-    // int cnt = 0;
-    // zz_p p0{0};
-    // for (long d = 1, m = n + 1; d <= n; ++d) {
-    //     long D = min(m / (m / d) + 1, n);
-    //     p0 += 2 * m * partial_sum(2^d, d, D - 1) * (partial_sum(mu(k) * (m / k / d), 1, n / d));
-    //     p0 -=
+    long p0 = 0;
+    for (int d = 1; d <= nn; ++d)
+        for (int t = 1; t * d <= nn; ++t)
+            p0 += func(d * t) * PowerMod(2, d, MOD) * mu[t];
+
+    for (int d = 1; d <= maxT; ++d) {
+        for (int t = 1; t * d <= maxT; ++t) {
+            g[t * d] += PowerMod(2, d, MOD) * func(d * t) % MOD;
+        }
+        g[d] = ((g[d] + g[d - 1]) % MOD + MOD) % MOD;
+    }
+
+    long p1 = 0;
+    for (int i = 1; i <= nn; ++i) {
+        p1 += mu[i] * g[nn / i];
+    }
+    // for (int i = 1; i <= nn; ) {
+    //     int j = nn / (nn / i) + 1;
+    //     p1 += (Mertens(j - 1) - Mertens(i - 1)) % MOD * G(nn / i) % MOD;
+    //     i = j;
     // }
+    p1 = (p1 % MOD + MOD) % MOD;
 
-    zz_p p0{0};
-    for (int d = 1; d <= n; ++d)
-        for (int t = 1; t * d <= n; ++t)
-            p0 += func(d * t) * power(two, d) * mu[t];
-
-    ans -= p0;
-    print("ans = {}, p0 = {}\n", ans, p0);
+    ans = (ans - p0 % MOD + MOD) % MOD;
+    print("ans = {}, p0 = {}, p1 = {}\n", ans, p0 % MOD, p1);
     return 0;
 }

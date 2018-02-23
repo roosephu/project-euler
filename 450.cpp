@@ -1,119 +1,143 @@
-#include <vector>
-#include <list>
-#include <map>
+#include "fmt/format.h"
+#include <NTL/ZZ.h>
+#include <tuple>
 #include <set>
-#include <queue>
-#include <deque>
-#include <stack>
-#include <bitset>
-#include <algorithm>
-#include <functional>
-#include <numeric>
-#include <utility>
-#include <sstream>
-#include <iostream>
-#include <iomanip>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <ctime>
-#include <cstring>
-#include <cassert>
-#if __cplusplus > 201103L
-#include <initializer_list>
-#include <unordered_map>
-#include <unordered_set>
-#endif
-
+using namespace fmt;
+using namespace NTL;
 using namespace std;
 
-#ifndef ONLINE_JUDGE
-#define DEBUG
-#endif
+namespace PE450 {
+    const long maxN = 1e6, maxSqrtN = 1e3, N = maxN + 10;
 
-#define oo 0x3F3F3F3F
-#define car first
-#define cdr second
-#define PB push_back
-#define SZ(x) (int)((x).size())
-#define ALL(x) (x).begin(), (x).end()
-#define FOR(i, a, b) for (int _end_ = (b), i = (a); i <= _end_; ++i)
-#define ROF(i, a, b) for (int _end_ = (b), i = (a); i >= _end_; --i)
+    long ans = 0;
+    int primes[N], mu[N];
 
-typedef unsigned int uint;
-typedef long long int64;
-typedef unsigned long long uint64;
-typedef long double real;
+    tuple<long, long, long> power_angle(long a, long b, long c, long e) {
+        long x = 1, y = 0, z = 1;
+        for (; e--; ) {
+            long xx = x * a - y * b;
+            long yy = x * b + y * a;
+            x = xx;
+            y = yy;
+            z = z * c;
+        }
+        return {x, y, z};
+    }
 
-int64 fpm(int64 b, int64 e, int64 m) { int64 t = 1; for (; e; e >>= 1, b = b * b % m) e & 1 ? t = t * b % m : 0; return t; }
-template<class T> inline bool chkmin(T &a, T b) {return a > b ? a = b, true : false;}
-template<class T> inline bool chkmax(T &a, T b) {return a < b ? a = b, true : false;}
-template<class T> inline T sqr(T x) {return x * x;}
-template <typename T> T gcd(T x, T y) {for (T t; x; ) t = x, x = y % x, y = t; return y; }
+    void expand(long a, long b, long c) {
+        for (int RR = 3; ; ++RR) {
+            long cc = power_long(c, RR);
+            if (cc > maxN * maxN / 2) break;
+            for (int rr = 1; 2 * rr < RR; ++rr) {
+                if (GCD(RR, rr) != 1) continue;
+                auto [x1, y1, z1] = power_angle(a, b, c, rr);
+                auto [x2, y2, z2] = power_angle(a, b, c, RR - rr);
+                long xu = (RR - rr) * x1 * (z2 / z1) + rr * x2;
+                long yu = (RR - rr) * y1 * (z2 / z1) - rr * y2;
+                long gg = GCD(z2, GCD(xu, yu)), g = z2 / gg;
+                long x = xu / gg, y = yu / gg;
+                // print("x1 = {}, y1 = {}, z1 = {}, x2 = {}, y2 = {}, z2 = {}, g = {}, xu = {}, yu = {}\n", x1, y1, z1, x2, y2, z2, g, xu, yu);
+                for (int i = 1; i * g * RR <= maxN; ++i) {
+                    // if (RR * g * i != 2500 || rr * g * i != 1000) continue;
+                    // print("x = {}, y = {}, R = {}, r = {}\n", x * i, y * i, RR * g * i, rr * g * i);
+                    ans += (abs(x) + abs(y)) * i * 2;
+                }
+            }
+            if (c == 1) break;
+        }
+    }
 
-template<class edge> struct Graph {
-    vector<vector<edge> > adj;
-    Graph(int n) {adj.clear(); adj.resize(n + 5);}
-    Graph() {adj.clear(); }
-    void resize(int n) {adj.resize(n + 5); }
-    void add(int s, edge e){adj[s].push_back(e);}
-    void del(int s, edge e) {adj[s].erase(find(iter(adj[s]), e)); }
-    vector<edge>& operator [](int t) {return adj[t];}
-};
+    void main() {
+        // expand(1, 0, 1);
+        // expand(-1, 0, 1);
+        // expand(0, 1, 1);
+        // expand(0, -1, 1);
+        for (int u = 1; u * u <= maxSqrtN; ++u) {
+            for (int v = 1; v <= u && u * u + v * v <= maxSqrtN; ++v) {
+                if (GCD(u, v) == 1 && (u % 2) != (v % 2)) {
+                    long a = u * u - v * v;
+                    long b = 2 * u * v;
+                    long c = u * u + v * v;
+                    // print("a = {}, b = {}, c = {}\n", a, b, c);
 
-const int N = 3.6e3;
-
-struct node {
-    int64 a, b, c;
-
-    node(int A, int B, int C) : a(A), b(B), c(C) {}
-} ;
-
-bool operator < (const node &a, const node &b) {
-    return a.a == b.a ? (a.b < b.b) : (a.a < b.a);
-}
-
-node operator * (const node &a, const node &b) {
-    return node(a.a * b.a - a.b * b.b, a.a * b.b + a.b * b.a, a.c * b.c);
-}
-
-int cnt;
-set<node> S;
-
-void test(int a, int b, int c) {
-    auto p = node(a, b, c);
-    if (S.count(p)) return ;
-    vector<node> v;
-    for (auto q = p; q.c < N; q = q * p) v.push_back(q), S.insert(q);
-
-    for (int i = 0; i < SZ(v); ++i) {
-        for (int j = i + 1; j < SZ(v); ++j) {
-            int x = gcd(i + 1, j + 1);
-            int pr = N * (i + 1) / (i + j + 2) / v[j].c;
-            for (int t = 1; t <= pr; ++t) {
-                int64 r = t * v[j].c * (i + 1) / x, R = t * v[j].c * (j + 1) / x;
-                if (r == 500 && R == 1500)
-                    cout << r << " " << R << " " << (R * v[i].a / v[i].c + r * v[j].a / v[j].c) << " " << (R * v[i].b / v[i].c - r * v[j].b / v[j].c) << endl;
+                    // (a, b, c) = primitive
+                    expand(a, b, c);
+                    expand(-a, b, c);
+                    // expand(-a, -b, c);
+                    // expand(a, -b, c);
+                    expand(b, a, c);
+                    expand(-b, a, c);
+                    // expand(-b, -a, c);
+                    // expand(b, -a, c);
+                }
             }
         }
+
+        const int xc[4] = {1, 0, -1, 0}, xs[4] = {0, 1, 0, -1};
+        // for (int R = 1; R <= maxN; ++R) {
+        //     for (int r = 1; 2 * r < R; ++r) {
+        //         long T = 0;
+        //         int g = GCD(R, r), RR = R / g, rr = r / g;
+        //         set<pair<int, int>> S;
+        //         for (int t = 0; t < 4; ++t) {
+        //             long x = (R - r) * xc[rr * t % 4] + r * xc[(RR - rr) * t % 4];
+        //             long y = (R - r) * xs[rr * t % 4] - r * xs[(RR - rr) * t % 4];
+        //             T += abs(x) + abs(y);
+        //             pair<int, int> s = {x, y};
+        //             if (S.count(s) || (R == 2500 && r == 1000)) {
+        //                 print("!!! {} {} {} {}\n", x, y, RR, rr);
+        //             }
+        //             S.insert(s);
+        //         }
+        //         // if (RR % 2 == 1)
+        //         //     assert(T == 4 * R - 2 * r);
+        //         // else if (RR % 4 == 0)
+        //         //     assert(T == 4 * R);
+        //         // else if (RR % 4 == 2)
+        //         //     assert(T == 4 * R - 4 * r);
+        //         // else
+        //         //     print("R = {}, r = {}, T = {}, est = {}, RR = {}, rr = {}\n", R, r, T, 4 * R - 2 * r, RR, rr);
+        //         assert(T == 4 * R - 2 * r * (1 - xc[RR % 4]));
+        //         ans += T;
+        //     }
+        // }
+        for (int R = 1; R <= maxN; ++R) {
+            for (int r = 1; 2 * r < R; ++r) {
+                ans += 4 * R - 2 * r;
+            }
+        }
+
+        long d1 = 0, d2 = 0;
+        // for (int R = 1; R <= maxN; ++R) {
+        //     for (int r = 1; 2 * r < R; ++r) {
+        //         int g = GCD(R, r);
+        //         int RR = R / g;
+        //         d1 += 2 * r * xc[RR % 4];
+        //     }
+        // }
+
+        mu[1] = 1;
+        for (int i = 2; i <= maxN; ++i) {
+            if (!primes[i]) primes[++primes[0]] = i, mu[i] = -1;
+            for (int j = 1, k = maxN / i, t; primes[j] <= k; ++j) {
+                primes[t = i * primes[j]] = 1;
+                if (i % primes[j]) mu[t] = -mu[i];
+                else { mu[t] = 0; break; }
+            }
+        }
+
+        for (int d = 1; d <= maxN; ++d) {
+            // print("d = {}, mu = {}\n", d, mu[d]);
+            for (int R = d; R <= maxN; R += d) {
+                if (R < 3) continue;
+                d2 += (long) xc[R % 4] * (maxN / R) * (maxN / R + 1) / 2 * mu[d] * (R / 2 / d) * (R / 2 / d + 1) * d;
+            }
+        }
+        print("ans = {}, d1 = {}, d2 = {}\n", ans + d2, d1, d2);
     }
 }
 
-void gen(int a, int b, int c) {
-    if (c > N) return ;
-    if (a && b) test(a, b, c);
-    ++cnt;
-    int g = (a + b + c) << 1, d, e, f;
-    gen(d = g - a, e = g - b, f = g + c);
-    if (a) g = (a <<= 1) << 1, gen(d - a, e - g, f - g);
-    if (b) g = (b <<= 1) << 1, gen(d - g, e - b, f - g);
-}
-
-int main(int argc, char **argv) {
-    ios_base::sync_with_stdio(false);
-    gen(3, 4, 5);
-    gen(4, 3, 5);
-    cout << cnt << endl;
-
-    return 0; 
+int main() {
+    PE450::main();
+    return 0;
 }

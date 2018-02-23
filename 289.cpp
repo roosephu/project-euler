@@ -1,139 +1,142 @@
-#include <cstdio>
+#include "lib.h"
 #include <map>
-#include <vector>
-#include <algorithm>
-using namespace std;
+#include <string>
+#include <unordered_map>
 
-#define fst first
-#define snd second
+namespace PE289 {
+    const int n = 100, m = 10; // n >= m
+    const long MOD = 1e10;
+    int connections[] = {1111, 1114, 1133, 1134, 1131, 1211, 1214, 1221, 1222, 1224, 1231, 1232, 1233, 1234};
 
-const int n = 2, m = 2, P = n * m * 4 + 10;
+    map<long, long> f, g;
+    map<pair<long, int>, vector<long>> cache;
 
-typedef vector<pair<int, int>> State;
+    int state[20];
+    int cnt;
 
-vector<int> G[P];
-int lmt[P];
-
-int get_id(int x, int y, int k) {
-  return ((x - 1) * m + (y - 1)) * 4 + k + 1;
-}
-
-void adde(int x, int y) {
-  if (x > y) return adde(y, x);
-  G[y].push_back(x);
-  lmt[x] = max(lmt[x], y);
-}
-
-void transit(map<State, long> &dp, const State &old, State delta, int cur, long val, bool circle_allowed=false) {
-  map<int, int> g;
-  for (auto &p : old) {
-    g[p.fst] = p.snd;
-    g[p.snd] = p.fst;
-  }
-
-  for (auto &p : delta) {
-    int x = p.fst, y = p.snd; // x -> y
-    // printf("%d %d\n", x, y);
-    if (x == cur && x != y && g.count(y) == 0)
-      return;
-    if (y == cur && x != y && g.count(x) == 0)
-      return;
-    int l = g.count(x) ? g[x] : x, r = g.count(y) ? g[y] : y;
-    if (l != x)
-      g.erase(x);
-    if (r != y)
-      g.erase(y);
-    if (x != y && l == y && r == x) { // circle
-      if (!circle_allowed)
-        return;
-      continue;
+    void decode(long s) {
+        for (int i = 0; i < (m + 3); ++i) {
+            state[i] = s >> (i * 4) & 15;
+        }
     }
-    g[l] = r;
-    g[r] = l;
-  }
 
-  State s;
-  for (auto &it : g) {
-    if (it.fst <= it.snd) {
-      s.push_back(it);
-      if (lmt[it.fst] <= cur || lmt[it.snd] <= cur) // no loop any more
-        return;
+    long merge(long s, long x, long y) {
+        if (s == -1) return s;
+        for (int i = 0; s >> (i * 4); ++i) {
+            long w = s >> (i * 4) & 15;
+            if (w == x) {
+                s ^= (x ^ y) << (i * 4);
+            }
+        }
+        return s;
     }
-  }
-  if (cur < 20) {
-    printf("|  ");
-    for (auto it : s)
-      printf("(%d -> %d)", it.fst, it.snd);
-    printf("\n");
-  }
 
-  dp[s] += val;
+    int find(long s, int k) {
+        long ret = 0;
+        for (int i = 0; i < (m + 4); ++i) {
+            ret += (s & 15) == k;
+            s >>= 4;
+        }
+        return ret;
+    }
+
+    long rep(long s) {
+        long ret = 0, t = 0, f[20] = {0};
+        for (int i = 0; s >> (i * 4); ++i) {
+            long x = s >> (i * 4) & 15;
+            if (!f[x]) {
+                ++t;
+                f[x] = t;
+            }
+            ret |= (long) (f[x] - 1) << (4 * i);
+        }
+        assert(t <= 14);
+        return ret;
+    }
+
+    vector<long> init_cache(long k, int x, int y) {
+        cnt += 1;
+        vector<long> S;
+        decode(k);
+        for (int C : connections) {
+            long a = C / 1000 - 1, b = C / 100 % 10 - 1, c = C / 10 % 10 - 1, d = C / 1 % 10 - 1;
+            long indices[] = {a, b, c, d};
+            int new_color = y == m || x == n ? 0 : 15;
+            int colors[] = {state[y], state[y + 1], state[y + 2], new_color};
+            long kk = k << 4 | new_color;
+            for (int i = 0; i < 4; ++i) {
+                for (int j = 0; j < 4; ++j) {
+                    if (colors[i] == 0 && (colors[j] == 0) != (indices[i] == indices[j])) {
+                        kk = -1;
+                    }
+                }
+            }
+            // if (x == 1 && y == 1 && k == 03210 && C == 1232) {
+            //     print("!!! kk = {:05o}\n", kk);
+            // }
+            // if (kk != -1)
+            for (int i = 0; i < 4 && kk != -1; ++i) {
+                if (i == indices[i]) continue;
+                int c_src = kk >> (4 * (y + i + 1)) & 15;
+                int c_dst = kk >> (4 * (y + indices[i] + 1)) & 15;
+                if (i == 3) c_src = new_color;
+                if (c_src == 0) continue;
+                if (c_src == c_dst || !c_src || !c_dst)
+                    kk = -1;
+                kk = merge(kk, c_src, c_dst);
+            }
+            if (kk != -1) {
+                long cur = kk & 15; kk = kk >> 4;
+                long old = (kk >> ((y + 1) * 4)) & 15;
+                if (find(kk, old) > 1 || old == cur || (x == n && y == m)) {
+                    kk ^= (cur ^ old) << (4 * (y + 1));
+                    if (y == m) kk = kk << 4;
+                // print("{} {} {} {}, kk = {:05o}\n", a, b, c, d, kk);
+                    // print("{:05o} => {:05o}, [{}, {}, {}, {}]\n", k, rep(kk), a, b, c, d);
+                    S.push_back(rep(kk));
+                    // (f[rep(kk)] += v) %= MOD;
+                }
+            }
+        }
+        return S;
+    }
+
+    void main() {
+        f[0] = 1;
+        for (int x = 0; x <= n; ++x) {
+            for (int y = 0; y <= m; ++y) {
+                print("================= x = {}, y = {}, |f| = {}, cnt = {}\n", x, y, f.size(), cnt);
+                g = f;
+                f.clear();
+                for (auto [k, v] : g) {
+                    // print("current: {:05o}, v = {}\n", k, v);
+                    if (x == n) {
+                        for (auto kk : init_cache(k, x, y)) {
+                            (f[kk] += v) %= MOD;
+                        }
+                    } else {
+                        pair<long, int> S = {k, y};
+                        if (!cache.count(S)) {
+                            cache[S] = init_cache(k, x, y);
+                        }
+                        for (auto kk : cache[S]) {
+                            (f[kk] += v) %= MOD;
+                        }
+                    }
+                }
+            }
+        }
+        long ans = f[0];
+        // long ans = 0;
+        // for (auto [k, v] : f) {
+        //     print("{:05o}: {}\n", k, v);
+        //     ans += v;
+        // }
+        print("ans = {}\n", ans);
+    }
 }
 
 int main() {
-  for (int i = 1; i <= n; ++i) {
-    for (int j = 1; j <= m; ++j) {
-      for (int k = 0; k < 4; ++k) {
-        adde(get_id(i, j, k), get_id(i, j, (k + 1) % 4));
-      }
-      if (i < n) {
-        adde(get_id(i, j, 3), get_id(i + 1, j, 1));
-        if (j == 1) {
-          adde(get_id(i, j, 0), get_id(i + 1, j, 0));
-        }
-        if (j == m) {
-          adde(get_id(i, j, 2), get_id(i + 1, j, 2));
-        }
-      }
-
-      if (j < m) {
-        adde(get_id(i, j, 2), get_id(i, j + 1, 0));
-        if (i == 1) {
-          adde(get_id(i, j, 1), get_id(i, j + 1, 1));
-        }
-        if (i == n) {
-          adde(get_id(i, j, 3), get_id(i, j + 1, 3));
-        }
-      }
-    }
-  }
-
-  const int N = get_id(n, m, 3);
-  map<State, long> f;
-  f[State()] = 1;
-
-  for (int x = 1; x <= N; ++x) { // adding vertices one by one
-    map<State, long> g;
-    bool b = x == N;
-    printf("cur = %d\n", x);
-
-    for (auto &it : f) {
-      if (x < 17) {
-        for (auto p : it.fst) {
-          printf("(%d -> %d)", p.fst, p.snd);
-        }
-        printf(" = %ld\n", it.snd);
-      }
-
-
-      transit(g, it.fst, {{x, x}}, x, it.snd, b);
-
-      for (auto y : G[x]) {
-        transit(g, it.fst, {{x, y}}, x, it.snd, b);
-      }
-      for (auto y1 : G[x]) {
-        for (auto y2 : G[x]) {
-          if (y1 < y2) {
-            transit(g, it.fst, {{y1, y2}}, x, it.snd, b);
-          }
-        }
-      }
-    }
-
-    f = g;
-  }
-
-  long ans = f[State()];
-  printf("ans = %ld\n", ans);
-  return 0;
+    PE289::main();
+    return 0;
 }

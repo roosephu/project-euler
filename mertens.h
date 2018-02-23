@@ -4,8 +4,8 @@ using namespace std;
 map<long, long> M;
 
 long Mertens(long n) {
-    if (n == 1)
-        return 1;
+    if (n <= 1)
+        return n;
     if (!M.count(n)) {
         long ret = 1;
         for (long i = 2; i <= n; ) {

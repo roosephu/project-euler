@@ -1,1 +1,4 @@
-CXXFLAGS = -Wall -ggdb -g --std=c++11 -lgmp -lntl -L. -lfmt
+CXXFLAGS = -Wall -O3 --std=c++1z -lgmp -lntl -L. -lfmt
+
+%: lib.h %.cpp
+	g++ $(CXXFLAGS) $@.cpp -o $@
