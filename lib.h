@@ -5,16 +5,22 @@
 #include <map>
 #include <set>
 #include <tuple>
+#include <algorithm>
 #include "fmt/format.h"
 #include "fmt/ostream.h"
 using namespace NTL;
 using namespace std;
 using namespace fmt;
 
-tuple<vector<long>, vector<long>, function<int (long)>> sum_of_prime_func(long n, function<long (long)> f, function<long (long)> F) {
+template<class T>
+tuple<vector<long>, vector<T>, function<int (long)>> sum_of_prime_func(
+    long n,
+    function<T (long)> f,
+    function<T (long)> F
+) {
     long R = SqrRoot(n);
     vector<long> basis;
-    vector<long> ret;
+    vector<T> ret;
     for (int i = 1; n / i > R; ++i)
         basis.push_back(n / i);
     for (int i = R; i; --i)
@@ -40,24 +46,71 @@ tuple<vector<long>, vector<long>, function<int (long)>> sum_of_prime_func(long n
     return {ret, basis, get_index};
 }
 
-// template<class T> vector<T> sieve(int n) {
-//     vector<int> primes(n + 1);
-//     vector<T> ret(n + 1);
-//     int top = 1;
-//     for (int i = 2; i <= n; ++i) {
-//         if (!primes[i]) {
-//             primes[++top] = 1;
-//             ret[i] = ..?;
-//         }
-//         for (int j = 1, limit = n / i; primes[j] <= limit; ++j) {
-//             long t = i * primes[j];
-//             primes[t] = 1;
-//             if (i % primes[j] == 0) {
-//                 ret[t] = merge(ret, i, j);
-//                 break;
-//             } else { // multiplicative
-//                 ret[t] = merge2(ret, i, j);
-//             }
-//         }
-//     }
-// }
+vector<int> sieve(int n) {
+    vector<int> primes;
+    vector<int> test(n + 1);
+    for (int i = 2; i <= n; ++i) {
+        if (!test[i]) {
+            primes.push_back(i);
+        }
+        for (auto p : primes) {
+            if (p * i > n) break;
+            long t = i * p;
+            test[t] = 1;
+            if (i % p == 0) {
+                break;
+            }
+        }
+    }
+    return primes;
+}
+
+template<class T>
+vector<T> init_mul_func2(
+    int n,
+    vector<int> &primes,
+    function<T (int)> init,
+    function<T (vector<T> &, int, int)> mul
+) {
+    vector<T> ret(n + 1);
+    ret[1] = 1;
+    for (auto p : primes)
+        ret[p] = init(p);
+    for (int i = 2; i <= n; ++i) {
+        for (auto p : primes) {
+            if (p * i > n) break;
+            long t = i * p;
+            ret[t] = mul(ret, i, p);
+            if (i % p == 0) {
+                break;
+            }
+        }
+    }
+    return ret;
+}
+
+template<class T>
+vector<T> init_mul_func(
+    int n,
+    vector<int> &primes,
+    function<T (int, int)> init
+) {
+    vector<T> f(n + 1);
+    f[1] = 1;
+    for (auto p : primes) {
+        for (long x = p, e = 1; x <= n; x *= p, ++e) {
+            f[x] = init(p, e);
+        }
+    }
+    for (int i = 2; i <= n; ++i) {
+        for (auto p : primes) {
+            if (p * i > n) break;
+            long t = i * p, d = i, e = 1;
+            for (; d % p == 0; d /= p)
+                ++e;
+            f[t] = f[d] * f[t / d];
+            if (d != i) break;
+        }
+    }
+    return f;
+}
