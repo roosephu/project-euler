@@ -12,6 +12,10 @@ using namespace NTL;
 using namespace std;
 using namespace fmt;
 
+#define setbit(x, p) ((x)[(p) >> 5] |= 1u << ((p) & 31))
+#define clrbit(x, p) ((x)[(p) >> 5] &= ~(1u << ((p) & 31)))
+#define getbit(x, p) ((x)[(p) >> 5] >> ((p) & 31) & 1)
+
 template<class T>
 tuple<vector<long>, vector<T>, function<int (long)>> sum_of_prime_func(
     long n,
