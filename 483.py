@@ -1,59 +1,102 @@
-from math import *
 from fractions import gcd
+import numpy as np
 
-def is_prime(n):
-    i = 2
-    while i * i <= n:
-        if n % i == 0:
-            return False
-        i += 1
-    return True
+n = 100
 
-def update(l, x):
-    # print x
-    for i in range(len(l)):
-        v = l[i]
-        if v < x:
-            l[i], x = x, v
-        else:
-            break
-    return l
+factorial = []
+last = 1
+for i in range(n + 1):
+    factorial.append(last)
+    last = last * (i + 1)
 
-def LCM(a, b):
-    return a * b // gcd(a, b)
+maxSum = np.zeros(n + 1)
+for i in range(1, n + 1):
+    maxSum[i:] = np.maximum(maxSum[i:], maxSum[:-i] + np.log(i))
+# print('maxSum', maxSum)
 
-def count(n, L):
-    print 'counting: %d' % (L)
-    g = [{1: 1} if x == 0 else {} for x in range(n + 1)]
-    for i in range(n): # old total length
-        print 'len(g[%d]) = %d' % (i, len(g[i]))
-        for old_lcm, nums in g[i].iteritems():
-            # print old_lcm, f[n - i][0], L
-            if old_lcm * f[n - i][0] < L: # cannot get total LCM = L
-                continue
+# maxLCM = [1]
 
-            for j in range(1, n - i + 1): # new segment length
-                if L % j == 0:
-                    new_len, new_lcm = i + j, LCM(old_lcm, j)
-                    if new_lcm not in g[new_len]:
-                        g[new_len][new_lcm] = g[i][old_lcm]
-                    else:
-                        g[new_len][new_lcm] += g[i][old_lcm]
-    print g[n]
-    return g[n][L]
+# cur = 0
+# def dfs2(n, t, lcm):
+#     global cur
 
-n = 350
-f = [[1] * 5 for i in range(n + 10)]
-for i in range(2, n + 1):
-    if is_prime(i):
-        print i
-        for j in range(n, 0, -1):
-            x = i
-            while x <= j:
-                for val in f[j - x]:
-                    update(f[j], val * x)
-                x *= i
+#     if n > t * (t + 1) // 2:
+#         return
+#     if lcm * maxLCM[n] <= cur:
+#         return
+#     if n == 0:
+#         if lcm > cur:
+#             cur = lcm
+#         return
+#     dfs2(n    , t - 1, lcm)
+#     if t <= n:
+#         dfs2(n - t, t - 1, lcm * t // gcd(lcm, t))
 
-print f[n] # [exp(x) for x in f[n]]
-for lcm in f[n]:
-    print 'count for %d = %d' % (lcm, count(n, lcm))
+# for i in range(1, n + 1):
+#     cur = 0
+#     for j in range(1, i + 1):
+#         dfs2(i - j, j, j)
+#     maxLCM.append(cur)
+
+# maxLCM = np.log(maxLCM)
+# print('maxLCM', maxLCM)
+print('maxSUM', maxSum)
+
+cycles = []
+
+def info(S):
+    deno = 1.
+    period = 1.
+    cnt = np.zeros(n + 1)
+    for a in S:
+        cnt[a] += a
+        deno *= cnt[a]
+
+    T = []
+    for i in range(1, n + 1):
+        if cnt[i] != 0:
+            cnt[i] = i
+            for j in T:
+                cnt[i] = cnt[i] // gcd(cnt[i], j)
+            period *= cnt[i]
+            T.append(i)
+        # period = period * a // gcd(period, a)
+    return deno, period
+
+print(info([19, 17, 16, 13, 11, 9, 7, 5, 2, 1]))
+# print(np.exp(maxSum[n]))
+# print(info([11, 9, 8, 7, 5]))
+thres = 1e8
+nodes = 0
+
+def dfs(x, t, S):
+    global thres, nodes
+    if x > t * (t + 1) // 2: return
+
+    deno, period = info(S)
+    if period**2 / deno * np.exp(maxSum[x]) <= thres:
+        return
+    # if len(S) == 1:
+    #     print(S)
+    nodes += 1
+    if x == 0:
+
+        # print(S)
+        # print(S, deno, period)
+        cycles.append((period**2 / deno, period, deno, S))
+        print(period**2 / deno, S)
+        assert len(cycles) <= 100
+        return
+    t = min(x, t)
+    for i in reversed(range(1, t + 1)):
+        dfs(x - i, i, S + [i])
+
+dfs(n, n, [])
+cycles = list(reversed(sorted(cycles)))
+print(len(cycles), nodes)
+for x in cycles[:10]:
+    print(x)
+test = 0
+for x in cycles:
+    test += 1. / x[2]
+print(test)
